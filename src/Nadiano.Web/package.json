@@ -1,0 +1,25 @@
+{
+  "name": "nadiano.web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit -p tsconfig.json && node build.mjs",
+    "watch": "node build.mjs --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint wwwroot/js"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.66.0",
+    "@typescript-eslint/parser": "^8.66.0",
+    "esbuild": "^0.28.1",
+    "eslint": "^10.8.0",
+    "happy-dom": "^20.11.1",
+    "typescript": "~6.0.3",
+    "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "opensheetmusicdisplay": "^2.1.1"
+  }
+}

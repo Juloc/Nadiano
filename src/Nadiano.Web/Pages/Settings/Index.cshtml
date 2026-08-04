@@ -1,0 +1,26 @@
+@page
+@model IndexModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Settings.Title"];
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+}
+
+<h1>@Localizer["Settings.Title"]</h1>
+
+<form method="post" action="/culture/set" class="field-list" asp-antiforgery="true">
+    <div>
+        <label for="settings-culture-select">@Localizer["Settings.LanguageLabel"]</label>
+        <select id="settings-culture-select" name="culture">
+            <option value="de" selected="@(currentCulture == "de" ? "selected" : null)">@Localizer["Common.LanguageGerman"]</option>
+            <option value="id" selected="@(currentCulture == "id" ? "selected" : null)">@Localizer["Common.LanguageIndonesian"]</option>
+        </select>
+        <p class="help-text">@Localizer["Settings.LanguageHelp"]</p>
+    </div>
+    <input type="hidden" name="returnUrl" value="/Settings" />
+    <button type="submit" class="button">@Localizer["Settings.Save"]</button>
+</form>
+
+<div class="card">
+    <p><strong>@Localizer["Settings.VersionLabel"]:</strong> @Nadiano.Core.Common.AppVersion.Current</p>
+</div>

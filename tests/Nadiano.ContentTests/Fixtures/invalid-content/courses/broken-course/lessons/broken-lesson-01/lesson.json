@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "id": "broken-lesson-01",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": -5,
+  "estimatedMinutes": 0,
+  "skills": ["dup.skill", "totally-unknown-skill"],
+  "prerequisites": ["broken-lesson-01"],
+  "assessment": {
+    "categories": ["pitch"],
+    "completionRule": { "requiredSuccessfulRuns": 1 },
+    "selfChecks": ["unknown-self-check"]
+  },
+  "localization": { "directory": "i18n" }
+}

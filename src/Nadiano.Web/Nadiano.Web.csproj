@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nadiano.Core\Nadiano.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <DefaultItemExcludes>$(DefaultItemExcludes);node_modules/**;wwwroot/dist/**/*.map</DefaultItemExcludes>
+  </PropertyGroup>
+
+  <!--
+    Frontend build: TypeScript modules under wwwroot/js are bundled into wwwroot/dist by esbuild.
+    Runs automatically before every dotnet build/run so a single command starts the app.
+    Set SkipFrontendBuild=true to skip (e.g. when only running .NET-only tests).
+  -->
+  <Target Name="NadianoFrontendInstall" BeforeTargets="Build" Condition="'$(SkipFrontendBuild)' != 'true' AND !Exists('$(MSBuildThisFileDirectory)node_modules')">
+    <Exec Command="npm install" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+  </Target>
+
+  <Target Name="NadianoFrontendBuild" AfterTargets="NadianoFrontendInstall" BeforeTargets="Build" Condition="'$(SkipFrontendBuild)' != 'true'">
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildThisFileDirectory)" />
+  </Target>
+
+</Project>

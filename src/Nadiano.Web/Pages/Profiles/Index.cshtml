@@ -1,0 +1,51 @@
+@page
+@model IndexModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Profiles.Title"];
+}
+
+<h1>@Localizer["Profiles.Title"]</h1>
+<p>@Localizer["Profiles.Intro"]</p>
+
+<ul class="profile-list">
+    @foreach (var profile in Model.Profiles)
+    {
+        var isCurrent = profile.Id == Model.CurrentProfileId;
+        <li class="profile-list-item @(isCurrent ? "profile-list-item--current" : "")">
+            <span class="profile-name">
+                @profile.Name
+                @if (isCurrent)
+                {
+                    <strong>(@Localizer["Profiles.CurrentBadge"])</strong>
+                }
+            </span>
+            <span class="profile-actions">
+                @if (!isCurrent)
+                {
+                    <form method="post" asp-page-handler="Select" asp-antiforgery="true" class="inline-form">
+                        <input type="hidden" name="id" value="@profile.Id" />
+                        <button type="submit" class="button">@Localizer["Profiles.SelectButton"]</button>
+                    </form>
+                }
+                <a class="button" asp-page="/Profiles/Edit" asp-route-id="@profile.Id">@Localizer["Profiles.EditLink"]</a>
+                <a class="button" asp-page="/Profiles/Delete" asp-route-id="@profile.Id">@Localizer["Profiles.DeleteLink"]</a>
+                @if (isCurrent)
+                {
+                    <a class="button" href="/api/profiles/@profile.Id/export">@Localizer["Profiles.ExportLink"]</a>
+                }
+            </span>
+        </li>
+    }
+</ul>
+
+<div class="card">
+    <h2>@Localizer["Profiles.CreateHeading"]</h2>
+    <form method="post" asp-page-handler="Create" asp-antiforgery="true" class="field-list">
+        <div>
+            <label for="new-profile-name">@Localizer["Profiles.CreateLabel"]</label>
+            <input id="new-profile-name" type="text" asp-for="NewProfileName" placeholder="@Localizer["Profiles.CreatePlaceholder"]" />
+        </div>
+        <button type="submit" class="button">@Localizer["Profiles.CreateButton"]</button>
+    </form>
+</div>

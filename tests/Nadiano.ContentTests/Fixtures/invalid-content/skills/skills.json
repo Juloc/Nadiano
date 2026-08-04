@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    { "id": "dup.skill", "competency": "body", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "dup.skill", "competency": "body", "introducedStage": "F0", "measurability": "self-assessment", "relatedSkills": ["missing.skill"] }
+  ]
+}

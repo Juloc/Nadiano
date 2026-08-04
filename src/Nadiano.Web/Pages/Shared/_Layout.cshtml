@@ -1,0 +1,56 @@
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    var currentPath = Context.Request.Path + Context.Request.QueryString;
+    var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+}
+<!DOCTYPE html>
+<html lang="@currentCulture">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="nadiano-version" content="@Nadiano.Core.Common.AppVersion.Current" />
+    <title>@ViewData["Title"] - @Localizer["Common.AppName"]</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Nadiano.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <a class="skip-link" href="#main-content">@Localizer["Common.SkipToContent"]</a>
+
+    <header class="app-header">
+        <nav class="app-nav" aria-label="@Localizer["Common.AppName"]">
+            <a class="app-brand" asp-page="/Index">@Localizer["Common.AppName"]</a>
+            <ul class="app-nav-list">
+                <li><a asp-page="/Index">@Localizer["Nav.Home"]</a></li>
+                <li><a asp-page="/Learn/Index">@Localizer["Nav.Learn"]</a></li>
+                <li><a asp-page="/Practice/Index">@Localizer["Nav.Practice"]</a></li>
+                <li><a asp-page="/Library/Index">@Localizer["Nav.Library"]</a></li>
+                <li><a asp-page="/Progress/Index">@Localizer["Nav.Progress"]</a></li>
+                <li><a asp-page="/Settings/Index">@Localizer["Nav.Settings"]</a></li>
+                <li><a asp-page="/Profiles/Index">@Localizer["Nav.Profiles"]</a></li>
+            </ul>
+            <form class="app-culture-form" method="post" action="/culture/set" asp-antiforgery="true">
+                <label for="culture-select" class="visually-hidden">@Localizer["Common.Language"]</label>
+                <select id="culture-select" name="culture" onchange="this.form.submit()">
+                    <option value="de" selected="@(currentCulture == "de" ? "selected" : null)">@Localizer["Common.LanguageGerman"]</option>
+                    <option value="id" selected="@(currentCulture == "id" ? "selected" : null)">@Localizer["Common.LanguageIndonesian"]</option>
+                </select>
+                <input type="hidden" name="returnUrl" value="@currentPath" />
+                <noscript><button type="submit">@Localizer["Settings.Save"]</button></noscript>
+            </form>
+        </nav>
+    </header>
+
+    <main id="main-content" tabindex="-1">
+        @RenderBody()
+    </main>
+
+    <footer class="app-footer">
+        <p>@Localizer["Common.AppName"] &middot; v@(Nadiano.Core.Common.AppVersion.Current)</p>
+    </footer>
+
+    <script src="~/dist/pages/main.js" type="module" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

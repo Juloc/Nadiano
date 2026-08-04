@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Nadiano.Core/Nadiano.Core.csproj" />
+    <Project Path="src/Nadiano.Web/Nadiano.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Nadiano.BrowserTests/Nadiano.BrowserTests.csproj" />
+    <Project Path="tests/Nadiano.ContentTests/Nadiano.ContentTests.csproj" />
+    <Project Path="tests/Nadiano.Core.Tests/Nadiano.Core.Tests.csproj" />
+    <Project Path="tests/Nadiano.Web.IntegrationTests/Nadiano.Web.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Nadiano.ContentValidator/Nadiano.ContentValidator.csproj" />
+  </Folder>
+</Solution>

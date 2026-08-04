@@ -1,0 +1,86 @@
+@page
+@model IndexModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Setup.Title"];
+}
+
+<h1>@Localizer["Setup.Title"]</h1>
+<p>@Localizer["Setup.Intro"]</p>
+
+<section aria-labelledby="setup-capabilities-heading" class="card">
+    <h2 id="setup-capabilities-heading">@Localizer["Setup.Capabilities.Heading"]</h2>
+    <ul>
+        <li>
+            @Localizer["Setup.Capabilities.SecureContext"]:
+            <strong id="capability-secure-context" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong>
+        </li>
+        <li>
+            @Localizer["Setup.Capabilities.Midi"]:
+            <strong id="capability-midi" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong>
+        </li>
+        <li>
+            @Localizer["Setup.Capabilities.Audio"]:
+            <strong id="capability-audio" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong>
+        </li>
+        <li>
+            @Localizer["Setup.Capabilities.IndexedDb"]:
+            <strong id="capability-indexeddb" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong>
+        </li>
+    </ul>
+</section>
+
+<p id="setup-guidance-insecure" class="callout" hidden>@Localizer["Setup.Guidance.Insecure"]</p>
+<p id="setup-guidance-unsupported" class="callout" hidden>@Localizer["Setup.Guidance.Unsupported"]</p>
+<p id="setup-guidance-denied" class="callout" hidden>@Localizer["Setup.Guidance.Denied"]</p>
+
+<p id="setup-preferred-hint" hidden>
+    <span>@Localizer["Setup.PreferredDeviceHint"]:</span> <strong id="setup-preferred-hint-name"></strong>
+</p>
+
+<p>
+    <button id="setup-connect-button" type="button" class="button">@Localizer["Setup.ConnectButton"]</button>
+    <button id="setup-forget-button" type="button" class="button-secondary" hidden>@Localizer["Setup.ForgetPreference"]</button>
+</p>
+
+<section
+    id="setup-devices-section"
+    aria-labelledby="setup-devices-heading"
+    hidden
+    data-label-select="@Localizer["Setup.Devices.SelectButton"]"
+    data-label-selected="@Localizer["Setup.Devices.Selected"]"
+    data-label-connected="@Localizer["Setup.Devices.StateConnected"]"
+    data-label-disconnected="@Localizer["Setup.Devices.StateDisconnected"]">
+    <h2 id="setup-devices-heading">@Localizer["Setup.Devices.Heading"]</h2>
+    <p id="setup-devices-empty" hidden>@Localizer["Setup.Devices.Empty"]</p>
+    <ul id="setup-devices-list"></ul>
+</section>
+
+<section
+    id="setup-diagnostics-section"
+    aria-labelledby="setup-diagnostics-heading"
+    hidden
+    data-label-sustain-on="@Localizer["Setup.Diagnostics.SustainOn"]"
+    data-label-sustain-off="@Localizer["Setup.Diagnostics.SustainOff"]">
+    <h2 id="setup-diagnostics-heading">@Localizer["Setup.Diagnostics.Heading"]</h2>
+
+    <div id="setup-keyboard" class="keyboard" role="img" aria-label="@Localizer["Setup.Diagnostics.Heading"]"></div>
+
+    <h3>@Localizer["Setup.Diagnostics.ActiveNotesHeading"]</h3>
+    <p id="setup-active-notes-empty">@Localizer["Setup.Diagnostics.ActiveNotesEmpty"]</p>
+    <ul id="setup-active-notes-list"></ul>
+    <p id="setup-sustain-state"></p>
+
+    <h3>@Localizer["Setup.Diagnostics.RecentEventsHeading"]</h3>
+    <p id="setup-recent-events-empty">@Localizer["Setup.Diagnostics.RecentEventsEmpty"]</p>
+    <ul id="setup-recent-events-list"></ul>
+
+    <p>
+        <button id="setup-export-button" type="button" class="button-secondary">@Localizer["Setup.Diagnostics.ExportButton"]</button>
+    </p>
+    <pre id="setup-export-output" hidden></pre>
+</section>
+
+@section Scripts {
+    <script src="~/dist/pages/setup.js" type="module" asp-append-version="true"></script>
+}

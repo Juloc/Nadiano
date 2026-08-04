@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Nav.Home" xml:space="preserve"><value>Beranda</value></data>
+  <data name="Nav.Learn" xml:space="preserve"><value>Belajar</value></data>
+  <data name="Nav.Practice" xml:space="preserve"><value>Berlatih</value></data>
+  <data name="Nav.Library" xml:space="preserve"><value>Perpustakaan</value></data>
+  <data name="Nav.Progress" xml:space="preserve"><value>Kemajuan</value></data>
+  <data name="Nav.Settings" xml:space="preserve"><value>Pengaturan</value></data>
+  <data name="Nav.Profiles" xml:space="preserve"><value>Profil</value></data>
+
+  <data name="Common.SkipToContent" xml:space="preserve"><value>Lompat ke konten</value></data>
+  <data name="Common.Language" xml:space="preserve"><value>Bahasa</value></data>
+  <data name="Common.LanguageGerman" xml:space="preserve"><value>Bahasa Jerman</value></data>
+  <data name="Common.LanguageIndonesian" xml:space="preserve"><value>Bahasa Indonesia</value></data>
+  <data name="Common.AppName" xml:space="preserve"><value>Nadiano</value></data>
+
+  <data name="Home.Title" xml:space="preserve"><value>Selamat datang di Nadiano</value></data>
+  <data name="Home.Intro" xml:space="preserve"><value>Nadiano adalah aplikasi belajar dan berlatih piano yang terstruktur. Aplikasi ini menghubungkan pianomu melalui USB MIDI dengan pelajaran terarah, tampilan notasi, dan umpan balik yang dapat diukur.</value></data>
+  <data name="Home.GetStarted" xml:space="preserve"><value>Mulai sekarang</value></data>
+  <data name="Home.NoTeacherReplacement" xml:space="preserve"><value>Nadiano tidak menggantikan guru piano yang berkualifikasi untuk postur, ketegangan, kualitas gerakan, atau interpretasi profesional.</value></data>
+
+  <data name="Learn.Title" xml:space="preserve"><value>Belajar</value></data>
+  <data name="Learn.Placeholder" xml:space="preserve"><value>Kemajuan kursus akan segera ditampilkan di sini.</value></data>
+
+  <data name="Practice.Title" xml:space="preserve"><value>Berlatih</value></data>
+  <data name="Practice.Placeholder" xml:space="preserve"><value>Area latihan akan segera tersedia di sini.</value></data>
+
+  <data name="Practice.Notation.ZoomLabel" xml:space="preserve"><value>Perbesar</value></data>
+  <data name="Practice.Notation.FromMeasureLabel" xml:space="preserve"><value>Dari birama</value></data>
+  <data name="Practice.Notation.ToMeasureLabel" xml:space="preserve"><value>Sampai birama</value></data>
+  <data name="Practice.Notation.ErrorPrefix" xml:space="preserve"><value>Partitur tidak dapat ditampilkan</value></data>
+
+  <data name="Practice.Workspace.GoalHeading" xml:space="preserve"><value>Tujuan latihan</value></data>
+  <data name="Practice.Workspace.Goal" xml:space="preserve"><value>Mainkan tangga nada dengan rata dan dengan nada yang benar. Ini adalah contoh latihan untuk pratinjau area latihan.</value></data>
+  <data name="Practice.Workspace.TargetTempoLabel" xml:space="preserve"><value>Tempo sasaran</value></data>
+  <data name="Practice.Workspace.DeviceConnected" xml:space="preserve"><value>Perangkat MIDI terhubung.</value></data>
+  <data name="Practice.Workspace.DeviceNotConnected" xml:space="preserve"><value>Belum ada perangkat MIDI yang terhubung. Silakan hubungkan sebelum berlatih.</value></data>
+  <data name="Practice.Workspace.ConnectButton" xml:space="preserve"><value>Hubungkan MIDI</value></data>
+  <data name="Practice.Workspace.ModeLabel" xml:space="preserve"><value>Mode latihan</value></data>
+  <data name="Practice.Workspace.ModeWait" xml:space="preserve"><value>Tunggu</value></data>
+  <data name="Practice.Workspace.ModeLoop" xml:space="preserve"><value>Ulang bagian</value></data>
+  <data name="Practice.Workspace.ModePerformance" xml:space="preserve"><value>Mainkan penuh</value></data>
+  <data name="Practice.Workspace.StartButton" xml:space="preserve"><value>Mulai latihan</value></data>
+  <data name="Practice.Workspace.StopButton" xml:space="preserve"><value>Hentikan latihan</value></data>
+  <data name="Practice.Workspace.RetryButton" xml:space="preserve"><value>Ulangi bagian</value></data>
+  <data name="Practice.Workspace.LiveHeading" xml:space="preserve"><value>Perkembangan saat ini</value></data>
+  <data name="Practice.Workspace.StatusPending" xml:space="preserve"><value>belum</value></data>
+  <data name="Practice.Workspace.StatusCorrect" xml:space="preserve"><value>benar</value></data>
+  <data name="Practice.Workspace.StatusMissed" xml:space="preserve"><value>terlewat</value></data>
+  <data name="Practice.Workspace.ResultHeading" xml:space="preserve"><value>Hasil</value></data>
+  <data name="Practice.Workspace.LoadError" xml:space="preserve"><value>Latihan tidak dapat dimuat.</value></data>
+
+  <data name="Practice.Result.PitchCorrect" xml:space="preserve"><value>Nada benar: {0} dari {1}</value></data>
+  <data name="Practice.Result.PitchAdditions" xml:space="preserve"><value>Nada tambahan yang dimainkan: {0}</value></data>
+  <data name="Practice.Result.OnsetOnTime" xml:space="preserve"><value>Tepat waktu: {0} dari {1}</value></data>
+  <data name="Practice.Result.DurationAverage" xml:space="preserve"><value>Rasio durasi tahan terhadap nilai not: {0}</value></data>
+  <data name="Practice.Result.SteadinessValue" xml:space="preserve"><value>Kestabilan (variasi, lebih rendah lebih stabil): {0}</value></data>
+  <data name="Practice.Result.DynamicsRange" xml:space="preserve"><value>Kekuatan tekanan: {0}–{1} (rata-rata {2})</value></data>
+
+  <data name="Practice.NextAction.HandsSeparate" xml:space="preserve"><value>Rekomendasi: Latih bagian ini dengan satu tangan terlebih dahulu.</value></data>
+  <data name="Practice.NextAction.RepeatSlower" xml:space="preserve"><value>Rekomendasi: Ulangi bagian ini dengan tempo yang lebih lambat.</value></data>
+  <data name="Practice.NextAction.RepeatSection" xml:space="preserve"><value>Rekomendasi: Ulangi bagian ini sekali lagi.</value></data>
+  <data name="Practice.NextAction.WellDone" xml:space="preserve"><value>Bagus! Kamu bisa melanjutkan ke bagian berikutnya.</value></data>
+
+  <data name="Library.Title" xml:space="preserve"><value>Perpustakaan</value></data>
+  <data name="Library.Placeholder" xml:space="preserve"><value>Perpustakaan pribadi untuk berkas MusicXML yang diimpor direncanakan untuk versi Beta. Di versi Alpha belum ada yang dapat dikelola di sini.</value></data>
+
+  <data name="Progress.Title" xml:space="preserve"><value>Kemajuan</value></data>
+  <data name="Progress.Placeholder" xml:space="preserve"><value>Kemajuan akan segera ditampilkan di sini.</value></data>
+
+  <data name="Settings.Title" xml:space="preserve"><value>Pengaturan</value></data>
+  <data name="Settings.LanguageLabel" xml:space="preserve"><value>Bahasa antarmuka</value></data>
+  <data name="Settings.LanguageHelp" xml:space="preserve"><value>Bahasa ini berlaku untuk seluruh antarmuka dan terpisah dari pengaturan penamaan not.</value></data>
+  <data name="Settings.VersionLabel" xml:space="preserve"><value>Versi aplikasi</value></data>
+  <data name="Settings.Save" xml:space="preserve"><value>Terapkan</value></data>
+
+  <data name="Error.Title" xml:space="preserve"><value>Terjadi kesalahan</value></data>
+  <data name="Error.Message" xml:space="preserve"><value>Ada yang tidak berjalan sesuai rencana. Silakan coba lagi atau kembali ke halaman utama.</value></data>
+  <data name="Error.RequestId" xml:space="preserve"><value>ID permintaan</value></data>
+  <data name="Error.BackHome" xml:space="preserve"><value>Ke halaman utama</value></data>
+
+  <data name="NotFound.Title" xml:space="preserve"><value>Halaman tidak ditemukan</value></data>
+  <data name="NotFound.Message" xml:space="preserve"><value>Halaman yang diminta tidak ada atau telah dipindahkan.</value></data>
+
+  <data name="Setup.Title" xml:space="preserve"><value>Pengaturan MIDI</value></data>
+  <data name="Setup.Intro" xml:space="preserve"><value>Hubungkan pianomu melalui USB ke perangkat ini, lalu izinkan akses MIDI di browser. Tanpa aksi darimu, tidak ada dialog izin yang akan muncul.</value></data>
+  <data name="Setup.ConnectButton" xml:space="preserve"><value>Hubungkan MIDI</value></data>
+  <data name="Setup.Capabilities.Heading" xml:space="preserve"><value>Pemeriksaan sistem</value></data>
+  <data name="Setup.Capabilities.SecureContext" xml:space="preserve"><value>Koneksi aman</value></data>
+  <data name="Setup.Capabilities.Midi" xml:space="preserve"><value>Dukungan Web MIDI</value></data>
+  <data name="Setup.Capabilities.Audio" xml:space="preserve"><value>Dukungan Web Audio</value></data>
+  <data name="Setup.Capabilities.IndexedDb" xml:space="preserve"><value>Penyimpanan lokal</value></data>
+  <data name="Setup.Capabilities.Yes" xml:space="preserve"><value>tersedia</value></data>
+  <data name="Setup.Capabilities.No" xml:space="preserve"><value>tidak tersedia</value></data>
+  <data name="Setup.Guidance.Insecure" xml:space="preserve"><value>Halaman ini tidak berjalan dalam konteks aman. Web MIDI membutuhkan HTTPS atau localhost; silakan buka aplikasi dengan cara tersebut.</value></data>
+  <data name="Setup.Guidance.Unsupported" xml:space="preserve"><value>Browser ini tidak mendukung Web MIDI. Silakan gunakan versi terbaru Chrome atau Edge.</value></data>
+  <data name="Setup.Guidance.Denied" xml:space="preserve"><value>Akses MIDI tidak diberikan. Silakan izinkan akses di pengaturan browser dan coba lagi.</value></data>
+  <data name="Setup.Devices.Heading" xml:space="preserve"><value>Perangkat yang tersedia</value></data>
+  <data name="Setup.Devices.Empty" xml:space="preserve"><value>Tidak ada perangkat MIDI yang ditemukan. Periksa koneksi USB.</value></data>
+  <data name="Setup.Devices.SelectButton" xml:space="preserve"><value>Pilih</value></data>
+  <data name="Setup.Devices.Selected" xml:space="preserve"><value>Terpilih</value></data>
+  <data name="Setup.Devices.StateConnected" xml:space="preserve"><value>terhubung</value></data>
+  <data name="Setup.Devices.StateDisconnected" xml:space="preserve"><value>terputus</value></data>
+  <data name="Setup.ForgetPreference" xml:space="preserve"><value>Lupakan preferensi perangkat</value></data>
+  <data name="Setup.PreferredDeviceHint" xml:space="preserve"><value>Perangkat pilihan</value></data>
+
+  <data name="Setup.Diagnostics.Heading" xml:space="preserve"><value>Diagnosis langsung</value></data>
+  <data name="Setup.Diagnostics.ActiveNotesHeading" xml:space="preserve"><value>Nada aktif</value></data>
+  <data name="Setup.Diagnostics.ActiveNotesEmpty" xml:space="preserve"><value>Tidak ada tuts yang sedang ditekan.</value></data>
+  <data name="Setup.Diagnostics.SustainOn" xml:space="preserve"><value>Pedal (sustain): aktif</value></data>
+  <data name="Setup.Diagnostics.SustainOff" xml:space="preserve"><value>Pedal (sustain): tidak aktif</value></data>
+  <data name="Setup.Diagnostics.RecentEventsHeading" xml:space="preserve"><value>Peristiwa terbaru</value></data>
+  <data name="Setup.Diagnostics.RecentEventsEmpty" xml:space="preserve"><value>Belum ada peristiwa yang diterima.</value></data>
+  <data name="Setup.Diagnostics.ExportButton" xml:space="preserve"><value>Ekspor diagnosis</value></data>
+
+  <data name="Profiles.Title" xml:space="preserve"><value>Profil</value></data>
+  <data name="Profiles.Intro" xml:space="preserve"><value>Setiap anggota keluarga dapat memiliki profil sendiri dengan kemajuan dan pengaturan masing-masing.</value></data>
+  <data name="Profiles.CurrentBadge" xml:space="preserve"><value>aktif</value></data>
+  <data name="Profiles.SelectButton" xml:space="preserve"><value>Pilih</value></data>
+  <data name="Profiles.EditLink" xml:space="preserve"><value>Ubah</value></data>
+  <data name="Profiles.DeleteLink" xml:space="preserve"><value>Hapus</value></data>
+  <data name="Profiles.ExportLink" xml:space="preserve"><value>Ekspor data</value></data>
+  <data name="Profiles.CreateHeading" xml:space="preserve"><value>Buat profil baru</value></data>
+  <data name="Profiles.CreateLabel" xml:space="preserve"><value>Nama</value></data>
+  <data name="Profiles.CreatePlaceholder" xml:space="preserve"><value>mis. Profil 2</value></data>
+  <data name="Profiles.CreateButton" xml:space="preserve"><value>Buat profil</value></data>
+  <data name="Profiles.Edit.Title" xml:space="preserve"><value>Ubah profil</value></data>
+  <data name="Profiles.Edit.NameLabel" xml:space="preserve"><value>Nama</value></data>
+  <data name="Profiles.Edit.NoteNameSystemLabel" xml:space="preserve"><value>Penamaan not</value></data>
+  <data name="Profiles.Edit.NoteNameSystemGerman" xml:space="preserve"><value>Jerman (C, D, E, ... H)</value></data>
+  <data name="Profiles.Edit.NoteNameSystemInternational" xml:space="preserve"><value>Internasional (C, D, E, ... B)</value></data>
+  <data name="Profiles.Edit.SessionLengthLabel" xml:space="preserve"><value>Durasi latihan (menit)</value></data>
+  <data name="Profiles.Edit.CancelLink" xml:space="preserve"><value>Batal</value></data>
+  <data name="Profiles.Delete.Title" xml:space="preserve"><value>Hapus profil</value></data>
+  <data name="Profiles.Delete.ConfirmText" xml:space="preserve"><value>Apakah kamu yakin ingin menghapus profil "{0}"? Tindakan ini tidak dapat dibatalkan.</value></data>
+  <data name="Profiles.Delete.SessionCountText" xml:space="preserve"><value>Ini akan menghapus permanen {0} sesi latihan yang tersimpan.</value></data>
+  <data name="Profiles.Delete.ConfirmButton" xml:space="preserve"><value>Hapus permanen</value></data>
+</root>

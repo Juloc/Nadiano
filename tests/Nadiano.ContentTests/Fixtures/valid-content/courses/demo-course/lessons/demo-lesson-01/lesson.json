@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "demo-lesson-01",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 10,
+  "estimatedMinutes": 5,
+  "skills": ["technique.release"],
+  "prerequisites": [],
+  "assessment": {
+    "categories": ["pitch"],
+    "completionRule": { "requiredSuccessfulRuns": 2, "maximumPitchErrors": 0, "minimumTimingScore": 0.75 },
+    "selfChecks": ["body.thumb-side-contact"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nadiano",
+      "runtimeExecutable": "dotnet",
+      "runtimeArgs": ["run", "--project", "src/Nadiano.Web", "--no-build", "--urls", "http://localhost:5299"],
+      "port": 5299
+    }
+  ]
+}

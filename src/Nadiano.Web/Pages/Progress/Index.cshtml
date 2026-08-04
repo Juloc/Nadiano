@@ -1,0 +1,9 @@
+@page
+@model IndexModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Progress.Title"];
+}
+
+<h1>@Localizer["Progress.Title"]</h1>
+<p>@Localizer["Progress.Placeholder"]</p>

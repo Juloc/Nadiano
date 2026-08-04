@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    { "id": "body.thumb-side-contact", "competency": "body", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "technique.release", "competency": "technique", "introducedStage": "F0", "measurability": "self-assessment", "relatedSkills": ["body.thumb-side-contact"] }
+  ]
+}

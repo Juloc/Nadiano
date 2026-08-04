@@ -1,0 +1,41 @@
+@page "{id:guid}"
+@model EditModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Profiles.Edit.Title"];
+}
+
+<h1>@Localizer["Profiles.Edit.Title"]</h1>
+
+<form method="post" asp-antiforgery="true" class="field-list">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label for="profile-name">@Localizer["Profiles.Edit.NameLabel"]</label>
+        <input id="profile-name" type="text" asp-for="Name" required />
+    </div>
+
+    <div>
+        <label for="profile-language">@Localizer["Settings.LanguageLabel"]</label>
+        <select id="profile-language" asp-for="Language">
+            <option value="de">@Localizer["Common.LanguageGerman"]</option>
+            <option value="id">@Localizer["Common.LanguageIndonesian"]</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="profile-note-names">@Localizer["Profiles.Edit.NoteNameSystemLabel"]</label>
+        <select id="profile-note-names" asp-for="NoteNameSystem">
+            <option value="german">@Localizer["Profiles.Edit.NoteNameSystemGerman"]</option>
+            <option value="international">@Localizer["Profiles.Edit.NoteNameSystemInternational"]</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="profile-session-length">@Localizer["Profiles.Edit.SessionLengthLabel"]</label>
+        <input id="profile-session-length" type="number" min="5" max="120" asp-for="SessionLengthMinutes" />
+    </div>
+
+    <button type="submit" class="button">@Localizer["Settings.Save"]</button>
+    <a class="button" asp-page="/Profiles/Index">@Localizer["Profiles.Edit.CancelLink"]</a>
+</form>

@@ -1,0 +1,9 @@
+@page
+@model IndexModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Library.Title"];
+}
+
+<h1>@Localizer["Library.Title"]</h1>
+<p>@Localizer["Library.Placeholder"]</p>

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "broken-course",
+  "version": "0.1.0",
+  "defaultLanguage": "fr",
+  "supportedLanguages": ["de"],
+  "stages": [
+    { "id": "F0", "titleKey": "course.stage.f0", "items": ["ghost-lesson", "broken-lesson-01"] }
+  ]
+}

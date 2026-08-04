@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <data name="Nav.Home" xml:space="preserve"><value>Start</value></data>
+  <data name="Nav.Learn" xml:space="preserve"><value>Lernen</value></data>
+  <data name="Nav.Practice" xml:space="preserve"><value>Üben</value></data>
+  <data name="Nav.Library" xml:space="preserve"><value>Bibliothek</value></data>
+  <data name="Nav.Progress" xml:space="preserve"><value>Fortschritt</value></data>
+  <data name="Nav.Settings" xml:space="preserve"><value>Einstellungen</value></data>
+  <data name="Nav.Profiles" xml:space="preserve"><value>Profile</value></data>
+
+  <data name="Common.SkipToContent" xml:space="preserve"><value>Zum Inhalt springen</value></data>
+  <data name="Common.Language" xml:space="preserve"><value>Sprache</value></data>
+  <data name="Common.LanguageGerman" xml:space="preserve"><value>Deutsch</value></data>
+  <data name="Common.LanguageIndonesian" xml:space="preserve"><value>Indonesisch</value></data>
+  <data name="Common.AppName" xml:space="preserve"><value>Nadiano</value></data>
+
+  <data name="Home.Title" xml:space="preserve"><value>Willkommen bei Nadiano</value></data>
+  <data name="Home.Intro" xml:space="preserve"><value>Nadiano ist eine strukturierte Klavier-Lern- und Übungsanwendung. Sie verbindet dein Klavier per USB-MIDI mit geführten Lektionen, Notenanzeige und messbarem Feedback.</value></data>
+  <data name="Home.GetStarted" xml:space="preserve"><value>Jetzt starten</value></data>
+  <data name="Home.NoTeacherReplacement" xml:space="preserve"><value>Nadiano ersetzt keine qualifizierte Klavierlehrkraft für Haltung, Spannung, Bewegungsqualität oder professionelle Interpretation.</value></data>
+
+  <data name="Learn.Title" xml:space="preserve"><value>Lernen</value></data>
+  <data name="Learn.Placeholder" xml:space="preserve"><value>Der Kursfortschritt wird in Kürze hier angezeigt.</value></data>
+
+  <data name="Practice.Title" xml:space="preserve"><value>Üben</value></data>
+  <data name="Practice.Placeholder" xml:space="preserve"><value>Der Übungsbereich wird in Kürze hier verfügbar sein.</value></data>
+
+  <data name="Practice.Notation.ZoomLabel" xml:space="preserve"><value>Zoom</value></data>
+  <data name="Practice.Notation.FromMeasureLabel" xml:space="preserve"><value>Von Takt</value></data>
+  <data name="Practice.Notation.ToMeasureLabel" xml:space="preserve"><value>Bis Takt</value></data>
+  <data name="Practice.Notation.ErrorPrefix" xml:space="preserve"><value>Die Partitur konnte nicht angezeigt werden</value></data>
+
+  <data name="Practice.Workspace.GoalHeading" xml:space="preserve"><value>Übungsziel</value></data>
+  <data name="Practice.Workspace.Goal" xml:space="preserve"><value>Spiele die Tonleiter gleichmäßig und mit den richtigen Tönen. Dies ist eine Beispielübung zur Vorschau der Übungsumgebung.</value></data>
+  <data name="Practice.Workspace.TargetTempoLabel" xml:space="preserve"><value>Zieltempo</value></data>
+  <data name="Practice.Workspace.DeviceConnected" xml:space="preserve"><value>MIDI-Gerät verbunden.</value></data>
+  <data name="Practice.Workspace.DeviceNotConnected" xml:space="preserve"><value>Kein MIDI-Gerät verbunden. Bitte verbinden, bevor du übst.</value></data>
+  <data name="Practice.Workspace.ConnectButton" xml:space="preserve"><value>MIDI verbinden</value></data>
+  <data name="Practice.Workspace.ModeLabel" xml:space="preserve"><value>Übungsmodus</value></data>
+  <data name="Practice.Workspace.ModeWait" xml:space="preserve"><value>Warten</value></data>
+  <data name="Practice.Workspace.ModeLoop" xml:space="preserve"><value>Schleife</value></data>
+  <data name="Practice.Workspace.ModePerformance" xml:space="preserve"><value>Durchspielen</value></data>
+  <data name="Practice.Workspace.StartButton" xml:space="preserve"><value>Übung starten</value></data>
+  <data name="Practice.Workspace.StopButton" xml:space="preserve"><value>Übung beenden</value></data>
+  <data name="Practice.Workspace.RetryButton" xml:space="preserve"><value>Abschnitt wiederholen</value></data>
+  <data name="Practice.Workspace.LiveHeading" xml:space="preserve"><value>Aktueller Verlauf</value></data>
+  <data name="Practice.Workspace.StatusPending" xml:space="preserve"><value>noch offen</value></data>
+  <data name="Practice.Workspace.StatusCorrect" xml:space="preserve"><value>richtig</value></data>
+  <data name="Practice.Workspace.StatusMissed" xml:space="preserve"><value>verpasst</value></data>
+  <data name="Practice.Workspace.ResultHeading" xml:space="preserve"><value>Ergebnis</value></data>
+  <data name="Practice.Workspace.LoadError" xml:space="preserve"><value>Die Übung konnte nicht geladen werden.</value></data>
+
+  <data name="Practice.Result.PitchCorrect" xml:space="preserve"><value>Richtige Töne: {0} von {1}</value></data>
+  <data name="Practice.Result.PitchAdditions" xml:space="preserve"><value>Zusätzlich gespielte Töne: {0}</value></data>
+  <data name="Practice.Result.OnsetOnTime" xml:space="preserve"><value>Im Takt getroffen: {0} von {1}</value></data>
+  <data name="Practice.Result.DurationAverage" xml:space="preserve"><value>Haltedauer im Verhältnis zur Notenwert: {0}</value></data>
+  <data name="Practice.Result.SteadinessValue" xml:space="preserve"><value>Gleichmäßigkeit (Schwankung, niedriger ist gleichmäßiger): {0}</value></data>
+  <data name="Practice.Result.DynamicsRange" xml:space="preserve"><value>Anschlagstärke: {0}–{1} (Durchschnitt {2})</value></data>
+
+  <data name="Practice.NextAction.HandsSeparate" xml:space="preserve"><value>Empfehlung: Übe den Abschnitt zunächst mit einer Hand allein.</value></data>
+  <data name="Practice.NextAction.RepeatSlower" xml:space="preserve"><value>Empfehlung: Wiederhole den Abschnitt in einem langsameren Tempo.</value></data>
+  <data name="Practice.NextAction.RepeatSection" xml:space="preserve"><value>Empfehlung: Wiederhole diesen Abschnitt noch einmal.</value></data>
+  <data name="Practice.NextAction.WellDone" xml:space="preserve"><value>Gut gemacht! Du kannst mit dem nächsten Abschnitt fortfahren.</value></data>
+
+  <data name="Library.Title" xml:space="preserve"><value>Bibliothek</value></data>
+  <data name="Library.Placeholder" xml:space="preserve"><value>Die private Bibliothek für importierte MusicXML-Stücke ist für die Beta-Version vorgesehen. In der Alpha gibt es hier noch nichts zu verwalten.</value></data>
+
+  <data name="Progress.Title" xml:space="preserve"><value>Fortschritt</value></data>
+  <data name="Progress.Placeholder" xml:space="preserve"><value>Der Fortschritt wird in Kürze hier angezeigt.</value></data>
+
+  <data name="Settings.Title" xml:space="preserve"><value>Einstellungen</value></data>
+  <data name="Settings.LanguageLabel" xml:space="preserve"><value>Sprache der Oberfläche</value></data>
+  <data name="Settings.LanguageHelp" xml:space="preserve"><value>Die Sprache gilt für die gesamte Oberfläche und ist unabhängig von der Notennamen-Einstellung.</value></data>
+  <data name="Settings.VersionLabel" xml:space="preserve"><value>Anwendungsversion</value></data>
+  <data name="Settings.Save" xml:space="preserve"><value>Übernehmen</value></data>
+
+  <data name="Error.Title" xml:space="preserve"><value>Ein Fehler ist aufgetreten</value></data>
+  <data name="Error.Message" xml:space="preserve"><value>Etwas ist schiefgelaufen. Bitte versuche es erneut oder kehre zur Startseite zurück.</value></data>
+  <data name="Error.RequestId" xml:space="preserve"><value>Anfrage-ID</value></data>
+  <data name="Error.BackHome" xml:space="preserve"><value>Zur Startseite</value></data>
+
+  <data name="NotFound.Title" xml:space="preserve"><value>Seite nicht gefunden</value></data>
+  <data name="NotFound.Message" xml:space="preserve"><value>Die aufgerufene Seite existiert nicht oder wurde verschoben.</value></data>
+
+  <data name="Setup.Title" xml:space="preserve"><value>MIDI-Einrichtung</value></data>
+  <data name="Setup.Intro" xml:space="preserve"><value>Verbinde dein Klavier per USB mit diesem Gerät und erlaube dann den MIDI-Zugriff im Browser. Ohne Aktion wird kein Berechtigungsdialog angezeigt.</value></data>
+  <data name="Setup.ConnectButton" xml:space="preserve"><value>Mit MIDI verbinden</value></data>
+  <data name="Setup.Capabilities.Heading" xml:space="preserve"><value>Systemprüfung</value></data>
+  <data name="Setup.Capabilities.SecureContext" xml:space="preserve"><value>Sichere Verbindung</value></data>
+  <data name="Setup.Capabilities.Midi" xml:space="preserve"><value>Web-MIDI-Unterstützung</value></data>
+  <data name="Setup.Capabilities.Audio" xml:space="preserve"><value>Web-Audio-Unterstützung</value></data>
+  <data name="Setup.Capabilities.IndexedDb" xml:space="preserve"><value>Lokaler Speicher</value></data>
+  <data name="Setup.Capabilities.Yes" xml:space="preserve"><value>verfügbar</value></data>
+  <data name="Setup.Capabilities.No" xml:space="preserve"><value>nicht verfügbar</value></data>
+  <data name="Setup.Guidance.Insecure" xml:space="preserve"><value>Diese Seite läuft nicht in einem sicheren Kontext. Web MIDI benötigt HTTPS oder localhost; bitte rufe die Anwendung entsprechend auf.</value></data>
+  <data name="Setup.Guidance.Unsupported" xml:space="preserve"><value>Dieser Browser unterstützt Web MIDI nicht. Bitte verwende eine aktuelle Version von Chrome oder Edge.</value></data>
+  <data name="Setup.Guidance.Denied" xml:space="preserve"><value>Der MIDI-Zugriff wurde nicht erteilt. Bitte erlaube den Zugriff in den Browsereinstellungen und versuche es erneut.</value></data>
+  <data name="Setup.Devices.Heading" xml:space="preserve"><value>Verfügbare Geräte</value></data>
+  <data name="Setup.Devices.Empty" xml:space="preserve"><value>Es wurde kein MIDI-Gerät gefunden. Prüfe die USB-Verbindung.</value></data>
+  <data name="Setup.Devices.SelectButton" xml:space="preserve"><value>Auswählen</value></data>
+  <data name="Setup.Devices.Selected" xml:space="preserve"><value>Ausgewählt</value></data>
+  <data name="Setup.Devices.StateConnected" xml:space="preserve"><value>verbunden</value></data>
+  <data name="Setup.Devices.StateDisconnected" xml:space="preserve"><value>getrennt</value></data>
+  <data name="Setup.ForgetPreference" xml:space="preserve"><value>Gerätepräferenz vergessen</value></data>
+  <data name="Setup.PreferredDeviceHint" xml:space="preserve"><value>Bevorzugtes Gerät</value></data>
+
+  <data name="Setup.Diagnostics.Heading" xml:space="preserve"><value>Live-Diagnose</value></data>
+  <data name="Setup.Diagnostics.ActiveNotesHeading" xml:space="preserve"><value>Aktive Töne</value></data>
+  <data name="Setup.Diagnostics.ActiveNotesEmpty" xml:space="preserve"><value>Keine Taste aktuell gedrückt.</value></data>
+  <data name="Setup.Diagnostics.SustainOn" xml:space="preserve"><value>Pedal (Sustain): aktiv</value></data>
+  <data name="Setup.Diagnostics.SustainOff" xml:space="preserve"><value>Pedal (Sustain): nicht aktiv</value></data>
+  <data name="Setup.Diagnostics.RecentEventsHeading" xml:space="preserve"><value>Letzte Ereignisse</value></data>
+  <data name="Setup.Diagnostics.RecentEventsEmpty" xml:space="preserve"><value>Noch keine Ereignisse empfangen.</value></data>
+  <data name="Setup.Diagnostics.ExportButton" xml:space="preserve"><value>Diagnose exportieren</value></data>
+
+  <data name="Profiles.Title" xml:space="preserve"><value>Profile</value></data>
+  <data name="Profiles.Intro" xml:space="preserve"><value>Jede Person im Haushalt kann ein eigenes Profil mit eigenem Fortschritt und eigenen Einstellungen nutzen.</value></data>
+  <data name="Profiles.CurrentBadge" xml:space="preserve"><value>aktuell</value></data>
+  <data name="Profiles.SelectButton" xml:space="preserve"><value>Auswählen</value></data>
+  <data name="Profiles.EditLink" xml:space="preserve"><value>Bearbeiten</value></data>
+  <data name="Profiles.DeleteLink" xml:space="preserve"><value>Löschen</value></data>
+  <data name="Profiles.ExportLink" xml:space="preserve"><value>Daten exportieren</value></data>
+  <data name="Profiles.CreateHeading" xml:space="preserve"><value>Neues Profil anlegen</value></data>
+  <data name="Profiles.CreateLabel" xml:space="preserve"><value>Name</value></data>
+  <data name="Profiles.CreatePlaceholder" xml:space="preserve"><value>z. B. Profil 2</value></data>
+  <data name="Profiles.CreateButton" xml:space="preserve"><value>Profil anlegen</value></data>
+  <data name="Profiles.Edit.Title" xml:space="preserve"><value>Profil bearbeiten</value></data>
+  <data name="Profiles.Edit.NameLabel" xml:space="preserve"><value>Name</value></data>
+  <data name="Profiles.Edit.NoteNameSystemLabel" xml:space="preserve"><value>Notennamen</value></data>
+  <data name="Profiles.Edit.NoteNameSystemGerman" xml:space="preserve"><value>Deutsch (C, D, E, ... H)</value></data>
+  <data name="Profiles.Edit.NoteNameSystemInternational" xml:space="preserve"><value>International (C, D, E, ... B)</value></data>
+  <data name="Profiles.Edit.SessionLengthLabel" xml:space="preserve"><value>Übungsdauer in Minuten</value></data>
+  <data name="Profiles.Edit.CancelLink" xml:space="preserve"><value>Abbrechen</value></data>
+  <data name="Profiles.Delete.Title" xml:space="preserve"><value>Profil löschen</value></data>
+  <data name="Profiles.Delete.ConfirmText" xml:space="preserve"><value>Möchtest du das Profil "{0}" wirklich löschen? Dies kann nicht rückgängig gemacht werden.</value></data>
+  <data name="Profiles.Delete.SessionCountText" xml:space="preserve"><value>Dabei werden {0} gespeicherte Übungssitzungen unwiderruflich gelöscht.</value></data>
+  <data name="Profiles.Delete.ConfirmButton" xml:space="preserve"><value>Endgültig löschen</value></data>
+</root>

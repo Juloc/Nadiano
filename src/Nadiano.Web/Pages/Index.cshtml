@@ -1,0 +1,15 @@
+@page
+@model IndexModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Home.Title"];
+}
+
+<h1>@Localizer["Home.Title"]</h1>
+<p>@Localizer["Home.Intro"]</p>
+
+<p class="callout">@Localizer["Home.NoTeacherReplacement"]</p>
+
+<p>
+    <a class="button" asp-page="/Setup/Index">@Localizer["Home.GetStarted"]</a>
+</p>

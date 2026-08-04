@@ -1,0 +1,17 @@
+@page "{id:guid}"
+@model DeleteModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Localizer["Profiles.Delete.Title"];
+}
+
+<h1>@Localizer["Profiles.Delete.Title"]</h1>
+
+<p>@string.Format(Localizer["Profiles.Delete.ConfirmText"].Value, Model.ProfileName)</p>
+<p>@string.Format(Localizer["Profiles.Delete.SessionCountText"].Value, Model.SessionCount)</p>
+
+<form method="post" asp-antiforgery="true">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="button button--danger">@Localizer["Profiles.Delete.ConfirmButton"]</button>
+    <a class="button" asp-page="/Profiles/Index">@Localizer["Profiles.Edit.CancelLink"]</a>
+</form>

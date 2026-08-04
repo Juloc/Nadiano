@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "id": "demo-course",
+  "version": "0.1.0",
+  "defaultLanguage": "de",
+  "supportedLanguages": ["de", "id"],
+  "stages": [
+    { "id": "F0", "titleKey": "course.stage.f0", "items": ["demo-lesson-01"] }
+  ]
+}

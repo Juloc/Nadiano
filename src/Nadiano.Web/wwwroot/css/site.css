@@ -1,0 +1,320 @@
+:root {
+  color-scheme: light;
+  --nadiano-color-bg: #ffffff;
+  --nadiano-color-fg: #1b1f24;
+  --nadiano-color-muted: #4b5563;
+  --nadiano-color-border: #d0d5dd;
+  --nadiano-color-accent: #1c5fb8;
+  --nadiano-color-accent-contrast: #ffffff;
+  --nadiano-color-surface: #f5f7fa;
+  --nadiano-focus-ring: 0 0 0 3px #ffffff, 0 0 0 5px #1c5fb8;
+  --nadiano-radius: 6px;
+  --nadiano-font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--nadiano-font);
+  color: var(--nadiano-color-fg);
+  background: var(--nadiano-color-bg);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--nadiano-color-accent);
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--nadiano-focus-ring);
+  border-radius: var(--nadiano-radius);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  background: var(--nadiano-color-accent);
+  color: var(--nadiano-color-accent-contrast);
+  border-radius: 0 0 var(--nadiano-radius) 0;
+}
+
+.skip-link:focus {
+  left: 0;
+}
+
+.app-header {
+  border-bottom: 1px solid var(--nadiano-color-border);
+  background: var(--nadiano-color-surface);
+}
+
+.app-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+}
+
+.app-brand {
+  font-weight: 700;
+  font-size: 1.125rem;
+  text-decoration: none;
+}
+
+.app-nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1 1 auto;
+}
+
+.app-nav-list a {
+  display: inline-block;
+  padding: 0.4rem 0.2rem;
+  text-decoration: none;
+  color: var(--nadiano-color-fg);
+  border-bottom: 2px solid transparent;
+}
+
+.app-nav-list a:hover {
+  border-bottom-color: var(--nadiano-color-accent);
+}
+
+.app-culture-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-culture-form select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--nadiano-color-border);
+  border-radius: var(--nadiano-radius);
+  background: var(--nadiano-color-bg);
+  color: var(--nadiano-color-fg);
+}
+
+main {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+main h1 {
+  margin-top: 0;
+}
+
+.app-footer {
+  border-top: 1px solid var(--nadiano-color-border);
+  color: var(--nadiano-color-muted);
+  font-size: 0.875rem;
+}
+
+.app-footer p {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+}
+
+.card {
+  border: 1px solid var(--nadiano-color-border);
+  border-radius: var(--nadiano-radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  background: var(--nadiano-color-surface);
+}
+
+.button {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--nadiano-radius);
+  background: var(--nadiano-color-accent);
+  color: var(--nadiano-color-accent-contrast);
+  text-decoration: none;
+  border: 1px solid transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 0.92;
+}
+
+.button-secondary {
+  background: transparent;
+  color: var(--nadiano-color-accent);
+  border-color: var(--nadiano-color-accent);
+}
+
+.field-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 28rem;
+}
+
+.field-list label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.field-list select,
+.field-list input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--nadiano-color-border);
+  border-radius: var(--nadiano-radius);
+}
+
+.help-text {
+  color: var(--nadiano-color-muted);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.callout {
+  border-left: 4px solid var(--nadiano-color-accent);
+  padding: 0.75rem 1rem;
+  background: var(--nadiano-color-surface);
+  border-radius: 0 var(--nadiano-radius) var(--nadiano-radius) 0;
+}
+
+.keyboard {
+  display: flex;
+  align-items: flex-end;
+  height: 90px;
+  overflow-x: auto;
+  border: 1px solid var(--nadiano-color-border);
+  border-radius: var(--nadiano-radius);
+  padding: 4px;
+  background: var(--nadiano-color-surface);
+}
+
+.keyboard-key {
+  flex: 0 0 auto;
+  width: 10px;
+  border: 1px solid var(--nadiano-color-border);
+  border-radius: 0 0 3px 3px;
+}
+
+.keyboard-key-white {
+  height: 80px;
+  background: #ffffff;
+}
+
+.keyboard-key-black {
+  height: 50px;
+  width: 7px;
+  background: #1b1f24;
+  margin: 0 -4px;
+  z-index: 1;
+}
+
+.keyboard-key-active {
+  background: var(--nadiano-color-accent) !important;
+}
+
+.metronome-visual {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--nadiano-color-border);
+  transition: transform 0.1s ease-out, background-color 0.1s ease-out;
+}
+
+.metronome-visual-beat {
+  background: var(--nadiano-color-accent);
+}
+
+.metronome-visual-beat-accent {
+  background: var(--nadiano-color-fg);
+}
+
+.metronome-visual-scale {
+  transform: scale(1.2);
+}
+
+.notation-container {
+  width: 100%;
+  max-width: 100%;
+  min-height: 120px;
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid var(--nadiano-color-border);
+  border-radius: var(--nadiano-radius);
+  margin-bottom: 1rem;
+}
+
+#workspace-live-list,
+#workspace-result-list {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+#workspace-result-list {
+  flex-direction: column;
+}
+
+#workspace-live-list li {
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--nadiano-radius);
+  border: 1px solid var(--nadiano-color-border);
+  font-size: 0.9rem;
+}
+
+.practice-status-correct {
+  border-color: #2f9e44 !important;
+  background: #ebfbee;
+}
+
+.practice-status-missed {
+  border-color: #c92a2a !important;
+  background: #fff5f5;
+}
+
+.practice-status-pending {
+  color: var(--nadiano-color-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
