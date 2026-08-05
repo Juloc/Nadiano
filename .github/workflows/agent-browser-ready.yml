@@ -1,0 +1,54 @@
+name: Add practice readiness signal
+
+on:
+  push:
+    branches:
+      - fix/nadiano-alpha-browser-ready
+    paths:
+      - .github/agent-browser-ready.apply
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Add deterministic page readiness wait
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          practice = Path('src/Nadiano.Web/wwwroot/js/pages/practice.ts')
+          text = practice.read_text()
+          old = '  void loadLesson();\n}'
+          new = '  workspace.dataset.initialized = "true";\n  void loadLesson();\n}'
+          if old not in text:
+              raise SystemExit('Practice initialization source was not found')
+          practice.write_text(text.replace(old, new, 1))
+
+          browser = Path('tests/Nadiano.BrowserTests/AlphaCriticalPathBrowserTests.cs')
+          text = browser.read_text()
+          old = '            await page.Locator("#practice-workspace").WaitForAsync();\n\n            Assert.Equal'
+          new = '''            await page.Locator("#practice-workspace").WaitForAsync();
+            await page.Locator("#practice-workspace[data-initialized='true']").WaitForAsync();
+
+            Assert.Equal'''
+          if old not in text:
+              raise SystemExit('Browser workspace wait source was not found')
+          browser.write_text(text.replace(old, new, 1))
+          PY
+          dotnet format Nadiano.slnx
+          rm -f .github/agent-browser-ready.apply
+          git config user.name "Juloc"
+          git config user.email "juli.hiresch@gmail.com"
+          git add src/Nadiano.Web/wwwroot/js/pages/practice.ts tests/Nadiano.BrowserTests .github/agent-browser-ready.apply
+          git commit -m "Wait for practice workspace initialization in browser tests"
+          git push origin HEAD:fix/nadiano-alpha-browser-ready
