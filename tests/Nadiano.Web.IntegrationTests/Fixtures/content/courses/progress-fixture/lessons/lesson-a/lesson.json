@@ -9,19 +9,37 @@
   "technique": {
     "id": "lesson-a-technique",
     "views": [
-      { "kind": "top", "path": "media/technique-top.webm", "poster": "media/technique-top.webp" }
+      {
+        "kind": "top",
+        "path": "media/technique-top.webm",
+        "poster": "media/technique-top.webp"
+      }
     ],
     "hasAudioDescription": false,
     "loop": true
   },
   "assessment": {
-    "categories": ["pitch"],
+    "categories": [
+      "pitch"
+    ],
     "completionRule": {
       "requiredSuccessfulRuns": 1,
       "maximumPitchErrors": 5,
       "minimumTimingScore": 0
     }
   },
-  "localization": { "directory": "i18n" },
-  "attribution": "attribution.json"
+  "localization": {
+    "directory": "i18n"
+  },
+  "attribution": "attribution.json",
+  "skills": [
+    "technique.fixture"
+  ],
+  "review": {
+    "initialIntervalsDays": [
+      1,
+      3,
+      7
+    ]
+  }
 }

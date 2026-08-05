@@ -294,4 +294,20 @@ public class MusicXmlExpectedEventGeneratorTests
         Assert.Null(result.Document);
         Assert.NotEmpty(result.UnsupportedConstructs);
     }
+
+    [Fact]
+    public void Generate_UsesLessonTempoWhenMusicXmlHasNoTempoMarking()
+    {
+        const string musicXml = """
+            <score-partwise version="4.0">
+              <part-list><score-part id="P1"><part-name>Piano</part-name></score-part></part-list>
+              <part id="P1"><measure number="1"><attributes><divisions>1</divisions><time><beats>4</beats><beat-type>4</beat-type></time></attributes><note><pitch><step>C</step><octave>4</octave></pitch><duration>4</duration><voice>1</voice></note></measure></part>
+            </score-partwise>
+            """;
+
+        var result = MusicXmlExpectedEventGenerator.Generate(musicXml, defaultTempoBpm: 66);
+
+        Assert.True(result.Success);
+        Assert.Equal(66, Assert.Single(result.Document!.TempoMap).Bpm);
+    }
 }

@@ -243,7 +243,10 @@ public static class LessonManifestValidator
         }
 
         var musicXml = File.ReadAllText(notationPath);
-        var generation = MusicXmlExpectedEventGenerator.Generate(musicXml, ToHandMapping(lesson.Notation.PartMapping));
+        var generation = MusicXmlExpectedEventGenerator.Generate(
+            musicXml,
+            ToHandMapping(lesson.Notation.PartMapping),
+            lesson.Practice.TargetTempo);
 
         if (!generation.Success)
         {

@@ -23,6 +23,9 @@ Nadiano should help a complete beginner build correct foundations and continue t
 - [Junior implementation plan](docs/JUNIOR_IMPLEMENTATION_PLAN.md)
 - [Alpha, beta and 1.0 roadmap](docs/ROADMAP.md)
 - [Quality and release requirements](docs/QUALITY_AND_RELEASE.md)
+- [First run and browser support](docs/FIRST_RUN_AND_BROWSER_SUPPORT.md)
+- [Backup and restore](docs/BACKUP_AND_RESTORE.md)
+- [Alpha known limitations](docs/KNOWN_LIMITATIONS_ALPHA.md)
 - [Research basis and sources](docs/RESEARCH_BASIS.md)
 - [Architecture decisions](docs/decisions/README.md)
 
@@ -45,4 +48,4 @@ Read [AGENTS.md](AGENTS.md) before making changes. Documentation and implementat
 
 ## Status
 
-Planning foundation. No production implementation exists yet.
+`0.1.0-alpha.1` is the first internal household pre-release. It includes the complete Alpha content set, profile-isolated progress, deterministic MIDI scoring, Docker deployment, release diagnostics and cold backup documentation. The real-piano test matrix remains a documented human verification step before the Alpha is considered hardware-verified.

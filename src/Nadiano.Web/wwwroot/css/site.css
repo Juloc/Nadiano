@@ -398,3 +398,54 @@ audio.technique-media {
     scroll-behavior: auto !important;
   }
 }
+
+.progress-summary-number {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.progress-meter {
+  width: 100%;
+  min-height: 1rem;
+  accent-color: var(--nadiano-color-accent);
+}
+
+.progress-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 1rem;
+}
+
+.progress-card {
+  margin-bottom: 0;
+}
+
+.progress-card h3,
+.observation-list h3 {
+  margin-top: 0;
+}
+
+.progress-list,
+.observation-list {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.progress-list li,
+.observation-list li {
+  padding: 0.5rem 0;
+}
+
+.progress-list .help-text {
+  margin-left: 0.5rem;
+}
+
+.observation-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.observation-list li + li {
+  border-top: 1px solid var(--nadiano-color-border);
+}

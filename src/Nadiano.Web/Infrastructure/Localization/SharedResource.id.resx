@@ -73,6 +73,9 @@
   <data name="SelfCheck.creative.call-response" xml:space="preserve"><value>Bisakah kamu menemukan jawaban singkatmu sendiri atas pola itu?</value></data>
 
   <data name="Practice.Title" xml:space="preserve"><value>Berlatih</value></data>
+  <data name="Practice.Workspace.ModeHandsSeparate" xml:space="preserve"><value>Tangan terpisah</value></data>
+  <data name="Practice.SelectLesson" xml:space="preserve"><value>Pilih pelajaran</value></data>
+  <data name="Practice.NoLesson" xml:space="preserve"><value>Pilih terlebih dahulu pelajaran yang memiliki latihan notasi.</value></data>
   <data name="Practice.Placeholder" xml:space="preserve"><value>Area latihan akan segera tersedia di sini.</value></data>
 
   <data name="Practice.Notation.ZoomLabel" xml:space="preserve"><value>Perbesar</value></data>
@@ -81,7 +84,7 @@
   <data name="Practice.Notation.ErrorPrefix" xml:space="preserve"><value>Partitur tidak dapat ditampilkan</value></data>
 
   <data name="Practice.Workspace.GoalHeading" xml:space="preserve"><value>Tujuan latihan</value></data>
-  <data name="Practice.Workspace.Goal" xml:space="preserve"><value>Mainkan tangga nada dengan rata dan dengan nada yang benar. Ini adalah contoh latihan untuk pratinjau area latihan.</value></data>
+  <data name="Practice.Workspace.Goal" xml:space="preserve"><value>Mainkan nada yang ditampilkan sesuai dengan mode latihan yang dipilih.</value></data>
   <data name="Practice.Workspace.TargetTempoLabel" xml:space="preserve"><value>Tempo sasaran</value></data>
   <data name="Practice.Workspace.DeviceConnected" xml:space="preserve"><value>Perangkat MIDI terhubung.</value></data>
   <data name="Practice.Workspace.DeviceNotConnected" xml:space="preserve"><value>Belum ada perangkat MIDI yang terhubung. Silakan hubungkan sebelum berlatih.</value></data>
@@ -185,4 +188,42 @@
   <data name="Profiles.Delete.ConfirmText" xml:space="preserve"><value>Apakah kamu yakin ingin menghapus profil "{0}"? Tindakan ini tidak dapat dibatalkan.</value></data>
   <data name="Profiles.Delete.SessionCountText" xml:space="preserve"><value>Ini akan menghapus permanen {0} sesi latihan yang tersimpan.</value></data>
   <data name="Profiles.Delete.ConfirmButton" xml:space="preserve"><value>Hapus permanen</value></data>
+
+  <data name="Progress.Intro" xml:space="preserve"><value>Ringkasan ini hanya menampilkan kemajuan profil yang sedang dipilih. Penyelesaian pelajaran, pengukuran MIDI, dan penilaian diri tetap dipisahkan.</value></data>
+  <data name="Progress.Recommendation.Heading" xml:space="preserve"><value>Langkah berikut yang disarankan</value></data>
+  <data name="Progress.Recommendation.Review" xml:space="preserve"><value>Ada pelajaran yang perlu diulang:</value></data>
+  <data name="Progress.Recommendation.NextLesson" xml:space="preserve"><value>Pelajaran berikut yang disarankan:</value></data>
+  <data name="Progress.Recommendation.CourseComplete" xml:space="preserve"><value>Semua pelajaran yang saat ini tersedia sudah selesai.</value></data>
+  <data name="Progress.Recommendation.Continue" xml:space="preserve"><value>Lanjutkan latihan saat ini.</value></data>
+  <data name="Progress.Completion.Heading" xml:space="preserve"><value>Kemajuan pelajaran</value></data>
+  <data name="Progress.Completion.Summary" xml:space="preserve"><value>{0} dari {1} pelajaran selesai</value></data>
+  <data name="Progress.Completion.RecentHeading" xml:space="preserve"><value>Terakhir diselesaikan</value></data>
+  <data name="Progress.Competency.Heading" xml:space="preserve"><value>Sebaran kompetensi</value></data>
+  <data name="Progress.Competency.Explanation" xml:space="preserve"><value>Batang menunjukkan pelajaran kursus yang selesai pada setiap bidang. Ini bukan nilai kemampuan umum.</value></data>
+  <data name="Progress.Competency.Summary" xml:space="preserve"><value>{0} dari {1} pelajaran terkait selesai</value></data>
+  <data name="Progress.Competency.body" xml:space="preserve"><value>Tubuh dan posisi</value></data>
+  <data name="Progress.Competency.technique" xml:space="preserve"><value>Teknik</value></data>
+  <data name="Progress.Competency.rhythm" xml:space="preserve"><value>Ritme</value></data>
+  <data name="Progress.Competency.reading" xml:space="preserve"><value>Membaca not</value></data>
+  <data name="Progress.Competency.ear" xml:space="preserve"><value>Pendengaran</value></data>
+  <data name="Progress.Competency.expression" xml:space="preserve"><value>Ekspresi</value></data>
+  <data name="Progress.Competency.creative" xml:space="preserve"><value>Kreativitas</value></data>
+  <data name="Progress.Observations.Heading" xml:space="preserve"><value>Kategori yang diamati</value></data>
+  <data name="Progress.Observations.Explanation" xml:space="preserve"><value>Persentase baru ditampilkan setelah sedikitnya tiga percobaan yang sesuai. Tren baru dihitung dari enam percobaan. Penilaian diri bukan pengukuran MIDI.</value></data>
+  <data name="Progress.Observation.pitch" xml:space="preserve"><value>Nada</value></data>
+  <data name="Progress.Observation.timing" xml:space="preserve"><value>Waktu mulai nada</value></data>
+  <data name="Progress.Observation.self-check" xml:space="preserve"><value>Penilaian diri</value></data>
+  <data name="Progress.Observation.Accuracy" xml:space="preserve"><value>{0}% sesuai dalam {1} percobaan yang dinilai</value></data>
+  <data name="Progress.Observation.NotEnough" xml:space="preserve"><value>Data belum cukup: {0} dari sedikitnya 3 percobaan.</value></data>
+  <data name="Progress.Trend.improving" xml:space="preserve"><value>Tiga percobaan terakhir lebih baik daripada tiga sebelumnya.</value></data>
+  <data name="Progress.Trend.stable" xml:space="preserve"><value>Enam percobaan terakhir tidak menunjukkan perbedaan yang jelas.</value></data>
+  <data name="Progress.Trend.needs-attention" xml:space="preserve"><value>Tiga percobaan terakhir memerlukan perhatian lebih daripada tiga sebelumnya.</value></data>
+  <data name="Progress.Trend.NotEnough" xml:space="preserve"><value>Tren memerlukan 6 percobaan. Saat ini tersedia: {0}.</value></data>
+  <data name="Progress.Review.Heading" xml:space="preserve"><value>Pengulangan</value></data>
+  <data name="Progress.Review.Explanation" xml:space="preserve"><value>Pelajaran disarankan kembali setelah interval pengulangan pertama sejak latihan berhasil terakhir.</value></data>
+  <data name="Progress.Review.None" xml:space="preserve"><value>Saat ini tidak ada pengulangan yang jatuh tempo.</value></data>
+  <data name="Progress.Review.Due" xml:space="preserve"><value>jatuh tempo</value></data>
+  <data name="Progress.Recent.Heading" xml:space="preserve"><value>Percobaan latihan terakhir</value></data>
+  <data name="Progress.Recent.Empty" xml:space="preserve"><value>Belum ada percobaan latihan yang selesai untuk profil ini.</value></data>
+  <data name="Progress.Recent.Start" xml:space="preserve"><value>Buka pelajaran pertama</value></data>
 </root>
