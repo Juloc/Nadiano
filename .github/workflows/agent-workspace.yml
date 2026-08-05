@@ -5,7 +5,7 @@ on:
     branches:
       - work/nadiano-alpha-20260805
     paths:
-      - .github/agent-patch.b64
+      - .github/agent-patch.ready
 
 permissions:
   contents: write
@@ -20,8 +20,8 @@ jobs:
       - name: Apply prepared source tree
         shell: bash
         run: |
-          base64 --decode .github/agent-patch.b64 | tar -xzf -
-          rm .github/agent-patch.b64
+          cat .github/agent-patch.part-* | base64 --decode | tar -xzf -
+          rm .github/agent-patch.part-* .github/agent-patch.ready
           rm .github/workflows/agent-workspace.yml
           git config user.name "Juloc"
           git config user.email "juli.hiresch@gmail.com"
