@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
 using Nadiano.Core.Profiles;
 
 namespace Nadiano.Web.Infrastructure.Persistence;
