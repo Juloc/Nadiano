@@ -1,0 +1,31 @@
+name: Add missing Alpha files
+
+on:
+  push:
+    branches:
+      - work/nadiano-alpha-20260805
+    paths:
+      - .github/agent-new-files.ready
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Extract and commit missing files
+        shell: bash
+        run: |
+          cat .github/agent-new-files.part-* | base64 --decode > /tmp/nadiano-new-files.tar.gz
+          echo "e81354875b8cb15c79b5d6de24cb913faa3bbd1fcd6ef9fbbdc8b65c85a1a353  /tmp/nadiano-new-files.tar.gz" | sha256sum -c -
+          tar -xzf /tmp/nadiano-new-files.tar.gz
+          rm -f .github/agent-new-files.part-* .github/agent-new-files.ready
+          git config user.name "Juloc"
+          git config user.email "juli.hiresch@gmail.com"
+          git add -A
+          git commit -m "Add complete Alpha content, services and verification files"
+          git push origin HEAD:work/nadiano-alpha-20260805
