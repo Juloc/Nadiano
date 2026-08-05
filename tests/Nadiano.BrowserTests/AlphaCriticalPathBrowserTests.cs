@@ -76,6 +76,10 @@ public sealed class AlphaCriticalPathBrowserTests
 
             await page.Locator("#workspace-start-button").ClickAsync();
             await WaitUntilEnabledAsync(page.Locator("#workspace-stop-button"));
+            await page.Locator("#workspace-live-section").WaitForAsync(new LocatorWaitForOptions
+            {
+                State = WaitForSelectorState.Visible,
+            });
 
             for (var index = 0; index < 8; index++)
             {
