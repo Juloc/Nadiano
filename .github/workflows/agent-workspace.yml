@@ -13,9 +13,16 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Generate expected events
+        run: dotnet run --project tools/Nadiano.ContentValidator -c Release -- --generate content
+      - name: Validate generated content
+        run: dotnet run --project tools/Nadiano.ContentValidator -c Release -- content
       - uses: actions/upload-artifact@v4
         with:
-          name: nadiano-source
+          name: nadiano-generated-source
           path: |
             .
             !.git
