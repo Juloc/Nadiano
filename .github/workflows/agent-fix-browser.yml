@@ -28,21 +28,15 @@ jobs:
 
           path = Path('tests/Nadiano.BrowserTests/AlphaCriticalPathBrowserTests.cs')
           text = path.read_text()
-          old = '''            await page.Locator("#workspace-start-button").ClickAsync();
-            await WaitUntilEnabledAsync(page.Locator("#workspace-stop-button"));
-
-            for (var index = 0; index < 8; index++)'''
-          new = '''            await page.Locator("#workspace-start-button").ClickAsync();
-            await WaitUntilEnabledAsync(page.Locator("#workspace-stop-button"));
+          needle = '            await WaitUntilEnabledAsync(page.Locator("#workspace-stop-button"));'
+          replacement = '''            await WaitUntilEnabledAsync(page.Locator("#workspace-stop-button"));
             await page.Locator("#workspace-live-section").WaitForAsync(new LocatorWaitForOptions
             {
                 State = WaitForSelectorState.Visible,
-            });
-
-            for (var index = 0; index < 8; index++)'''
-          if old not in text:
-              raise SystemExit('Browser count-in test source was not found')
-          path.write_text(text.replace(old, new, 1))
+            });'''
+          if needle not in text:
+              raise SystemExit('Browser count-in wait source was not found')
+          path.write_text(text.replace(needle, replacement, 1))
           PY
           dotnet format Nadiano.slnx
           rm -f .github/agent-fix-browser.ready
