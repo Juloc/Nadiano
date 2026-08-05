@@ -23,7 +23,7 @@ public class PracticePageTests : IClassFixture<ProgressWebApplicationFactory>
         using var client = _factory.CreateClient();
 
         var response = await client.GetAsync("/Practice");
-        var html = await response.Content.ReadAsStringAsync();
+        var html = WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync());
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Contains("Wähle zuerst eine Lektion mit Notenübung aus.", html);

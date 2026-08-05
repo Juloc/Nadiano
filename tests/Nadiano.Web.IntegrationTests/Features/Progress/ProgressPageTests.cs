@@ -40,7 +40,7 @@ public class ProgressPageTests : IClassFixture<ProgressWebApplicationFactory>
 
         var germanRequest = WithCookie("/Progress", profileCookie);
         var germanResponse = await client.SendAsync(germanRequest);
-        var germanHtml = await germanResponse.Content.ReadAsStringAsync();
+        var germanHtml = WebUtility.HtmlDecode(await germanResponse.Content.ReadAsStringAsync());
 
         Assert.Equal(HttpStatusCode.OK, germanResponse.StatusCode);
         Assert.Contains("Lektion A", germanHtml);
@@ -53,7 +53,7 @@ public class ProgressPageTests : IClassFixture<ProgressWebApplicationFactory>
         var indonesianRequest = WithCookie("/Progress", profileCookie);
         indonesianRequest.Headers.AcceptLanguage.ParseAdd("id");
         var indonesianResponse = await client.SendAsync(indonesianRequest);
-        var indonesianHtml = await indonesianResponse.Content.ReadAsStringAsync();
+        var indonesianHtml = WebUtility.HtmlDecode(await indonesianResponse.Content.ReadAsStringAsync());
 
         Assert.Equal(HttpStatusCode.OK, indonesianResponse.StatusCode);
         Assert.Contains("Kemajuan", indonesianHtml);

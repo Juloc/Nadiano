@@ -65,7 +65,7 @@ public sealed class AlphaCriticalPathBrowserTests
             }
 
             await page.GotoAsync($"{baseUrl}/Learn/Lesson/exercise-single-tone-01");
-            await page.Locator("a[href*='/Practice']").ClickAsync();
+            await page.Locator("#main-content a[href='/Practice?lessonId=exercise-single-tone-01']").ClickAsync();
             await page.Locator("#practice-workspace").WaitForAsync();
 
             Assert.Equal("exercise-single-tone-01", await page.Locator("#practice-workspace").GetAttributeAsync("data-lesson-id"));
