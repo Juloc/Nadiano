@@ -1,0 +1,53 @@
+name: Fix Alpha browser timing
+
+on:
+  push:
+    branches:
+      - work/nadiano-alpha-20260805
+    paths:
+      - .github/agent-fix-browser.ready
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - name: Wait for count-in completion before MIDI events
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('tests/Nadiano.BrowserTests/AlphaCriticalPathBrowserTests.cs')
+          text = path.read_text()
+          old = '''            await page.Locator("#workspace-start-button").ClickAsync();
+            await WaitUntilEnabledAsync(page.Locator("#workspace-stop-button"));
+
+            for (var index = 0; index < 8; index++)'''
+          new = '''            await page.Locator("#workspace-start-button").ClickAsync();
+            await WaitUntilEnabledAsync(page.Locator("#workspace-stop-button"));
+            await page.Locator("#workspace-live-section").WaitForAsync(new LocatorWaitForOptions
+            {
+                State = WaitForSelectorState.Visible,
+            });
+
+            for (var index = 0; index < 8; index++)'''
+          if old not in text:
+              raise SystemExit('Browser count-in test source was not found')
+          path.write_text(text.replace(old, new, 1))
+          PY
+          dotnet format Nadiano.slnx
+          rm -f .github/agent-fix-browser.ready
+          git config user.name "Juloc"
+          git config user.email "juli.hiresch@gmail.com"
+          git add tests/Nadiano.BrowserTests .github/agent-fix-browser.ready
+          git commit -m "Wait for practice count-in before fake MIDI input"
+          git push origin HEAD:work/nadiano-alpha-20260805
