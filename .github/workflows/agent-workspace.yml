@@ -23,7 +23,7 @@ jobs:
           cat .github/agent-diff.part-* | base64 --decode > /tmp/nadiano.patch.xz
           echo "b2423e413776f8bfeb21bf2c26ce3b428384bedfadeb365e5d3a4cdd1620eac7  /tmp/nadiano.patch.xz" | sha256sum -c -
           xz -dc /tmp/nadiano.patch.xz > /tmp/nadiano.patch
-          git apply --binary --whitespace=nowarn /tmp/nadiano.patch
+          git apply --binary --whitespace=nowarn --exclude=.github/workflows/agent-workspace.yml /tmp/nadiano.patch
           rm -f .github/agent-patch.part-* .github/agent-diff.part-* .github/agent-diff.ready
           rm .github/workflows/agent-workspace.yml
           git config user.name "Juloc"
