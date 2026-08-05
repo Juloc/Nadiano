@@ -10,7 +10,7 @@ import type { ScoringPolicy } from "../scoring/ScoringPolicy";
 import type { MidiAccessAdapter, Unsubscribe } from "../midi/MidiAccessAdapter";
 import type { PlayedMidiEvent } from "../midi/types";
 
-export type PracticeMode = "wait" | "loop" | "performance";
+export type PracticeMode = "wait" | "loop" | "hands-separate" | "performance";
 
 export interface PracticeSessionConfig {
   mode: PracticeMode;

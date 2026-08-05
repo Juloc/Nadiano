@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Nadiano.Core.Content;
 using Nadiano.Core.Content.Validation;
 using Nadiano.Web.Features.Content;
+using Nadiano.Web.Features.Diagnostics;
 using Nadiano.Web.Features.Practice;
 using Nadiano.Web.Features.Profiles;
 using Nadiano.Web.Features.Progress;
@@ -39,6 +40,7 @@ builder.Services.AddSingleton<ContentCatalogue>();
 
 builder.Services.AddScoped<CurrentProfileAccessor>();
 builder.Services.AddScoped<CourseProgressService>();
+builder.Services.AddScoped<ProgressSummaryService>();
 
 var app = builder.Build();
 
@@ -90,6 +92,7 @@ app.MapPracticeSessionEndpoints();
 app.MapProfileExportEndpoints();
 app.MapSelfCheckEndpoints();
 app.MapContentMediaEndpoints();
+app.MapReleaseDiagnosticsEndpoints();
 
 app.MapStaticAssets();
 app.MapRazorPages()

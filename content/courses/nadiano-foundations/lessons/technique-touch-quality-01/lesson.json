@@ -12,6 +12,7 @@
     "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
     "selfChecks": ["technique.connected-phrase", "technique.detached-movement", "expression.dynamics-range"]
   },
+  "review": { "initialIntervalsDays": [1, 3, 7] },
   "localization": { "directory": "i18n" },
   "attribution": "attribution.json"
 }

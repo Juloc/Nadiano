@@ -71,7 +71,10 @@ static int GenerateExpectedEvents(string contentRoot)
             }
 
             var musicXml = File.ReadAllText(notationPath);
-            var generation = MusicXmlExpectedEventGenerator.Generate(musicXml, ToHandMapping(notation.PartMapping));
+            var generation = MusicXmlExpectedEventGenerator.Generate(
+                musicXml,
+                ToHandMapping(notation.PartMapping),
+                lesson.Practice?.TargetTempo ?? 90);
 
             if (!generation.Success)
             {

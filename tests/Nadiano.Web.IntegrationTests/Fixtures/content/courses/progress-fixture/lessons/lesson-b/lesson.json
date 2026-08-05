@@ -5,7 +5,49 @@
   "stage": "F0",
   "order": 20,
   "estimatedMinutes": 5,
-  "prerequisites": ["lesson-a"],
-  "localization": { "directory": "i18n" },
-  "attribution": "attribution.json"
+  "prerequisites": [
+    "lesson-a"
+  ],
+  "localization": {
+    "directory": "i18n"
+  },
+  "attribution": "attribution.json",
+  "skills": [
+    "reading.fixture"
+  ],
+  "notation": {
+    "path": "score.musicxml",
+    "partMapping": {
+      "P1": "right-hand"
+    }
+  },
+  "practice": {
+    "supportedModes": [
+      "wait",
+      "performance"
+    ],
+    "defaultMode": "wait",
+    "targetTempo": 66,
+    "countInMeasures": 1,
+    "sections": []
+  },
+  "assessment": {
+    "categories": [
+      "pitch",
+      "onset",
+      "duration"
+    ],
+    "completionRule": {
+      "requiredSuccessfulRuns": 1,
+      "maximumPitchErrors": 0,
+      "minimumTimingScore": 0
+    }
+  },
+  "review": {
+    "initialIntervalsDays": [
+      1,
+      3,
+      7
+    ]
+  }
 }

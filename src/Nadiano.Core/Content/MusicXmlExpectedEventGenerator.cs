@@ -27,7 +27,10 @@ public static class MusicXmlExpectedEventGenerator
         ["B"] = 11,
     };
 
-    public static ExpectedEventGenerationResult Generate(string musicXml, IReadOnlyDictionary<string, Hand>? partHandMapping = null)
+    public static ExpectedEventGenerationResult Generate(
+        string musicXml,
+        IReadOnlyDictionary<string, Hand>? partHandMapping = null,
+        int defaultTempoBpm = 90)
     {
         var unsupported = new List<string>();
         XDocument document;
@@ -47,7 +50,7 @@ public static class MusicXmlExpectedEventGenerator
             return new ExpectedEventGenerationResult { UnsupportedConstructs = ["Only score-partwise MusicXML is supported."] };
         }
 
-        var tempoMap = ReadTempoMap(root);
+        var tempoMap = ReadTempoMap(root, defaultTempoBpm);
         var events = new List<ExpectedEvent>();
 
         foreach (var partElement in root.Elements("part"))
@@ -88,7 +91,7 @@ public static class MusicXmlExpectedEventGenerator
         return XDocument.Load(xmlReader);
     }
 
-    private static IReadOnlyList<TempoMapEntry> ReadTempoMap(XElement root)
+    private static IReadOnlyList<TempoMapEntry> ReadTempoMap(XElement root, int defaultTempoBpm)
     {
         var soundTempo = root
             .Descendants("sound")
@@ -97,7 +100,7 @@ public static class MusicXmlExpectedEventGenerator
 
         var bpm = soundTempo is not null && double.TryParse(soundTempo, out var parsedTempo)
             ? (int)Math.Round(parsedTempo)
-            : 90;
+            : Math.Max(1, defaultTempoBpm);
 
         return [new TempoMapEntry { Beat = 0, Bpm = bpm }];
     }

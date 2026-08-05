@@ -7,18 +7,13 @@ import { NotationAdapter } from "../notation/NotationAdapter";
 import type { MatchResult } from "../scoring/matcher";
 import { NORMAL_MODE_POLICY, PERFORMANCE_MODE_POLICY, WAIT_MODE_POLICY } from "../scoring/ScoringPolicy";
 import { resolveExpectedEventTiming, type ResolvedExpectedEvent } from "../scoring/resolveExpectedEventTiming";
+import type { AssessmentCategory } from "../scoring/computeScoringFacts";
 import type { ExpectedEventDocument } from "../scoring/types";
 import { PracticeSession, type PracticeMode, type PracticeSessionResult } from "../practice/PracticeSession";
 import { completeSession, createSession } from "../practice/practiceApi";
 
-const LESSON_ID = "demo-notation-fixture";
-const CONTENT_VERSION = "wp016-demo-1";
 const RESULT_SCHEMA_VERSION = 1;
-
 const BEATS_PER_MEASURE = 4;
-const TARGET_TEMPO_BPM = 90;
-const ENABLED_CATEGORIES = ["pitch", "onset", "duration", "steadiness", "dynamics"] as const;
-const COUNT_IN_MEASURES = 1;
 
 function requireElement<T extends HTMLElement>(id: string): T {
   const element = document.getElementById(id);
@@ -36,6 +31,15 @@ function policyForMode(mode: PracticeMode) {
 }
 
 function initPracticeWorkspace(): void {
+  const workspace = requireElement<HTMLElement>("practice-workspace");
+  const lessonId = workspace.dataset.lessonId ?? "";
+  const contentVersion = workspace.dataset.contentVersion ?? "";
+  const scoreUrl = workspace.dataset.scoreUrl ?? "";
+  const expectedEventsUrl = workspace.dataset.expectedEventsUrl ?? "";
+  const targetTempoBpm = Number(workspace.dataset.targetTempo) || 90;
+  const countInMeasures = Number(workspace.dataset.countInMeasures) || 0;
+  const enabledCategories = JSON.parse(workspace.dataset.assessmentCategories ?? "[]") as AssessmentCategory[];
+
   const targetTempoLabel = requireElement<HTMLElement>("workspace-target-tempo");
   const deviceStatus = requireElement<HTMLElement>("workspace-device-status");
   const connectButton = requireElement<HTMLButtonElement>("workspace-connect-button");
@@ -55,7 +59,7 @@ function initPracticeWorkspace(): void {
   const nextActionLabel = requireElement<HTMLElement>("workspace-next-action");
   const retryButton = requireElement<HTMLButtonElement>("workspace-retry-button");
 
-  targetTempoLabel.textContent = String(TARGET_TEMPO_BPM);
+  targetTempoLabel.textContent = String(targetTempoBpm);
 
   const midiAdapter = new WebMidiAccessAdapter();
   const notationAdapter = new NotationAdapter(notationContainer);
@@ -69,8 +73,8 @@ function initPracticeWorkspace(): void {
   async function loadLesson(): Promise<void> {
     try {
       const [scoreResponse, eventsResponse] = await Promise.all([
-        fetch("/fixtures/demo-score.musicxml"),
-        fetch("/fixtures/demo-score.expected-events.json"),
+        fetch(scoreUrl),
+        fetch(expectedEventsUrl),
       ]);
       const musicXml = await scoreResponse.text();
       const renderResult = await notationAdapter.loadAndRender(musicXml);
@@ -218,8 +222,8 @@ function initPracticeWorkspace(): void {
 
   async function playCountIn(): Promise<void> {
     const activeMetronome = await ensureMetronome();
-    await activeMetronome.start({ bpm: TARGET_TEMPO_BPM, beatsPerMeasure: BEATS_PER_MEASURE });
-    const countInDurationMs = (60000 / TARGET_TEMPO_BPM) * BEATS_PER_MEASURE * COUNT_IN_MEASURES;
+    await activeMetronome.start({ bpm: targetTempoBpm, beatsPerMeasure: BEATS_PER_MEASURE });
+    const countInDurationMs = (60000 / targetTempoBpm) * BEATS_PER_MEASURE * countInMeasures;
     await new Promise((resolve) => setTimeout(resolve, countInDurationMs));
     activeMetronome.stop();
   }
@@ -239,7 +243,7 @@ function initPracticeWorkspace(): void {
     const mode = modeSelect.value as PracticeMode;
 
     try {
-      currentSessionId = await createSession(LESSON_ID, CONTENT_VERSION, mode);
+      currentSessionId = await createSession(lessonId, contentVersion, mode);
     } catch {
       currentSessionId = undefined; // Persistence is best-effort here — a failed create must not block practising.
     }
@@ -254,7 +258,7 @@ function initPracticeWorkspace(): void {
     session = new PracticeSession(midiAdapter, currentResolvedExpected, {
       mode,
       policy,
-      enabledCategories: ENABLED_CATEGORIES,
+      enabledCategories,
       onTimeToleranceMs: policy.onTimeToleranceMs,
     });
     session.onLiveUpdate = (result) => renderLiveList(currentResolvedExpected, result);
@@ -292,6 +296,6 @@ function initPracticeWorkspace(): void {
   void loadLesson();
 }
 
-if (document.getElementById("workspace-start-button")) {
+if (document.getElementById("practice-workspace")) {
   initPracticeWorkspace();
 }

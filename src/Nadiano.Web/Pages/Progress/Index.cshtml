@@ -1,9 +1,182 @@
 @page
 @model IndexModel
+@using System.Globalization
 @inject IStringLocalizer<SharedResource> Localizer
 @{
     ViewData["Title"] = Localizer["Progress.Title"];
 }
 
 <h1>@Localizer["Progress.Title"]</h1>
-<p>@Localizer["Progress.Placeholder"]</p>
+<p>@Localizer["Progress.Intro"]</p>
+
+<section class="card" aria-labelledby="progress-recommendation-heading">
+    <h2 id="progress-recommendation-heading">@Localizer["Progress.Recommendation.Heading"]</h2>
+
+    @if (Model.Summary.ReviewsDue.Count > 0)
+    {
+        var review = Model.Summary.ReviewsDue[0];
+        <p class="callout">
+            @Localizer["Progress.Recommendation.Review"]
+            <a asp-page="/Learn/Lesson" asp-route-lessonId="@review.LessonId">@review.LessonTitle</a>
+        </p>
+    }
+    else if (Model.Summary.RecommendedLesson is not null)
+    {
+        <p class="callout">
+            @Localizer["Progress.Recommendation.NextLesson"]
+            <a asp-page="/Learn/Lesson" asp-route-lessonId="@Model.Summary.RecommendedLesson.LessonId">@Model.Summary.RecommendedLesson.LessonTitle</a>
+        </p>
+    }
+    else
+    {
+        <p>@Localizer["Progress.Recommendation.CourseComplete"]</p>
+    }
+
+    @if (Model.Summary.LatestNextActionCode is not null)
+    {
+        <p>@Localizer[IndexModel.NextActionResourceKey(Model.Summary.LatestNextActionCode)]</p>
+    }
+</section>
+
+<section class="card" aria-labelledby="progress-completion-heading">
+    <h2 id="progress-completion-heading">@Localizer["Progress.Completion.Heading"]</h2>
+    <p class="progress-summary-number">
+        @string.Format(Localizer["Progress.Completion.Summary"], Model.Summary.CompletedLessonCount, Model.Summary.TotalLessonCount)
+    </p>
+    <progress
+        class="progress-meter"
+        value="@Model.Summary.CompletedLessonCount"
+        max="@Math.Max(1, Model.Summary.TotalLessonCount)"
+        aria-label="@string.Format(Localizer["Progress.Completion.Summary"], Model.Summary.CompletedLessonCount, Model.Summary.TotalLessonCount)">
+        @Model.Summary.CompletedLessonCount / @Model.Summary.TotalLessonCount
+    </progress>
+
+    @if (Model.Summary.RecentCompletions.Count > 0)
+    {
+        <h3>@Localizer["Progress.Completion.RecentHeading"]</h3>
+        <ul class="progress-list">
+            @foreach (var completion in Model.Summary.RecentCompletions)
+            {
+                <li>
+                    <a asp-page="/Learn/Lesson" asp-route-lessonId="@completion.LessonId">@completion.LessonTitle</a>
+                    <span class="help-text">
+                        <time datetime="@completion.CompletedAtUtc.ToString("O")">@completion.CompletedAtUtc.ToLocalTime().ToString("g", CultureInfo.CurrentCulture)</time>
+                    </span>
+                </li>
+            }
+        </ul>
+    }
+</section>
+
+<section aria-labelledby="progress-competency-heading">
+    <h2 id="progress-competency-heading">@Localizer["Progress.Competency.Heading"]</h2>
+    <p class="help-text">@Localizer["Progress.Competency.Explanation"]</p>
+
+    <div class="progress-card-grid">
+        @foreach (var competency in Model.Summary.Competencies)
+        {
+            var labelKey = $"Progress.Competency.{competency.AreaCode}";
+            var summary = string.Format(
+                Localizer["Progress.Competency.Summary"],
+                competency.CompletedLessonCount,
+                competency.TotalLessonCount);
+
+            <article class="card progress-card">
+                <h3>@Localizer[labelKey]</h3>
+                <p>@summary</p>
+                <progress
+                    class="progress-meter"
+                    value="@competency.CompletedLessonCount"
+                    max="@Math.Max(1, competency.TotalLessonCount)"
+                    aria-label="@($"{Localizer[labelKey]}: {summary}")">
+                    @competency.CompletionPercent%
+                </progress>
+            </article>
+        }
+    </div>
+</section>
+
+<section class="card" aria-labelledby="progress-observations-heading">
+    <h2 id="progress-observations-heading">@Localizer["Progress.Observations.Heading"]</h2>
+    <p class="help-text">@Localizer["Progress.Observations.Explanation"]</p>
+
+    <ul class="observation-list">
+        @foreach (var observation in Model.Summary.CategoryObservations)
+        {
+            var categoryKey = $"Progress.Observation.{observation.CategoryCode}";
+            <li>
+                <h3>@Localizer[categoryKey]</h3>
+                @if (observation.AccuracyPercent is not null)
+                {
+                    var accuracyText = string.Format(Localizer["Progress.Observation.Accuracy"], observation.AccuracyPercent, observation.SampleCount);
+                    <p>@accuracyText</p>
+                    <progress class="progress-meter" value="@observation.AccuracyPercent" max="100" aria-label="@accuracyText">
+                        @observation.AccuracyPercent%
+                    </progress>
+
+                    @if (observation.TrendCode is not null)
+                    {
+                        <p class="help-text">@Localizer[$"Progress.Trend.{observation.TrendCode}"]</p>
+                    }
+                    else
+                    {
+                        <p class="help-text">@string.Format(Localizer["Progress.Trend.NotEnough"], observation.SampleCount)</p>
+                    }
+                }
+                else
+                {
+                    <p class="help-text">@string.Format(Localizer["Progress.Observation.NotEnough"], observation.SampleCount)</p>
+                }
+            </li>
+        }
+    </ul>
+</section>
+
+<section class="card" aria-labelledby="progress-review-heading">
+    <h2 id="progress-review-heading">@Localizer["Progress.Review.Heading"]</h2>
+    <p class="help-text">@Localizer["Progress.Review.Explanation"]</p>
+
+    @if (Model.Summary.ReviewsDue.Count == 0)
+    {
+        <p>@Localizer["Progress.Review.None"]</p>
+    }
+    else
+    {
+        <ul class="progress-list">
+            @foreach (var review in Model.Summary.ReviewsDue)
+            {
+                <li>
+                    <a asp-page="/Learn/Lesson" asp-route-lessonId="@review.LessonId">@review.LessonTitle</a>
+                    <span class="badge badge--available">@Localizer["Progress.Review.Due"]</span>
+                </li>
+            }
+        </ul>
+    }
+</section>
+
+<section class="card" aria-labelledby="progress-recent-heading">
+    <h2 id="progress-recent-heading">@Localizer["Progress.Recent.Heading"]</h2>
+
+    @if (Model.Summary.RecentPractice.Count == 0)
+    {
+        <p>@Localizer["Progress.Recent.Empty"]</p>
+        <p><a class="button" asp-page="/Learn/Index">@Localizer["Progress.Recent.Start"]</a></p>
+    }
+    else
+    {
+        <ol class="progress-list">
+            @foreach (var attempt in Model.Summary.RecentPractice)
+            {
+                <li>
+                    <div>
+                        <a asp-page="/Learn/Lesson" asp-route-lessonId="@attempt.LessonId">@attempt.LessonTitle</a>
+                        <span class="help-text">
+                            <time datetime="@attempt.CompletedAtUtc.ToString("O")">@attempt.CompletedAtUtc.ToLocalTime().ToString("g", CultureInfo.CurrentCulture)</time>
+                        </span>
+                    </div>
+                    <p class="help-text">@Localizer[IndexModel.NextActionResourceKey(attempt.NextActionCode)]</p>
+                </li>
+            }
+        </ol>
+    }
+</section>

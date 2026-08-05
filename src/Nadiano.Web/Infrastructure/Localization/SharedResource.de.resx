@@ -73,6 +73,9 @@
   <data name="SelfCheck.creative.call-response" xml:space="preserve"><value>Hast du eine eigene kurze Antwort auf das Muster gefunden?</value></data>
 
   <data name="Practice.Title" xml:space="preserve"><value>Üben</value></data>
+  <data name="Practice.Workspace.ModeHandsSeparate" xml:space="preserve"><value>Hände einzeln</value></data>
+  <data name="Practice.SelectLesson" xml:space="preserve"><value>Lektion auswählen</value></data>
+  <data name="Practice.NoLesson" xml:space="preserve"><value>Wähle zuerst eine Lektion mit Notenübung aus.</value></data>
   <data name="Practice.Placeholder" xml:space="preserve"><value>Der Übungsbereich wird in Kürze hier verfügbar sein.</value></data>
 
   <data name="Practice.Notation.ZoomLabel" xml:space="preserve"><value>Zoom</value></data>
@@ -81,7 +84,7 @@
   <data name="Practice.Notation.ErrorPrefix" xml:space="preserve"><value>Die Partitur konnte nicht angezeigt werden</value></data>
 
   <data name="Practice.Workspace.GoalHeading" xml:space="preserve"><value>Übungsziel</value></data>
-  <data name="Practice.Workspace.Goal" xml:space="preserve"><value>Spiele die Tonleiter gleichmäßig und mit den richtigen Tönen. Dies ist eine Beispielübung zur Vorschau der Übungsumgebung.</value></data>
+  <data name="Practice.Workspace.Goal" xml:space="preserve"><value>Spiele die angezeigten Töne entsprechend dem gewählten Übungsmodus.</value></data>
   <data name="Practice.Workspace.TargetTempoLabel" xml:space="preserve"><value>Zieltempo</value></data>
   <data name="Practice.Workspace.DeviceConnected" xml:space="preserve"><value>MIDI-Gerät verbunden.</value></data>
   <data name="Practice.Workspace.DeviceNotConnected" xml:space="preserve"><value>Kein MIDI-Gerät verbunden. Bitte verbinden, bevor du übst.</value></data>
@@ -185,4 +188,42 @@
   <data name="Profiles.Delete.ConfirmText" xml:space="preserve"><value>Möchtest du das Profil "{0}" wirklich löschen? Dies kann nicht rückgängig gemacht werden.</value></data>
   <data name="Profiles.Delete.SessionCountText" xml:space="preserve"><value>Dabei werden {0} gespeicherte Übungssitzungen unwiderruflich gelöscht.</value></data>
   <data name="Profiles.Delete.ConfirmButton" xml:space="preserve"><value>Endgültig löschen</value></data>
+
+  <data name="Progress.Intro" xml:space="preserve"><value>Die Übersicht zeigt nur den Fortschritt des aktuell ausgewählten Profils. Abschlussstände, MIDI-Messungen und Selbsteinschätzungen bleiben getrennt.</value></data>
+  <data name="Progress.Recommendation.Heading" xml:space="preserve"><value>Nächster sinnvoller Schritt</value></data>
+  <data name="Progress.Recommendation.Review" xml:space="preserve"><value>Eine Wiederholung ist fällig:</value></data>
+  <data name="Progress.Recommendation.NextLesson" xml:space="preserve"><value>Als Nächstes empfohlen:</value></data>
+  <data name="Progress.Recommendation.CourseComplete" xml:space="preserve"><value>Alle derzeit verfügbaren Lektionen sind abgeschlossen.</value></data>
+  <data name="Progress.Recommendation.Continue" xml:space="preserve"><value>Setze die aktuelle Übung fort.</value></data>
+  <data name="Progress.Completion.Heading" xml:space="preserve"><value>Lektionsfortschritt</value></data>
+  <data name="Progress.Completion.Summary" xml:space="preserve"><value>{0} von {1} Lektionen abgeschlossen</value></data>
+  <data name="Progress.Completion.RecentHeading" xml:space="preserve"><value>Zuletzt abgeschlossen</value></data>
+  <data name="Progress.Competency.Heading" xml:space="preserve"><value>Kompetenzverteilung</value></data>
+  <data name="Progress.Competency.Explanation" xml:space="preserve"><value>Die Balken zeigen abgeschlossene Kurslektionen je Lernbereich. Sie sind kein allgemeiner Fähigkeitswert.</value></data>
+  <data name="Progress.Competency.Summary" xml:space="preserve"><value>{0} von {1} zugeordneten Lektionen abgeschlossen</value></data>
+  <data name="Progress.Competency.body" xml:space="preserve"><value>Körper und Haltung</value></data>
+  <data name="Progress.Competency.technique" xml:space="preserve"><value>Technik</value></data>
+  <data name="Progress.Competency.rhythm" xml:space="preserve"><value>Rhythmus</value></data>
+  <data name="Progress.Competency.reading" xml:space="preserve"><value>Notenlesen</value></data>
+  <data name="Progress.Competency.ear" xml:space="preserve"><value>Gehör</value></data>
+  <data name="Progress.Competency.expression" xml:space="preserve"><value>Ausdruck</value></data>
+  <data name="Progress.Competency.creative" xml:space="preserve"><value>Kreativität</value></data>
+  <data name="Progress.Observations.Heading" xml:space="preserve"><value>Beobachtete Kategorien</value></data>
+  <data name="Progress.Observations.Explanation" xml:space="preserve"><value>Prozentwerte erscheinen erst nach mindestens drei passenden Versuchen. Ein Trend wird erst aus sechs Versuchen berechnet. Selbsteinschätzungen sind keine MIDI-Messung.</value></data>
+  <data name="Progress.Observation.pitch" xml:space="preserve"><value>Tonhöhen</value></data>
+  <data name="Progress.Observation.timing" xml:space="preserve"><value>Einsätze</value></data>
+  <data name="Progress.Observation.self-check" xml:space="preserve"><value>Selbsteinschätzungen</value></data>
+  <data name="Progress.Observation.Accuracy" xml:space="preserve"><value>{0}% passend in {1} ausgewerteten Versuchen</value></data>
+  <data name="Progress.Observation.NotEnough" xml:space="preserve"><value>Noch nicht genug Daten: {0} von mindestens 3 Versuchen.</value></data>
+  <data name="Progress.Trend.improving" xml:space="preserve"><value>Die letzten drei Versuche waren besser als die drei davor.</value></data>
+  <data name="Progress.Trend.stable" xml:space="preserve"><value>Die letzten sechs Versuche zeigen keinen deutlichen Unterschied.</value></data>
+  <data name="Progress.Trend.needs-attention" xml:space="preserve"><value>Die letzten drei Versuche benötigen mehr Aufmerksamkeit als die drei davor.</value></data>
+  <data name="Progress.Trend.NotEnough" xml:space="preserve"><value>Für einen Trend werden 6 Versuche benötigt. Vorhanden: {0}.</value></data>
+  <data name="Progress.Review.Heading" xml:space="preserve"><value>Wiederholungen</value></data>
+  <data name="Progress.Review.Explanation" xml:space="preserve"><value>Eine Lektion wird nach der letzten erfolgreichen Bearbeitung anhand ihres ersten hinterlegten Wiederholungsintervalls erneut vorgeschlagen.</value></data>
+  <data name="Progress.Review.None" xml:space="preserve"><value>Derzeit ist keine Wiederholung fällig.</value></data>
+  <data name="Progress.Review.Due" xml:space="preserve"><value>fällig</value></data>
+  <data name="Progress.Recent.Heading" xml:space="preserve"><value>Letzte Übungsversuche</value></data>
+  <data name="Progress.Recent.Empty" xml:space="preserve"><value>Für dieses Profil wurde noch kein Übungsversuch abgeschlossen.</value></data>
+  <data name="Progress.Recent.Start" xml:space="preserve"><value>Erste Lektion öffnen</value></data>
 </root>

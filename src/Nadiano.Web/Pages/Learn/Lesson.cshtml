@@ -74,7 +74,7 @@
 {
     <p class="help-text">
         @Localizer["Lesson.PlayAtPianoHint"]
-        <a asp-page="/Practice/Index">@Localizer["Nav.Practice"]</a>
+        <a asp-page="/Practice/Index" asp-route-lessonId="@Model.LessonId">@Localizer["Nav.Practice"]</a>
     </p>
 }
 else

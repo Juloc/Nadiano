@@ -38,6 +38,21 @@ public class ContentMediaEndpointsTests : IClassFixture<ProgressWebApplicationFa
         Assert.Equal("image/webp", response.Content.Headers.ContentType?.MediaType);
     }
 
+
+    [Fact]
+    public async Task GetMedia_ForDeclaredNotationAndGeneratedEvents_ServesBothFiles()
+    {
+        using var client = _factory.CreateClient();
+
+        var scoreResponse = await client.GetAsync("/api/content/lessons/lesson-b/files/score.musicxml");
+        var eventsResponse = await client.GetAsync("/api/content/lessons/lesson-b/files/expected-events.json");
+
+        Assert.Equal(HttpStatusCode.OK, scoreResponse.StatusCode);
+        Assert.Equal("application/vnd.recordare.musicxml+xml", scoreResponse.Content.Headers.ContentType?.MediaType);
+        Assert.Equal(HttpStatusCode.OK, eventsResponse.StatusCode);
+        Assert.Equal("application/json", eventsResponse.Content.Headers.ContentType?.MediaType);
+    }
+
     [Fact]
     public async Task GetMedia_ForAPathTheManifestDidNotDeclare_IsNotFound()
     {

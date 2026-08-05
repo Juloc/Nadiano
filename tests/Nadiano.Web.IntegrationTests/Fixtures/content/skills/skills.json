@@ -1,4 +1,17 @@
 {
   "schemaVersion": 1,
-  "skills": []
+  "skills": [
+    {
+      "id": "technique.fixture",
+      "competency": "technique",
+      "introducedStage": "F0",
+      "measurability": "midi-objective"
+    },
+    {
+      "id": "reading.fixture",
+      "competency": "reading",
+      "introducedStage": "F0",
+      "measurability": "midi-objective"
+    }
+  ]
 }
