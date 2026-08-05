@@ -112,7 +112,7 @@ jobs:
             .
 
       - name: Scan release image
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ env.REGISTRY_IMAGE }}:${{ steps.release.outputs.version }}
           severity: CRITICAL,HIGH
