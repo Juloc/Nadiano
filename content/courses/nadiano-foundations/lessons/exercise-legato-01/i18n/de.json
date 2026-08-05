@@ -1,0 +1,13 @@
+{
+  "title": "Eine verbundene Phrase",
+  "summary": "Verbinde vier Töne so, dass zwischen ihnen keine hörbare Lücke entsteht.",
+  "why": "Verbundenes Spiel lässt eine Melodie wie einen zusammenhängenden Gedanken klingen.",
+  "steps": [
+    "Spiele die vier Töne langsam nacheinander.",
+    "Löse jede Taste erst genau in dem Moment, in dem die nächste gedrückt wird.",
+    "Höre bewusst hin, ob eine Lücke entsteht.",
+    "Wiederhole, bis es sich verbunden anhört."
+  ],
+  "commonMistake": "Eine Taste wird zu früh gelöst, sodass eine kleine Lücke zur nächsten entsteht.",
+  "successMessage": "Die vier Töne klingen wie ein zusammenhängender Satz."
+}

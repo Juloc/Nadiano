@@ -1,0 +1,13 @@
+{
+  "title": "Satu nada yang ditahan",
+  "summary": "Mainkan nada yang sama beberapa kali dengan rata, dan lepaskan tuts dengan santai setiap kali.",
+  "why": "Nada berulang yang tenang adalah dasar untuk semua yang akan datang.",
+  "steps": [
+    "Letakkan jari 3 di atas tuts.",
+    "Mainkan dengan tempo yang rata, tanpa menekan berlebihan.",
+    "Lepaskan tuts dengan sadar setelah setiap nada.",
+    "Ulangi sampai terasa tenang."
+  ],
+  "commonMistake": "Tuts terus ditekan setelah dimainkan, bukannya dilepaskan dengan santai.",
+  "successMessage": "Nadanya terdengar rata. Itulah tujuannya di sini."
+}

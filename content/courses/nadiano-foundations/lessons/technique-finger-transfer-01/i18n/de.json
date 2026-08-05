@@ -1,0 +1,14 @@
+{
+  "title": "Zwischen zwei und drei Fingern wechseln",
+  "summary": "Gib das Gewicht ruhig von einem Finger zum nächsten weiter, während die Hand selbst entspannt bleibt.",
+  "why": "Wenn das Gewicht sauber wandert statt zu springen, bleibt der Klang gleichmäßig und die Hand wird nicht steif.",
+  "steps": [
+    "Spiele denselben Ton mehrmals mit einem Finger und lass die Hand dabei ruhig über der Taste liegen.",
+    "Nimm zwei benachbarte Finger und lass das Gewicht von einem zum anderen wandern, während die Handfläche stillsteht.",
+    "Wiederhole den Wechsel zwischen den zwei Fingern mehrmals, bis er sich gleichmäßig anfühlt.",
+    "Nimm einen dritten Finger dazu und lass das Gewicht der Reihe nach durch alle drei wandern.",
+    "Beobachte, ob dein Handgelenk oder Unterarm bei jedem Wechsel mitzuckt – falls ja, verlangsame den Wechsel."
+  ],
+  "commonMistake": "Die Hand hebt oder verschiebt sich mit jedem Fingerwechsel, statt dass nur der einzelne Finger das Gewicht übernimmt.",
+  "successMessage": "Deine Hand blieb ruhig, während einzelne Finger die Arbeit übernommen haben – das ist genau die Bewegung, die du später brauchst."
+}

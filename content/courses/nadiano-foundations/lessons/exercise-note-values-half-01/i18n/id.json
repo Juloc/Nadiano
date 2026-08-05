@@ -1,0 +1,13 @@
+{
+  "title": "Nada pendek dan panjang",
+  "summary": "Mainkan nada panjang yang berdurasi dua kali lipat dari nada pendek, tanpa kehilangan hitungan.",
+  "why": "Menghitung durasi nada yang berbeda dengan sadar adalah dasar dari semua rasa ritme.",
+  "steps": [
+    "Saat nada panjang, hitung dalam hati sampai dua.",
+    "Saat nada pendek, hitung hanya sampai satu.",
+    "Lepaskan setiap nada setelah hitungan penuh selesai.",
+    "Ulangi kedua birama dengan tempo yang sama."
+  ],
+  "commonMistake": "Nada panjang dilepaskan terlalu cepat karena hitungannya tidak diselesaikan.",
+  "successMessage": "Nada panjang sekarang terdengar jelas lebih lama dari nada pendek."
+}

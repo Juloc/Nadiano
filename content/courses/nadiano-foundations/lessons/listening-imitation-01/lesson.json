@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "listening-imitation-01",
+  "kind": "guided-lesson",
+  "stage": "F1",
+  "order": 140,
+  "estimatedMinutes": 6,
+  "skills": ["ear.echo-pattern", "creative.call-response"],
+  "prerequisites": ["technique-hands-alternating-01"],
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["ear.echo-pattern", "creative.call-response"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

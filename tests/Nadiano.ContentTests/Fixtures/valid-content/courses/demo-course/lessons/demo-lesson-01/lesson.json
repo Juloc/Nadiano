@@ -7,6 +7,14 @@
   "estimatedMinutes": 5,
   "skills": ["technique.release"],
   "prerequisites": [],
+  "technique": {
+    "id": "demo-technique",
+    "views": [
+      { "kind": "top", "path": "media/technique-top.webm", "poster": "media/technique-top.webp" }
+    ],
+    "hasAudioDescription": false,
+    "loop": true
+  },
   "assessment": {
     "categories": ["pitch"],
     "completionRule": { "requiredSuccessfulRuns": 2, "maximumPitchErrors": 0, "minimumTimingScore": 0.75 },

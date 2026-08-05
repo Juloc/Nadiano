@@ -1,0 +1,13 @@
+{
+  "title": "Gleich oder anders?",
+  "summary": "Höre zwei kurze Zwei-Ton-Muster hintereinander und finde heraus, ob das zweite genauso klingt wie das erste oder ob sich eine Note verändert hat.",
+  "why": "Wer Unterschiede zwischen zwei Klängen heraushört, entwickelt ein Gehör für kleine Veränderungen in der Musik, lange bevor er Noten benennen kann.",
+  "steps": [
+    "Setze Kopfhörer auf oder sorge für eine ruhige Umgebung.",
+    "Höre dir das Beispiel einmal vollständig an. Es besteht aus zwei Teilen, die direkt nacheinander gespielt werden.",
+    "Höre es dir bei Bedarf ein zweites Mal an.",
+    "Entscheide für dich, ob der zweite Teil gleich war wie der erste oder ob sich etwas verändert hat."
+  ],
+  "commonMistake": "Schon nach dem ersten Ton eine Vermutung festlegen, statt beide Teile ruhig zu Ende zu hören und dann zu vergleichen.",
+  "successMessage": "Du hast dir bewusst Zeit genommen, beide Teile zu vergleichen. Genau das trainiert dein Gehör."
+}

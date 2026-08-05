@@ -4,9 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 using Nadiano.Core.Content;
 using Nadiano.Core.Content.Validation;
+using Nadiano.Web.Features.Content;
 using Nadiano.Web.Features.Practice;
 using Nadiano.Web.Features.Profiles;
+using Nadiano.Web.Features.Progress;
 using Nadiano.Web.Infrastructure.Content;
+using Nadiano.Web.Infrastructure.Courses;
 using Nadiano.Web.Infrastructure.Localization;
 using Nadiano.Web.Infrastructure.Persistence;
 using Nadiano.Web.Infrastructure.Profiles;
@@ -32,8 +35,10 @@ builder.Services.AddDbContext<NadianoDbContext>(options => options.UseSqlite($"D
 
 var contentPath = ContentPathResolver.Resolve(builder.Configuration, builder.Environment);
 builder.Services.AddSingleton(new BundledContentRepository(contentPath));
+builder.Services.AddSingleton<ContentCatalogue>();
 
 builder.Services.AddScoped<CurrentProfileAccessor>();
+builder.Services.AddScoped<CourseProgressService>();
 
 var app = builder.Build();
 
@@ -83,6 +88,8 @@ app.MapHealthChecks("/health/ready", new HealthCheckOptions { Predicate = check 
 
 app.MapPracticeSessionEndpoints();
 app.MapProfileExportEndpoints();
+app.MapSelfCheckEndpoints();
+app.MapContentMediaEndpoints();
 
 app.MapStaticAssets();
 app.MapRazorPages()

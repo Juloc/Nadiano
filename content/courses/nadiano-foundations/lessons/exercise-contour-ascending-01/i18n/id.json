@@ -1,0 +1,13 @@
+{
+  "title": "Membaca lengkungan naik",
+  "summary": "Baca not sebagai satu lengkungan yang naik lalu sedikit turun kembali.",
+  "why": "Kalau kamu bisa melihat arah not sekilas, kamu tidak perlu mencari setiap not satu per satu.",
+  "steps": [
+    "Lihat dulu kedua birama sebelum mulai bermain.",
+    "Mainkan empat not pertama yang naik bertahap.",
+    "Mainkan empat not terakhir yang turun sedikit kembali.",
+    "Jaga tempo tetap rata, jangan berhenti di tengah."
+  ],
+  "commonMistake": "Melihat tuts setiap kali setelah satu not, bukan mengenali gerakan naik secara keseluruhan.",
+  "successMessage": "Kamu berhasil memainkan lengkungan naik dan turun kembali dalam satu alur."
+}

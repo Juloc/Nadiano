@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "foundation-tension-release-01",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 30,
+  "estimatedMinutes": 5,
+  "skills": ["body.tension-release"],
+  "prerequisites": ["foundation-sitting-01"],
+  "technique": {
+    "id": "tension-release-illustration",
+    "views": [{ "kind": "top", "path": "media/technique-top.svg" }],
+    "hasAudioDescription": false,
+    "loop": false
+  },
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["body.tension-release"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

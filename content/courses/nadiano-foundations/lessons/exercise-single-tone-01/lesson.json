@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "exercise-single-tone-01",
+  "kind": "technique-drill",
+  "stage": "F1",
+  "order": 200,
+  "estimatedMinutes": 4,
+  "skills": ["technique.single-tone-transfer"],
+  "prerequisites": ["technique-finger-transfer-01"],
+  "notation": { "path": "score.musicxml", "partMapping": { "P1": "right-hand" } },
+  "practice": {
+    "supportedModes": ["wait", "performance"],
+    "defaultMode": "wait",
+    "targetTempo": 66,
+    "countInMeasures": 1
+  },
+  "assessment": {
+    "categories": ["pitch", "onset"],
+    "completionRule": { "requiredSuccessfulRuns": 2, "maximumPitchErrors": 0, "minimumTimingScore": 0.7 },
+    "selfChecks": []
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

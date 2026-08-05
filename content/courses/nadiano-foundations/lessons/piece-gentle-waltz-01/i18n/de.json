@@ -1,0 +1,13 @@
+{
+  "title": "Sanfter Walzer",
+  "summary": "Spiele das Stück im ruhigen Dreierschwung durch, vom Anfang bis zum letzten Ton.",
+  "why": "Der Dreierschwung fühlt sich anders an als die bisherigen Stücke und verbindet Puls mit Musik.",
+  "steps": [
+    "Schau dir das Stück einmal komplett an, ohne zu spielen.",
+    "Übe die ersten vier Takte allein.",
+    "Übe die letzten vier Takte allein.",
+    "Spiele das ganze Stück im gleichmäßigen Dreierschwung durch."
+  ],
+  "commonMistake": "Der Dreierschwung rutscht mitten im Stück unbemerkt in einen Viererschwung.",
+  "successMessage": "Du hast den sanften Walzer bis zum letzten Ton durchgehalten."
+}

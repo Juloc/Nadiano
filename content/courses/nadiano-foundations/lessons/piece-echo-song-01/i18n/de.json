@@ -1,0 +1,13 @@
+{
+  "title": "Echolied",
+  "summary": "Spiele das kleine Stück durchgehend, in dem sich jede Frage in eine Antwort verwandelt.",
+  "why": "Ein ganzes Stück durchzuspielen zeigt, dass einzelne Bausteine jetzt zu einer Musik zusammenfinden.",
+  "steps": [
+    "Schau dir das Stück einmal komplett an, ohne zu spielen.",
+    "Übe die ersten vier Takte allein.",
+    "Übe die letzten vier Takte allein.",
+    "Spiele das ganze Stück durch, auch wenn eine Stelle nicht perfekt gelingt."
+  ],
+  "commonMistake": "Beim ersten Fehler wird sofort abgebrochen, statt bis zum Ende weiterzuspielen.",
+  "successMessage": "Du hast das ganze Echolied von Anfang bis Ende gespielt."
+}

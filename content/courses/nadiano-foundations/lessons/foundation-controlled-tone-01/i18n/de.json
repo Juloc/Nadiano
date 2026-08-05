@@ -1,0 +1,15 @@
+{
+  "title": "Erste kontrollierte Töne",
+  "summary": "Du spielst mit den Fingern 2 bis 4 einen einzelnen schwarzen Ton an und lässt ihn wieder los, und hörst dabei auf ein gleichmäßiges, unangestrengtes Ergebnis.",
+  "why": "Ein bewusst gehörter, gleichmäßiger Ton zeigt dir, ob Gewicht und Lösung aus den vorherigen Übungen wirklich zusammenkommen.",
+  "steps": [
+    "Lege die Hand mit gerundeten Fingern locker über eine schwarze Taste.",
+    "Wähle Finger 2, 3 oder 4 für den Ton.",
+    "Lass das Gewicht des Arms in den Finger und die Taste sinken.",
+    "Löse Finger und Hand direkt nach dem Ton wieder von der Taste.",
+    "Höre, ob der Ton gleichmäßig klingt oder eher hart und gepresst.",
+    "Wiederhole den Ton mit einem anderen der drei Finger."
+  ],
+  "commonMistake": "Die Taste wird kurz und hart angeschlagen, statt das Gewicht ruhig hineinsinken zu lassen, wodurch der Ton hart statt gleichmäßig klingt.",
+  "successMessage": "Du hörst den Unterschied zwischen einem gleichmäßigen und einem gepressten Ton. Damit hast du die Grundlage für kontrolliertes Spiel gelegt."
+}

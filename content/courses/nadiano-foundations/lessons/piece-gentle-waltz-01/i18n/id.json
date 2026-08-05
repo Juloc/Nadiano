@@ -1,0 +1,13 @@
+{
+  "title": "Waltz Lembut",
+  "summary": "Mainkan lagu ini dengan irama tiga yang tenang, dari awal sampai nada terakhir.",
+  "why": "Irama tiga terasa berbeda dari lagu-lagu sebelumnya dan menghubungkan ketukan dengan musik.",
+  "steps": [
+    "Lihat seluruh lagunya sekali tanpa memainkan dulu.",
+    "Latih empat birama pertama secara terpisah.",
+    "Latih empat birama terakhir secara terpisah.",
+    "Mainkan seluruh lagu dengan irama tiga yang rata."
+  ],
+  "commonMistake": "Irama tiga tanpa disadari berubah menjadi irama empat di tengah lagu.",
+  "successMessage": "Kamu berhasil menjaga Waltz Lembut ini sampai nada terakhir."
+}

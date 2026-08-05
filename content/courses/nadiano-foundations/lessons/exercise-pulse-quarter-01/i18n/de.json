@@ -1,0 +1,13 @@
+{
+  "title": "Gleichmäßiger Puls",
+  "summary": "Spiele denselben Ton viermal pro Takt in einem Tempo, das sich nie verändert.",
+  "why": "Ein Puls, der immer gleich schnell bleibt, ist die Grundlage für jedes spätere Rhythmusgefühl.",
+  "steps": [
+    "Zähle innerlich \"eins, zwei, drei, vier\", bevor du beginnst.",
+    "Spiele auf jede Zahl einen Ton.",
+    "Lass dich nicht schneller oder langsamer werden.",
+    "Wiederhole über alle vier Takte hinweg."
+  ],
+  "commonMistake": "Das Tempo wird zum Ende hin schneller, ohne dass es bemerkt wird.",
+  "successMessage": "Der Puls bleibt von Anfang bis Ende gleich."
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Ketukan yang rata",
+  "summary": "Mainkan nada yang sama empat kali per birama dengan tempo yang tidak pernah berubah.",
+  "why": "Ketukan yang selalu sama cepatnya adalah dasar untuk semua rasa ritme selanjutnya.",
+  "steps": [
+    "Hitung dalam hati \"satu, dua, tiga, empat\" sebelum mulai.",
+    "Mainkan satu nada di setiap hitungan.",
+    "Jangan biarkan dirimu jadi lebih cepat atau lebih lambat.",
+    "Ulangi sampai akhir keempat birama."
+  ],
+  "commonMistake": "Tempo menjadi lebih cepat menjelang akhir tanpa disadari.",
+  "successMessage": "Ketukannya tetap sama dari awal sampai akhir."
+}

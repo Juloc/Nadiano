@@ -1,0 +1,13 @@
+{
+  "title": "Aufwärtsbogen lesen",
+  "summary": "Lies die Notenlinie als Bogen, der aufsteigt und dann ein Stück zurückgeht.",
+  "why": "Wer die Richtung der Noten auf einen Blick erkennt, muss nicht jede einzelne Note neu suchen.",
+  "steps": [
+    "Schau dir beide Takte an, bevor du beginnst.",
+    "Spiele die ersten vier Töne, die stetig nach oben steigen.",
+    "Spiele die letzten vier Töne, die wieder ein Stück nach unten führen.",
+    "Achte auf ein gleichmäßiges Tempo, ohne zu stocken."
+  ],
+  "commonMistake": "Man schaut nach jedem einzelnen Ton wieder auf die Tasten, statt die Aufwärtsbewegung als Ganzes zu erkennen.",
+  "successMessage": "Du hast den Bogen nach oben und wieder zurück in einem Zug gespielt."
+}

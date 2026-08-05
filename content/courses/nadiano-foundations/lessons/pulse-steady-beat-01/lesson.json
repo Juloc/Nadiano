@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "pulse-steady-beat-01",
+  "kind": "guided-lesson",
+  "stage": "F1",
+  "order": 100,
+  "estimatedMinutes": 6,
+  "skills": ["rhythm.steady-pulse"],
+  "prerequisites": ["foundation-controlled-tone-01"],
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["rhythm.steady-pulse"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

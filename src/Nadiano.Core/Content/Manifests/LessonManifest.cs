@@ -16,6 +16,7 @@ public sealed class LessonManifest
     public IReadOnlyList<string> Prerequisites { get; init; } = [];
     public NotationReference? Notation { get; init; }
     public PracticeConfig? Practice { get; init; }
+    public TechniqueMediaMetadata? Technique { get; init; }
     public AssessmentConfig? Assessment { get; init; }
     public ReviewConfig? Review { get; init; }
     public required LocalizationConfig Localization { get; init; }

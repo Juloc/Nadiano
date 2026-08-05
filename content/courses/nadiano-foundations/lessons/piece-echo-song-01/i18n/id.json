@@ -1,0 +1,13 @@
+{
+  "title": "Lagu Gema",
+  "summary": "Mainkan lagu pendek ini dari awal sampai akhir, di mana setiap pertanyaan berubah menjadi jawaban.",
+  "why": "Memainkan satu lagu penuh menunjukkan bahwa bagian-bagian kecil sekarang menyatu menjadi musik.",
+  "steps": [
+    "Lihat seluruh lagunya sekali tanpa memainkan dulu.",
+    "Latih empat birama pertama secara terpisah.",
+    "Latih empat birama terakhir secara terpisah.",
+    "Mainkan seluruh lagu, meski ada bagian yang belum sempurna."
+  ],
+  "commonMistake": "Berhenti langsung saat kesalahan pertama muncul, bukannya terus sampai akhir.",
+  "successMessage": "Kamu berhasil memainkan seluruh Lagu Gema dari awal sampai akhir."
+}

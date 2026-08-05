@@ -1,0 +1,13 @@
+{
+  "title": "Pausen aktiv zählen",
+  "summary": "Zähle die stillen Schläge genauso bewusst mit wie die gespielten.",
+  "why": "Eine Pause ist keine Unterbrechung des Zählens, sondern ein aktiver Teil des Rhythmus.",
+  "steps": [
+    "Zähle innerlich durchgehend \"eins, zwei, drei, vier\".",
+    "Spiele auf \"eins\" und \"drei\", bleib auf \"zwei\" und \"vier\" still.",
+    "Zähle die stillen Schläge genauso bewusst mit.",
+    "Wiederhole beide Takte im gleichen Tempo."
+  ],
+  "commonMistake": "Die Pause wird als kurze Unterbrechung erlebt, in der das Zählen aussetzt.",
+  "successMessage": "Die Pausen fühlen sich jetzt genauso gezählt an wie die Töne."
+}

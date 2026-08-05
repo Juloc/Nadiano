@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "foundation-sitting-01",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 20,
+  "estimatedMinutes": 5,
+  "skills": ["body.seated-position"],
+  "prerequisites": ["foundation-keyboard-map-01"],
+  "technique": {
+    "id": "sitting-illustration",
+    "views": [{ "kind": "top", "path": "media/technique-top.svg" }],
+    "hasAudioDescription": false,
+    "loop": false
+  },
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["body.seated-position"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

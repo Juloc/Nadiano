@@ -67,6 +67,7 @@ public class ContentValidatorTests
         Assert.Contains(result.Issues, i => i.Reason.Contains("Unknown self-check skill id"));
         Assert.Contains(result.Issues, i => i.Reason.Contains("Missing attribution.json"));
         Assert.Contains(result.Issues, i => i.Reason.Contains("Missing localization file"));
+        Assert.Contains(result.Issues, i => i.Reason.Contains("Referenced technique media file does not exist"));
     }
 
     [Fact]

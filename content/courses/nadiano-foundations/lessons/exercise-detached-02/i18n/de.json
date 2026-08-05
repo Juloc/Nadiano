@@ -1,0 +1,13 @@
+{
+  "title": "Wiederholte Töne, locker gelöst",
+  "summary": "Spiele zwei wechselnde Töne mehrmals, jeden davon locker gelöst statt verbunden.",
+  "why": "Wiederholte Töne gelöst zu spielen verhindert, dass sich die Hand versteift.",
+  "steps": [
+    "Spiele den ersten Takt mit den beiden Tönen im Wechsel.",
+    "Löse jede Taste bewusst, bevor die nächste kommt.",
+    "Spiele den zweiten Takt genauso mit den nächsten beiden Tönen.",
+    "Wiederhole beide Takte im gleichen ruhigen Tempo."
+  ],
+  "commonMistake": "Die Hand verspannt sich beim schnellen Wechsel zwischen den Tönen.",
+  "successMessage": "Der Wechsel bleibt locker und gelöst, auch bei Wiederholung."
+}

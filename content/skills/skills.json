@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    { "id": "body.keyboard-orientation", "competency": "body", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "body.seated-position", "competency": "body", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "body.tension-release", "competency": "body", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "technique.finger-numbers", "competency": "technique", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "technique.natural-hand-shape", "competency": "technique", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "technique.arm-weight-release", "competency": "technique", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "technique.controlled-tone", "competency": "technique", "introducedStage": "F0", "measurability": "self-assessment" },
+    { "id": "rhythm.steady-pulse", "competency": "rhythm", "introducedStage": "F1", "measurability": "midi-objective" },
+    { "id": "technique.single-tone-transfer", "competency": "technique", "introducedStage": "F1", "measurability": "midi-objective" },
+    { "id": "technique.two-finger-transfer", "competency": "technique", "introducedStage": "F1", "measurability": "midi-objective" },
+    { "id": "technique.three-finger-transfer", "competency": "technique", "introducedStage": "F1", "measurability": "midi-objective" },
+    { "id": "technique.repeated-note-release", "competency": "technique", "introducedStage": "F1", "measurability": "mixed" },
+    { "id": "technique.connected-phrase", "competency": "technique", "introducedStage": "F1", "measurability": "self-assessment" },
+    { "id": "technique.detached-movement", "competency": "technique", "introducedStage": "F1", "measurability": "self-assessment" },
+    { "id": "technique.hands-alternating", "competency": "technique", "introducedStage": "F1", "measurability": "midi-objective" },
+    { "id": "body.wrist-release", "competency": "body", "introducedStage": "F1", "measurability": "self-assessment" },
+    { "id": "rhythm.note-values", "competency": "rhythm", "introducedStage": "F1", "measurability": "midi-objective" },
+    { "id": "rhythm.rests", "competency": "rhythm", "introducedStage": "F1", "measurability": "midi-objective" },
+    { "id": "reading.contour-direction", "competency": "reading", "introducedStage": "F1", "measurability": "midi-objective" },
+    { "id": "expression.dynamics-range", "competency": "expression", "introducedStage": "F1", "measurability": "self-assessment" },
+    { "id": "ear.same-different", "competency": "ear", "introducedStage": "F1", "measurability": "self-assessment" },
+    { "id": "ear.direction", "competency": "ear", "introducedStage": "F1", "measurability": "self-assessment" },
+    { "id": "ear.echo-pattern", "competency": "ear", "introducedStage": "F1", "measurability": "self-assessment" },
+    { "id": "creative.call-response", "competency": "creative", "introducedStage": "F1", "measurability": "self-assessment" }
+  ]
+}

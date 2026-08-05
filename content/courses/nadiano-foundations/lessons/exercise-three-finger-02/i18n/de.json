@@ -1,0 +1,13 @@
+{
+  "title": "Drei Finger im Muster, absteigend",
+  "summary": "Spiele das Dreitonmuster jetzt beginnend mit dem höchsten Ton.",
+  "why": "Ein Muster in beide Richtungen sicher zu spielen zeigt, dass die Bewegung wirklich verstanden ist.",
+  "steps": [
+    "Lege Finger 4, 3 und 2 bereit.",
+    "Beginne beim höchsten der drei Töne.",
+    "Spiele langsam und gleichmäßig abwärts.",
+    "Wiederhole, bis es sich sicher anfühlt."
+  ],
+  "commonMistake": "Das absteigende Muster wird schneller und weniger kontrolliert gespielt als das aufsteigende.",
+  "successMessage": "Beide Richtungen klingen jetzt gleich ruhig."
+}

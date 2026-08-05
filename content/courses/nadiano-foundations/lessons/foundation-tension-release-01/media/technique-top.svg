@@ -1,0 +1,18 @@
+<svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+  <rect x="0" y="0" width="400" height="160" fill="#ffffff"/>
+  <!-- left: tense (jagged) -->
+  <g>
+    <circle cx="100" cy="40" r="14" fill="#ffffff" stroke="#1b1f24" stroke-width="2"/>
+    <path d="M60 90 L80 65 L95 80 L105 60 L120 80 L140 90" fill="none" stroke="#c92a2a" stroke-width="3"/>
+    <line x1="100" y1="54" x2="100" y2="66" stroke="#1b1f24" stroke-width="2"/>
+    <text x="100" y="130" font-family="sans-serif" font-size="14" fill="#4b5563" text-anchor="middle">angespannt</text>
+  </g>
+  <!-- right: released (smooth) -->
+  <g>
+    <circle cx="300" cy="40" r="14" fill="#ffffff" stroke="#1b1f24" stroke-width="2"/>
+    <path d="M260 85 Q300 100 340 85" fill="none" stroke="#2f9e44" stroke-width="3"/>
+    <line x1="300" y1="54" x2="300" y2="70" stroke="#1b1f24" stroke-width="2"/>
+    <text x="300" y="130" font-family="sans-serif" font-size="14" fill="#4b5563" text-anchor="middle">locker</text>
+  </g>
+  <line x1="200" y1="20" x2="200" y2="140" stroke="#d0d5dd" stroke-width="1" stroke-dasharray="4 3"/>
+</svg>

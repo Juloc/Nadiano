@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-a",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 10,
+  "estimatedMinutes": 5,
+  "prerequisites": [],
+  "technique": {
+    "id": "lesson-a-technique",
+    "views": [
+      { "kind": "top", "path": "media/technique-top.webm", "poster": "media/technique-top.webp" }
+    ],
+    "hasAudioDescription": false,
+    "loop": true
+  },
+  "assessment": {
+    "categories": ["pitch"],
+    "completionRule": {
+      "requiredSuccessfulRuns": 1,
+      "maximumPitchErrors": 5,
+      "minimumTimingScore": 0
+    }
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

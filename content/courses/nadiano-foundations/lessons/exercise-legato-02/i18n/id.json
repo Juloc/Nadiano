@@ -1,0 +1,13 @@
+{
+  "title": "Frase tersambung yang lebih panjang",
+  "summary": "Sekarang sambungkan delapan nada dengan sedikit belokan di tengah, tanpa kehilangan sambungannya.",
+  "why": "Menjaga frase yang lebih panjang tetap tersambung lebih menantang daripada empat nada pendek.",
+  "steps": [
+    "Mainkan dulu hanya birama pertama secara tersambung.",
+    "Lalu mainkan hanya birama kedua secara tersambung.",
+    "Gabungkan kedua birama itu dengan lambat.",
+    "Perhatikan khusus peralihan di antara kedua birama."
+  ],
+  "commonMistake": "Muncul jeda kecil yang tidak disengaja pada peralihan antara kedua birama.",
+  "successMessage": "Seluruh frase sekarang terdengar sebagai satu lengkungan yang utuh."
+}

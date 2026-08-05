@@ -1,0 +1,19 @@
+<svg viewBox="0 0 400 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+  <rect x="0" y="0" width="400" height="160" fill="#ffffff"/>
+  <!-- keyboard, side view -->
+  <rect x="150" y="95" width="220" height="16" rx="2" fill="#ffffff" stroke="#1b1f24" stroke-width="2"/>
+  <rect x="150" y="95" width="220" height="16" fill="none" stroke="#d0d5dd" stroke-width="1"/>
+  <!-- stool -->
+  <rect x="70" y="118" width="46" height="10" rx="2" fill="#f5f7fa" stroke="#1b1f24" stroke-width="2"/>
+  <line x1="78" y1="128" x2="78" y2="150" stroke="#1b1f24" stroke-width="2"/>
+  <line x1="108" y1="128" x2="108" y2="150" stroke="#1b1f24" stroke-width="2"/>
+  <!-- seated figure, schematic (no face/anatomy) -->
+  <circle cx="100" cy="55" r="14" fill="#ffffff" stroke="#1b1f24" stroke-width="2"/>
+  <path d="M100 69 C100 90, 95 95, 93 118" fill="none" stroke="#1b1f24" stroke-width="3"/>
+  <path d="M93 118 L78 150" fill="none" stroke="#1b1f24" stroke-width="3"/>
+  <path d="M93 100 C130 90, 150 96, 158 100" fill="none" stroke="#1c5fb8" stroke-width="3"/>
+  <line x1="93" y1="118" x2="60" y2="150" stroke="#1b1f24" stroke-width="3"/>
+  <!-- elbow-height guide line -->
+  <line x1="150" y1="96" x2="20" y2="96" stroke="#4b5563" stroke-width="1" stroke-dasharray="4 3"/>
+  <text x="20" y="90" font-family="sans-serif" font-size="12" fill="#4b5563">Ellbogenhöhe</text>
+</svg>

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "foundation-hand-shape-01",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 50,
+  "estimatedMinutes": 5,
+  "skills": ["technique.natural-hand-shape"],
+  "prerequisites": ["foundation-finger-numbers-01"],
+  "technique": {
+    "id": "hand-shape-illustration",
+    "views": [{ "kind": "top", "path": "media/technique-top.svg" }],
+    "hasAudioDescription": false,
+    "loop": false
+  },
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["technique.natural-hand-shape"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

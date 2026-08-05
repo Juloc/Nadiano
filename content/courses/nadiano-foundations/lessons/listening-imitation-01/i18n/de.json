@@ -1,0 +1,14 @@
+{
+  "title": "Hören und Muster nachspielen",
+  "summary": "Höre ein kurzes Muster aus zwei oder drei Tönen und spiele es aus dem Gedächtnis nach.",
+  "why": "Wer Muster nach dem Gehör wiedergeben kann, verbindet Hören und Spielen direkt, statt sich nur auf Noten zu verlassen.",
+  "steps": [
+    "Lass dir oder einer anderen Person ein kurzes Muster aus zwei Tönen vorspielen oder vorsingen.",
+    "Spiele oder singe das Muster sofort danach so genau wie möglich nach.",
+    "Steigere das Muster auf drei Töne und wiederhole das Nachspielen.",
+    "Spiele nach einem gehörten Muster eine eigene kurze Antwort, die sich anhört, als würde sie dazugehören.",
+    "Tauscht die Rollen: Erst hörst du und antwortest, dann spielst du vor und hörst die Antwort."
+  ],
+  "commonMistake": "Es wird versucht, das Muster sofort auswendig 'richtig' zu treffen, statt einfach genau hinzuhören und die grobe Form nachzuahmen.",
+  "successMessage": "Du hast ein gehörtes Muster erkannt und beantwortet – das ist der Kern von musikalischem Zuhören."
+}

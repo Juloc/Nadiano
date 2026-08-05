@@ -20,7 +20,57 @@
   <data name="Home.NoTeacherReplacement" xml:space="preserve"><value>Nadiano tidak menggantikan guru piano yang berkualifikasi untuk postur, ketegangan, kualitas gerakan, atau interpretasi profesional.</value></data>
 
   <data name="Learn.Title" xml:space="preserve"><value>Belajar</value></data>
-  <data name="Learn.Placeholder" xml:space="preserve"><value>Kemajuan kursus akan segera ditampilkan di sini.</value></data>
+  <data name="course.stage.f0" xml:space="preserve"><value>F0 — Instrumen dan tubuh</value></data>
+  <data name="course.stage.f1" xml:space="preserve"><value>F1 — Ketukan, suara, dan gerakan</value></data>
+  <data name="Learn.Placeholder" xml:space="preserve"><value>Belum ada kursus yang dipublikasikan untuk versi Alpha. Kemajuan kursus akan muncul di sini setelah pelajaran tersedia.</value></data>
+  <data name="Learn.RecommendedNext" xml:space="preserve"><value>Rekomendasi: Selanjutnya "{0}".</value></data>
+  <data name="Learn.StatusCompleted" xml:space="preserve"><value>selesai</value></data>
+  <data name="Learn.StatusAvailable" xml:space="preserve"><value>tersedia</value></data>
+  <data name="Learn.StatusLocked" xml:space="preserve"><value>terkunci</value></data>
+  <data name="Learn.LockedReason" xml:space="preserve"><value>Prasyarat belum terpenuhi: {0}</value></data>
+
+  <data name="Lesson.GoalHeading" xml:space="preserve"><value>Tujuan</value></data>
+  <data name="Lesson.WhyHeading" xml:space="preserve"><value>Mengapa</value></data>
+  <data name="Lesson.DemonstrationHeading" xml:space="preserve"><value>Demonstrasi</value></data>
+  <data name="Lesson.DemonstrationTextAlternative" xml:space="preserve"><value>Langkah-langkah di bawah menjelaskan latihan ini secara lengkap dalam bentuk teks — demonstrasi hanya bantuan tambahan, bukan pengganti.</value></data>
+  <data name="Lesson.CommonMistakeHeading" xml:space="preserve"><value>Kesalahan umum</value></data>
+  <data name="Lesson.StepsHeading" xml:space="preserve"><value>Langkah-langkah</value></data>
+  <data name="Lesson.PlayAtPianoHint" xml:space="preserve"><value>Pelajaran ini dimainkan di piano. Buka halaman latihan:</value></data>
+  <data name="Lesson.DryTaskButton" xml:space="preserve"><value>Saya sudah melakukan latihan ini</value></data>
+  <data name="Lesson.DryTaskDone" xml:space="preserve"><value>Terima kasih — sudah dicatat sebagai selesai.</value></data>
+  <data name="Lesson.SelfCheckHeading" xml:space="preserve"><value>Penilaian mandiri</value></data>
+  <data name="Lesson.SelfCheckDisclaimer" xml:space="preserve"><value>Jawaban ini berdasarkan penilaianmu sendiri. Nadiano tidak dapat mendeteksi postur atau penggunaan jari melalui MIDI.</value></data>
+  <data name="Lesson.SelfCheckYes" xml:space="preserve"><value>Ya</value></data>
+  <data name="Lesson.SelfCheckNo" xml:space="preserve"><value>Belum juga</value></data>
+  <data name="Lesson.SelfCheckRecorded" xml:space="preserve"><value>Terima kasih, sudah dicatat.</value></data>
+
+  <data name="SelfCheck.technique.thumb-loose" xml:space="preserve"><value>Apakah jempolmu tetap rileks?</value></data>
+  <data name="SelfCheck.body.wrist-neutral" xml:space="preserve"><value>Apakah pergelangan tanganmu dalam posisi netral?</value></data>
+
+  <data name="SelfCheck.body.keyboard-orientation" xml:space="preserve"><value>Bisakah kamu menemukan kembali kelompok dua dan tiga tuts hitam?</value></data>
+  <data name="SelfCheck.body.seated-position" xml:space="preserve"><value>Apakah kamu duduk di bagian depan kursi dengan siku sejajar papan tuts?</value></data>
+  <data name="SelfCheck.body.tension-release" xml:space="preserve"><value>Bisakah kamu melepaskan ketegangan di rahang, bahu, dan tangan?</value></data>
+  <data name="SelfCheck.technique.finger-numbers" xml:space="preserve"><value>Bisakah kamu menyebutkan jari 1 sampai 5 di kedua tangan dengan yakin?</value></data>
+  <data name="SelfCheck.technique.natural-hand-shape" xml:space="preserve"><value>Apakah tanganmu tetap dalam bentuk melengkung yang alami?</value></data>
+  <data name="SelfCheck.technique.arm-weight-release" xml:space="preserve"><value>Bisakah kamu menyalurkan berat lenganmu ke dalam nada lalu melepaskannya?</value></data>
+  <data name="SelfCheck.technique.controlled-tone" xml:space="preserve"><value>Apakah nadamu terdengar rata dan tidak dipaksakan?</value></data>
+  <data name="SelfCheck.rhythm.steady-pulse" xml:space="preserve"><value>Apakah ketukanmu tetap stabil selama latihan?</value></data>
+  <data name="SelfCheck.technique.single-tone-transfer" xml:space="preserve"><value>Apakah nada yang berulang terasa rata dan rileks?</value></data>
+  <data name="SelfCheck.technique.two-finger-transfer" xml:space="preserve"><value>Apakah perpindahan antara dua jari terasa tenang, tanpa membuat tangan tegang?</value></data>
+  <data name="SelfCheck.technique.three-finger-transfer" xml:space="preserve"><value>Apakah tanganmu tetap tenang selama pola tiga jari?</value></data>
+  <data name="SelfCheck.technique.repeated-note-release" xml:space="preserve"><value>Bisakah kamu melepaskan setiap nada berulang satu per satu?</value></data>
+  <data name="SelfCheck.technique.connected-phrase" xml:space="preserve"><value>Apakah frasenya terdengar tersambung, tanpa jeda antar nada?</value></data>
+  <data name="SelfCheck.technique.detached-movement" xml:space="preserve"><value>Apakah ada pelepasan kecil yang disengaja antar nada?</value></data>
+  <data name="SelfCheck.technique.hands-alternating" xml:space="preserve"><value>Apakah perpindahan antar tangan terasa lancar?</value></data>
+  <data name="SelfCheck.body.wrist-release" xml:space="preserve"><value>Bisakah pergelangan tanganmu melemas di akhir frase?</value></data>
+  <data name="SelfCheck.rhythm.note-values" xml:space="preserve"><value>Bisakah kamu membedakan nada pendek dan panjang dengan jelas?</value></data>
+  <data name="SelfCheck.rhythm.rests" xml:space="preserve"><value>Apakah kamu ikut menghitung saat diam, bukannya melompatinya?</value></data>
+  <data name="SelfCheck.reading.contour-direction" xml:space="preserve"><value>Bisakah kamu mengenali arah melodi sebelum memainkannya?</value></data>
+  <data name="SelfCheck.expression.dynamics-range" xml:space="preserve"><value>Bisakah kamu membuat perbedaan yang terkendali antara keras dan lembut?</value></data>
+  <data name="SelfCheck.ear.same-different" xml:space="preserve"><value>Bisakah kamu mendengar apakah kedua pola sama atau berbeda?</value></data>
+  <data name="SelfCheck.ear.direction" xml:space="preserve"><value>Bisakah kamu mendengar apakah pola itu naik atau turun?</value></data>
+  <data name="SelfCheck.ear.echo-pattern" xml:space="preserve"><value>Bisakah kamu memainkan atau menyanyikan kembali pola itu dari ingatanmu?</value></data>
+  <data name="SelfCheck.creative.call-response" xml:space="preserve"><value>Bisakah kamu menemukan jawaban singkatmu sendiri atas pola itu?</value></data>
 
   <data name="Practice.Title" xml:space="preserve"><value>Berlatih</value></data>
   <data name="Practice.Placeholder" xml:space="preserve"><value>Area latihan akan segera tersedia di sini.</value></data>

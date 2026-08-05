@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "piece-morning-steps-01",
+  "kind": "mini-piece",
+  "stage": "F1",
+  "order": 500,
+  "estimatedMinutes": 6,
+  "skills": [],
+  "prerequisites": ["exercise-contour-updown-01", "exercise-legato-01"],
+  "notation": { "path": "score.musicxml", "partMapping": { "P1": "right-hand" } },
+  "practice": {
+    "supportedModes": ["wait", "loop", "performance"],
+    "defaultMode": "performance",
+    "targetTempo": 76,
+    "countInMeasures": 1
+  },
+  "assessment": {
+    "categories": ["pitch", "onset"],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 1, "minimumTimingScore": 0.6 },
+    "selfChecks": []
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

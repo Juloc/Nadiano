@@ -1,0 +1,14 @@
+{
+  "title": "Die Tastatur kennenlernen",
+  "summary": "Finde die Gruppen aus zwei und drei schwarzen Tasten und nutze sie, um dich auf der Tastatur zu orientieren.",
+  "why": "Die schwarzen Tasten bilden wiederkehrende Muster. Wer diese Muster erkennt, kann sich auf der ganzen Tastatur orientieren, ohne einzelne Tasten abzuzählen.",
+  "steps": [
+    "Suche eine Gruppe aus zwei schwarzen Tasten.",
+    "Suche daneben eine Gruppe aus drei schwarzen Tasten.",
+    "Fahre mit einem Finger mehrmals von einer Zweiergruppe zur nächsten.",
+    "Wandere so einmal von einem Ende der Tastatur zum anderen.",
+    "Finde eine Taste, die hoch und weit rechts liegt, und eine, die tief und weit links liegt."
+  ],
+  "commonMistake": "Die Tasten werden einzeln abgezählt, statt die Zweier- und Dreiergruppen als Muster zu erkennen.",
+  "successMessage": "Du kannst die Gruppen wiederfinden. Das reicht als Orientierung völlig aus."
+}

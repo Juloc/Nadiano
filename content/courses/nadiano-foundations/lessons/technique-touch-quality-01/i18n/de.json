@@ -1,0 +1,14 @@
+{
+  "title": "Verbunden und abgesetzt spielen",
+  "summary": "Spiele eine kurze Tonfolge einmal ganz verbunden und einmal mit einer kleinen Lücke zwischen den Tönen.",
+  "why": "Wer verbundenes und abgesetztes Spiel bewusst unterscheiden kann, gewinnt Kontrolle über den Klangcharakter einer Phrase.",
+  "steps": [
+    "Spiele mehrere Töne hintereinander so, dass ein Ton erst loslässt, wenn der nächste schon klingt – ganz verbunden.",
+    "Spiele dieselbe Tonfolge noch einmal, aber lass zwischen den Tönen jeweils eine kleine, gleich große Lücke.",
+    "Wechsle mehrmals zwischen verbunden und abgesetzt, um den Unterschied deutlich zu spüren.",
+    "Spiele einen Ton zunächst deutlich leiser, dann deutlich lauter – aber beide Male kontrolliert, ohne zu schlagen.",
+    "Finde eine mittlere Lautstärke, die du sicher wiederholen kannst, ohne lauter oder leiser abzurutschen."
+  ],
+  "commonMistake": "Lautstärke wird oft durch einen harten Schlag statt durch bewusste Kontrolle der Bewegung erzeugt.",
+  "successMessage": "Du konntest zwischen verbunden und abgesetzt wechseln und dabei kontrolliert bleiben – das ist die Grundlage für Ausdruck."
+}

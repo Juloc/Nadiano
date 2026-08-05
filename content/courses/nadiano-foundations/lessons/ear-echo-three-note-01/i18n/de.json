@@ -1,0 +1,13 @@
+{
+  "title": "Ein Drei-Ton-Echo",
+  "summary": "Höre ein kurzes Muster aus drei Tönen und versuche, es direkt danach aus dem Gedächtnis zu singen oder zu spielen.",
+  "why": "Mit einem Ton mehr wird das Nachsingen oder Nachspielen etwas anspruchsvoller. Das ist ein guter nächster Schritt, um dein Gedächtnis für Klänge zu erweitern.",
+  "steps": [
+    "Setze Kopfhörer auf oder sorge für eine ruhige Umgebung.",
+    "Höre das Muster einmal an.",
+    "Singe oder spiele es sofort nach deinem Gefühl nach.",
+    "Vergleiche dein Ergebnis in Gedanken mit dem Original."
+  ],
+  "commonMistake": "Sich auf den ersten Ton konzentrieren und die beiden anderen dabei nur halb mitverfolgen, statt dem ganzen Muster gleichmäßig zuzuhören.",
+  "successMessage": "Du hast dich an drei Töne herangetraut statt nur an zwei. Auch ein unvollständiges Echo ist ein guter Übungsversuch."
+}

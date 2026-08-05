@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "foundation-keyboard-map-01",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 10,
+  "estimatedMinutes": 5,
+  "skills": ["body.keyboard-orientation"],
+  "prerequisites": [],
+  "technique": {
+    "id": "keyboard-map-illustration",
+    "views": [{ "kind": "top", "path": "media/technique-top.svg" }],
+    "hasAudioDescription": false,
+    "loop": false
+  },
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["body.keyboard-orientation"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

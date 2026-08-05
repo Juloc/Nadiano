@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using Nadiano.Core.Practice;
+using Nadiano.Web.Infrastructure.Courses;
 using Nadiano.Web.Infrastructure.Persistence;
 using Nadiano.Web.Infrastructure.Profiles;
 
@@ -31,7 +32,8 @@ public static class PracticeSessionEndpoints
         CreateSessionRequest request,
         HttpContext httpContext,
         NadianoDbContext db,
-        CurrentProfileAccessor profiles)
+        CurrentProfileAccessor profiles,
+        CourseProgressService progress)
     {
         var profileId = await profiles.GetOrCreateProfileIdAsync(httpContext);
 
@@ -39,6 +41,13 @@ public static class PracticeSessionEndpoints
         if (existing is not null)
         {
             return existing.ProfileId == profileId ? Results.Ok(new SessionCreatedResponse(existing.Id)) : Results.NotFound();
+        }
+
+        // Manual URL/API navigation to a locked lesson must not be able to start a
+        // session for it (docs/JUNIOR_IMPLEMENTATION_PLAN.md WP-019 acceptance criteria).
+        if (!await progress.IsLessonAvailableAsync(profileId, request.LessonId))
+        {
+            return Results.StatusCode(StatusCodes.Status403Forbidden);
         }
 
         var session = new PracticeSessionRecord
@@ -62,7 +71,8 @@ public static class PracticeSessionEndpoints
         CompleteSessionRequest request,
         HttpContext httpContext,
         NadianoDbContext db,
-        CurrentProfileAccessor profiles)
+        CurrentProfileAccessor profiles,
+        CourseProgressService progress)
     {
         var profileId = await profiles.GetOrCreateProfileIdAsync(httpContext);
 
@@ -91,6 +101,8 @@ public static class PracticeSessionEndpoints
 
         db.PracticeAttempts.Add(attempt);
         await db.SaveChangesAsync();
+
+        await progress.EvaluateAndRecordCompletionAsync(profileId, session.LessonId);
 
         return Results.Ok(ToResponse(attempt));
     }

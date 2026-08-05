@@ -1,0 +1,13 @@
+{
+  "title": "Morgenschritte",
+  "summary": "Spiele die ganze Melodie gleichmäßig von Anfang bis Ende, wie einen ruhigen Spaziergang am Morgen.",
+  "why": "Ein kurzes Stück komplett durchzuspielen zeigt dir, wie sich ein zusammenhängender musikalischer Gedanke anfühlt, statt nur einzelne Töne zu üben.",
+  "steps": [
+    "Schaue dir das Stück einmal an, ohne zu spielen, und finde die Stellen, die sich wiederholen.",
+    "Übe die ersten vier Takte für sich allein, bis sie sich sicher anfühlen.",
+    "Übe die zweite Hälfte für sich allein.",
+    "Spiele das ganze Stück durch, auch wenn dabei ein Ton danebengeht."
+  ],
+  "commonMistake": "Beim ersten falschen Ton stehen bleiben und neu anfangen, statt einfach weiterzuspielen bis zum Ende.",
+  "successMessage": "Du hast das ganze Stück von Anfang bis Ende gespielt. Genau dieses Durchhalten macht aus einzelnen Tönen ein echtes Stück."
+}

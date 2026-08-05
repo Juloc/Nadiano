@@ -1,0 +1,13 @@
+{
+  "title": "Satu nada yang sangat panjang",
+  "summary": "Tahan satu nada selama satu birama penuh, lalu bandingkan dengan nada yang lebih pendek.",
+  "why": "Nada yang mengisi satu birama penuh membutuhkan kesabaran ekstra saat menghitung.",
+  "steps": [
+    "Pada birama pertama, hitung dalam hati sampai empat sebelum melepaskan.",
+    "Mainkan birama kedua dengan nada-nada yang lebih pendek.",
+    "Perhatikan perbedaan durasinya yang jelas.",
+    "Ulangi kedua birama dengan tempo yang sama."
+  ],
+  "commonMistake": "Nada panjang dilepaskan setelah hitungan kedua saja.",
+  "successMessage": "Nada panjang sekarang benar-benar mengisi satu birama penuh."
+}

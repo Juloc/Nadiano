@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "technique-touch-quality-01",
+  "kind": "guided-lesson",
+  "stage": "F1",
+  "order": 120,
+  "estimatedMinutes": 6,
+  "skills": ["technique.connected-phrase", "technique.detached-movement", "expression.dynamics-range"],
+  "prerequisites": ["technique-finger-transfer-01"],
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["technique.connected-phrase", "technique.detached-movement", "expression.dynamics-range"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

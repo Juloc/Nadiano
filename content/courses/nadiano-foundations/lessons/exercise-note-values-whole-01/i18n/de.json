@@ -1,0 +1,13 @@
+{
+  "title": "Ein ganz langer Ton",
+  "summary": "Halte einen Ton über den ganzen Takt und vergleiche ihn danach mit kürzeren Tönen.",
+  "why": "Ein Ton, der einen ganzen Takt füllt, verlangt besonders viel Geduld beim Zählen.",
+  "steps": [
+    "Zähle beim ersten Takt innerlich bis vier, bevor du loslässt.",
+    "Spiele den zweiten Takt danach mit den kürzeren Tönen.",
+    "Achte auf den deutlichen Unterschied in der Länge.",
+    "Wiederhole beide Takte im gleichen Tempo."
+  ],
+  "commonMistake": "Der lange Ton wird schon nach zwei Zählzeiten gelöst.",
+  "successMessage": "Der lange Ton füllt jetzt wirklich den ganzen Takt."
+}

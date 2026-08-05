@@ -1,0 +1,13 @@
+{
+  "title": "Drei Finger im Muster",
+  "summary": "Spiele ein Muster über drei benachbarte Töne, ohne dass die Hand unruhig wird.",
+  "why": "Drei Finger nacheinander zu bewegen ist ein größerer Schritt als der Wechsel zwischen nur zwei.",
+  "steps": [
+    "Lege Finger 2, 3 und 4 bereit.",
+    "Spiele das Muster langsam und gleichmäßig.",
+    "Achte darauf, dass die Handfläche ruhig bleibt.",
+    "Wiederhole, bis es sich sicher anfühlt."
+  ],
+  "commonMistake": "Der mittlere Finger wird kürzer oder lauter gespielt als die anderen beiden.",
+  "successMessage": "Alle drei Töne klingen gleich gewichtet."
+}

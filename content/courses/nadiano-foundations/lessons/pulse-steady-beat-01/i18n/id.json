@@ -1,0 +1,14 @@
+{
+  "title": "Merasakan ketukan yang stabil",
+  "summary": "Hitung atau mainkan ketukan yang stabil, dengan jarak yang sama antara setiap nada.",
+  "why": "Ketukan yang stabil adalah dasar dari semua permainan berirama—tanpanya, melodi apa pun akan bergeser.",
+  "steps": [
+    "Hitung dengan suara nyaring dan stabil '1, 2, 3, 4', seperti saat berjalan santai.",
+    "Tepuk tangan sekali di setiap hitungan, dan pastikan jarak di antaranya tetap sama.",
+    "Ganti dengan mengetuk satu jari di tutup papan tuts atau meja, tetap di setiap hitungan.",
+    "Mainkan satu nada dengan satu jari di setiap hitungan, dan biarkan nada itu berbunyi sama panjang setiap kali.",
+    "Ulangi satu putaran penuh empat hitungan beberapa kali, tanpa mempercepat atau memperlambat."
+  ],
+  "commonMistake": "Hitungan sering menjadi lebih cepat di awal dan melambat menjelang akhir—ketukan jadi tidak benar-benar stabil.",
+  "successMessage": "Kamu berhasil menjaga ketukan yang terasa sama, di bagian mana pun kamu menghitung. Itulah yang disebut ketukan stabil."
+}

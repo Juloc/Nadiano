@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-b",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 20,
+  "estimatedMinutes": 5,
+  "prerequisites": ["lesson-a"],
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

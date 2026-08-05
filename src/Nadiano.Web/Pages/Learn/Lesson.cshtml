@@ -1,0 +1,109 @@
+@page "{lessonId}"
+@model LessonModel
+@inject IStringLocalizer<SharedResource> Localizer
+@{
+    ViewData["Title"] = Model.Text.Title;
+}
+
+<h1>@Model.Text.Title</h1>
+
+<section class="card" aria-labelledby="lesson-goal-heading">
+    <h2 id="lesson-goal-heading">@Localizer["Lesson.GoalHeading"]</h2>
+    <p id="lesson-cue" class="callout">@Model.Text.Summary</p>
+</section>
+
+@if (!string.IsNullOrWhiteSpace(Model.Text.Why))
+{
+    <section aria-labelledby="lesson-why-heading">
+        <h2 id="lesson-why-heading">@Localizer["Lesson.WhyHeading"]</h2>
+        <p>@Model.Text.Why</p>
+    </section>
+}
+
+@if (Model.MediaViews.Count > 0)
+{
+    <section aria-labelledby="lesson-demo-heading">
+        <h2 id="lesson-demo-heading">@Localizer["Lesson.DemonstrationHeading"]</h2>
+        <p class="help-text">@Localizer["Lesson.DemonstrationTextAlternative"]</p>
+        <div class="technique-media-list" data-loop="@Model.MediaLoops.ToString().ToLowerInvariant()">
+            @foreach (var view in Model.MediaViews)
+            {
+                @if (view.MediaTag == "image")
+                {
+                    <img class="technique-media" src="@view.Url" alt="" data-kind="@view.Kind" />
+                }
+                else if (view.MediaTag == "audio")
+                {
+                    <audio class="technique-media" controls preload="metadata" data-kind="@view.Kind">
+                        <source src="@view.Url" />
+                    </audio>
+                }
+                else
+                {
+                    <video class="technique-media" controls preload="metadata" data-kind="@view.Kind" poster="@view.PosterUrl">
+                        <source src="@view.Url" type="video/webm" />
+                    </video>
+                }
+            }
+        </div>
+    </section>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.Text.CommonMistake))
+{
+    <section aria-labelledby="lesson-mistake-heading" class="callout">
+        <h2 id="lesson-mistake-heading">@Localizer["Lesson.CommonMistakeHeading"]</h2>
+        <p>@Model.Text.CommonMistake</p>
+    </section>
+}
+
+@if (Model.Text.Steps.Count > 0)
+{
+    <section aria-labelledby="lesson-steps-heading">
+        <h2 id="lesson-steps-heading">@Localizer["Lesson.StepsHeading"]</h2>
+        <ol>
+            @foreach (var step in Model.Text.Steps)
+            {
+                <li>@step</li>
+            }
+        </ol>
+    </section>
+}
+
+@if (Model.HasNotationPractice)
+{
+    <p class="help-text">
+        @Localizer["Lesson.PlayAtPianoHint"]
+        <a asp-page="/Practice/Index">@Localizer["Nav.Practice"]</a>
+    </p>
+}
+else
+{
+    <section class="card" id="lesson-dry-task" data-lesson-id="@Model.LessonId" data-content-version="@Model.ContentVersion">
+        <p id="lesson-dry-task-status" class="callout" hidden>@Localizer["Lesson.DryTaskDone"]</p>
+        <button id="lesson-dry-task-button" type="button" class="button">@Localizer["Lesson.DryTaskButton"]</button>
+    </section>
+}
+
+@if (Model.SelfCheckSkillIds.Count > 0)
+{
+    <section aria-labelledby="lesson-selfcheck-heading" id="lesson-selfcheck-section" class="card" hidden>
+        <h2 id="lesson-selfcheck-heading">@Localizer["Lesson.SelfCheckHeading"]</h2>
+        <p class="help-text">@Localizer["Lesson.SelfCheckDisclaimer"]</p>
+        <ul id="lesson-selfcheck-list" data-lesson-id="@Model.LessonId">
+            @foreach (var skillId in Model.SelfCheckSkillIds)
+            {
+                <li class="self-check-item" data-skill-id="@skillId">
+                    <span>@Localizer[$"SelfCheck.{skillId}"]</span>
+                    <button type="button" class="button-secondary self-check-answer" data-value="true">@Localizer["Lesson.SelfCheckYes"]</button>
+                    <button type="button" class="button-secondary self-check-answer" data-value="false">@Localizer["Lesson.SelfCheckNo"]</button>
+                    <span class="self-check-answered help-text" hidden>@Localizer["Lesson.SelfCheckRecorded"]</span>
+                </li>
+            }
+        </ul>
+    </section>
+}
+
+@section Scripts {
+    <script src="~/dist/pages/lesson.js" type="module" asp-append-version="true"></script>
+}

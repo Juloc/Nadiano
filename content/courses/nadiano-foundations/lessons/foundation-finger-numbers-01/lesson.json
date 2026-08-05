@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "foundation-finger-numbers-01",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 40,
+  "estimatedMinutes": 5,
+  "skills": ["technique.finger-numbers"],
+  "prerequisites": ["foundation-tension-release-01"],
+  "technique": {
+    "id": "finger-numbers-illustration",
+    "views": [{ "kind": "top", "path": "media/technique-top.svg" }],
+    "hasAudioDescription": false,
+    "loop": false
+  },
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["technique.finger-numbers"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

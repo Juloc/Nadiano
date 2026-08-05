@@ -20,7 +20,57 @@
   <data name="Home.NoTeacherReplacement" xml:space="preserve"><value>Nadiano ersetzt keine qualifizierte Klavierlehrkraft für Haltung, Spannung, Bewegungsqualität oder professionelle Interpretation.</value></data>
 
   <data name="Learn.Title" xml:space="preserve"><value>Lernen</value></data>
-  <data name="Learn.Placeholder" xml:space="preserve"><value>Der Kursfortschritt wird in Kürze hier angezeigt.</value></data>
+  <data name="course.stage.f0" xml:space="preserve"><value>F0 — Instrument und Körper</value></data>
+  <data name="course.stage.f1" xml:space="preserve"><value>F1 — Puls, Klang und Bewegung</value></data>
+  <data name="Learn.Placeholder" xml:space="preserve"><value>Für die Alpha ist noch kein Kurs veröffentlicht. Der Kursfortschritt erscheint hier, sobald Lektionen verfügbar sind.</value></data>
+  <data name="Learn.RecommendedNext" xml:space="preserve"><value>Empfehlung: Als Nächstes "{0}".</value></data>
+  <data name="Learn.StatusCompleted" xml:space="preserve"><value>abgeschlossen</value></data>
+  <data name="Learn.StatusAvailable" xml:space="preserve"><value>verfügbar</value></data>
+  <data name="Learn.StatusLocked" xml:space="preserve"><value>gesperrt</value></data>
+  <data name="Learn.LockedReason" xml:space="preserve"><value>Voraussetzung noch offen: {0}</value></data>
+
+  <data name="Lesson.GoalHeading" xml:space="preserve"><value>Ziel</value></data>
+  <data name="Lesson.WhyHeading" xml:space="preserve"><value>Warum</value></data>
+  <data name="Lesson.DemonstrationHeading" xml:space="preserve"><value>Vorführung</value></data>
+  <data name="Lesson.DemonstrationTextAlternative" xml:space="preserve"><value>Die Schritte unten beschreiben die Übung vollständig in Textform — die Vorführung ist eine zusätzliche Hilfe, kein Ersatz.</value></data>
+  <data name="Lesson.CommonMistakeHeading" xml:space="preserve"><value>Häufiger Fehler</value></data>
+  <data name="Lesson.StepsHeading" xml:space="preserve"><value>Schritte</value></data>
+  <data name="Lesson.PlayAtPianoHint" xml:space="preserve"><value>Diese Lektion wird am Klavier gespielt. Öffne die Übungsseite:</value></data>
+  <data name="Lesson.DryTaskButton" xml:space="preserve"><value>Ich habe die Übung durchgeführt</value></data>
+  <data name="Lesson.DryTaskDone" xml:space="preserve"><value>Danke — als abgeschlossen vermerkt.</value></data>
+  <data name="Lesson.SelfCheckHeading" xml:space="preserve"><value>Selbsteinschätzung</value></data>
+  <data name="Lesson.SelfCheckDisclaimer" xml:space="preserve"><value>Diese Angaben beruhen auf deiner eigenen Einschätzung. Nadiano kann Haltung oder Fingereinsatz nicht per MIDI erkennen.</value></data>
+  <data name="Lesson.SelfCheckYes" xml:space="preserve"><value>Ja</value></data>
+  <data name="Lesson.SelfCheckNo" xml:space="preserve"><value>Eher nicht</value></data>
+  <data name="Lesson.SelfCheckRecorded" xml:space="preserve"><value>Danke, vermerkt.</value></data>
+
+  <data name="SelfCheck.technique.thumb-loose" xml:space="preserve"><value>Blieb dein Daumen dabei locker?</value></data>
+  <data name="SelfCheck.body.wrist-neutral" xml:space="preserve"><value>War dein Handgelenk in einer neutralen Haltung?</value></data>
+
+  <data name="SelfCheck.body.keyboard-orientation" xml:space="preserve"><value>Konntest du die Zweier- und Dreiergruppen der schwarzen Tasten wiederfinden?</value></data>
+  <data name="SelfCheck.body.seated-position" xml:space="preserve"><value>Saßt du vorne auf dem Sitz, mit den Ellbogen etwa auf Tastaturhöhe?</value></data>
+  <data name="SelfCheck.body.tension-release" xml:space="preserve"><value>Konntest du Kiefer, Schultern und Hände bewusst lockerlassen?</value></data>
+  <data name="SelfCheck.technique.finger-numbers" xml:space="preserve"><value>Konntest du die Finger 1 bis 5 in beiden Händen sicher benennen?</value></data>
+  <data name="SelfCheck.technique.natural-hand-shape" xml:space="preserve"><value>Blieb deine Hand in einer natürlichen, gerundeten Form?</value></data>
+  <data name="SelfCheck.technique.arm-weight-release" xml:space="preserve"><value>Konntest du das Gewicht des Arms in den Ton fallen lassen und danach lösen?</value></data>
+  <data name="SelfCheck.technique.controlled-tone" xml:space="preserve"><value>Klang dein Ton gleichmäßig und ohne Druck?</value></data>
+  <data name="SelfCheck.rhythm.steady-pulse" xml:space="preserve"><value>Blieb dein Puls während der Übung gleichmäßig?</value></data>
+  <data name="SelfCheck.technique.single-tone-transfer" xml:space="preserve"><value>Blieb der wiederholte Ton gleichmäßig und locker?</value></data>
+  <data name="SelfCheck.technique.two-finger-transfer" xml:space="preserve"><value>Ging der Wechsel zwischen den zwei Fingern ruhig, ohne die Hand zu verkrampfen?</value></data>
+  <data name="SelfCheck.technique.three-finger-transfer" xml:space="preserve"><value>Blieb die Hand beim Dreifinger-Muster ruhig?</value></data>
+  <data name="SelfCheck.technique.repeated-note-release" xml:space="preserve"><value>Konntest du jeden wiederholten Ton einzeln lösen?</value></data>
+  <data name="SelfCheck.technique.connected-phrase" xml:space="preserve"><value>Klang die Phrase verbunden, ohne Lücke zwischen den Tönen?</value></data>
+  <data name="SelfCheck.technique.detached-movement" xml:space="preserve"><value>Hattest du zwischen den Tönen eine kleine, bewusste Lösung?</value></data>
+  <data name="SelfCheck.technique.hands-alternating" xml:space="preserve"><value>Ging die Übergabe zwischen den Händen flüssig?</value></data>
+  <data name="SelfCheck.body.wrist-release" xml:space="preserve"><value>Konnte dein Handgelenk am Ende der Phrase locker nachgeben?</value></data>
+  <data name="SelfCheck.rhythm.note-values" xml:space="preserve"><value>Konntest du kurze und lange Noten deutlich unterscheiden?</value></data>
+  <data name="SelfCheck.rhythm.rests" xml:space="preserve"><value>Hast du die Pausen aktiv mitgezählt, statt sie zu überspringen?</value></data>
+  <data name="SelfCheck.reading.contour-direction" xml:space="preserve"><value>Konntest du die Richtung der Melodie schon vor dem Spielen erkennen?</value></data>
+  <data name="SelfCheck.expression.dynamics-range" xml:space="preserve"><value>Konntest du zwischen laut und leise einen kontrollierten Unterschied machen?</value></data>
+  <data name="SelfCheck.ear.same-different" xml:space="preserve"><value>Konntest du hören, ob die beiden Muster gleich oder unterschiedlich waren?</value></data>
+  <data name="SelfCheck.ear.direction" xml:space="preserve"><value>Konntest du hören, ob das Muster nach oben oder unten ging?</value></data>
+  <data name="SelfCheck.ear.echo-pattern" xml:space="preserve"><value>Konntest du das Muster aus dem Gedächtnis nachspielen oder nachsingen?</value></data>
+  <data name="SelfCheck.creative.call-response" xml:space="preserve"><value>Hast du eine eigene kurze Antwort auf das Muster gefunden?</value></data>
 
   <data name="Practice.Title" xml:space="preserve"><value>Üben</value></data>
   <data name="Practice.Placeholder" xml:space="preserve"><value>Der Übungsbereich wird in Kürze hier verfügbar sein.</value></data>

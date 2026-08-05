@@ -1,0 +1,13 @@
+{
+  "title": "Satu frase yang tersambung",
+  "summary": "Sambungkan empat nada sehingga tidak ada jeda yang terdengar di antaranya.",
+  "why": "Permainan yang tersambung membuat melodi terdengar seperti satu gagasan yang utuh.",
+  "steps": [
+    "Mainkan keempat nada secara berurutan dengan lambat.",
+    "Lepaskan setiap tuts tepat saat tuts berikutnya ditekan.",
+    "Dengarkan dengan sadar apakah ada jeda yang muncul.",
+    "Ulangi sampai terdengar tersambung."
+  ],
+  "commonMistake": "Sebuah tuts dilepaskan terlalu cepat sehingga muncul jeda kecil ke nada berikutnya.",
+  "successMessage": "Keempat nada terdengar seperti satu kalimat yang utuh."
+}

@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "nadiano-foundations",
+  "version": "0.1.0",
+  "defaultLanguage": "de",
+  "supportedLanguages": ["de", "id"],
+  "stages": [
+    {
+      "id": "F0",
+      "titleKey": "course.stage.f0",
+      "items": [
+        "foundation-keyboard-map-01",
+        "foundation-sitting-01",
+        "foundation-tension-release-01",
+        "foundation-finger-numbers-01",
+        "foundation-hand-shape-01",
+        "foundation-arm-weight-01",
+        "foundation-controlled-tone-01"
+      ]
+    },
+    {
+      "id": "F1",
+      "titleKey": "course.stage.f1",
+      "items": [
+        "pulse-steady-beat-01",
+        "technique-finger-transfer-01",
+        "technique-touch-quality-01",
+        "technique-hands-alternating-01",
+        "listening-imitation-01",
+        "exercise-single-tone-01",
+        "exercise-single-tone-02",
+        "exercise-two-finger-01",
+        "exercise-two-finger-02",
+        "exercise-three-finger-01",
+        "exercise-three-finger-02",
+        "exercise-pulse-quarter-01",
+        "exercise-pulse-quarter-02",
+        "exercise-note-values-half-01",
+        "exercise-note-values-whole-01",
+        "exercise-rests-quarter-01",
+        "exercise-rests-half-01",
+        "exercise-contour-ascending-01",
+        "exercise-contour-descending-01",
+        "exercise-contour-updown-01",
+        "exercise-contour-skip-01",
+        "exercise-legato-01",
+        "exercise-legato-02",
+        "exercise-detached-01",
+        "exercise-detached-02",
+        "ear-same-different-01",
+        "ear-direction-01",
+        "ear-echo-two-note-01",
+        "ear-echo-three-note-01",
+        "piece-morning-steps-01",
+        "piece-echo-song-01",
+        "piece-gentle-waltz-01"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Kurze und lange Töne",
+  "summary": "Spiele lange Töne, die doppelt so lange klingen wie die kurzen, ohne die Zählung zu verlieren.",
+  "why": "Unterschiedliche Tonlängen bewusst zu zählen ist die Grundlage für jedes Rhythmusgefühl.",
+  "steps": [
+    "Zähle bei einem langen Ton innerlich bis zwei weiter.",
+    "Zähle bei einem kurzen Ton nur bis eins.",
+    "Löse jeden Ton erst nach der vollen Zählzeit.",
+    "Wiederhole beide Takte im gleichen Tempo."
+  ],
+  "commonMistake": "Der lange Ton wird zu früh gelöst, weil die Zählzeit nicht mitgezählt wird.",
+  "successMessage": "Die langen Töne klingen jetzt deutlich länger als die kurzen."
+}

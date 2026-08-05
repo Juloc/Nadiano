@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "exercise-rests-half-01",
+  "kind": "rhythm-drill",
+  "stage": "F1",
+  "order": 310,
+  "estimatedMinutes": 4,
+  "skills": ["rhythm.rests"],
+  "prerequisites": ["pulse-steady-beat-01"],
+  "notation": { "path": "score.musicxml", "partMapping": { "P1": "right-hand" } },
+  "practice": {
+    "supportedModes": ["wait", "performance"],
+    "defaultMode": "performance",
+    "targetTempo": 72,
+    "countInMeasures": 1
+  },
+  "assessment": {
+    "categories": ["onset", "duration"],
+    "completionRule": { "requiredSuccessfulRuns": 2, "maximumPitchErrors": 0, "minimumTimingScore": 0.7 },
+    "selfChecks": []
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

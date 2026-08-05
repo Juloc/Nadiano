@@ -1,0 +1,13 @@
+{
+  "title": "Eine längere Pause zählen",
+  "summary": "Zähle eine Pause, die über zwei Schläge dauert, genauso ruhig wie einen langen Ton.",
+  "why": "Je länger eine Pause dauert, desto leichter verliert man dabei die Zählung.",
+  "steps": [
+    "Zähle innerlich durchgehend \"eins, zwei, drei, vier\".",
+    "Spiele auf \"eins\", bleib auf \"zwei\" und \"drei\" still, spiele wieder auf \"vier\".",
+    "Zähle die beiden stillen Schläge bewusst mit.",
+    "Wiederhole beide Takte im gleichen Tempo."
+  ],
+  "commonMistake": "Nach der Pause wird zu früh oder zu spät wieder eingesetzt.",
+  "successMessage": "Der Wiedereinsatz nach der Pause sitzt jetzt genau."
+}

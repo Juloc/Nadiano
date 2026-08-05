@@ -1,0 +1,13 @@
+{
+  "title": "Ketukan rata dalam tiga",
+  "summary": "Mainkan nada yang sama tiga kali per birama — rasa hitungan yang berbeda dari sebelumnya.",
+  "why": "Ketukan dalam tiga terasa berbeda dari ketukan dalam empat dan perlu dilatih secara terpisah.",
+  "steps": [
+    "Hitung dalam hati \"satu, dua, tiga\" sebelum mulai.",
+    "Mainkan satu nada di setiap hitungan.",
+    "Perhatikan baik-baik saat kembali ke hitungan \"satu\".",
+    "Ulangi sampai akhir keempat birama."
+  ],
+  "commonMistake": "Karena kebiasaan, muncul hitungan keempat yang seharusnya tidak ada.",
+  "successMessage": "Ketukan dalam tiga ini tetap jelas dan rata."
+}

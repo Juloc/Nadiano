@@ -1,0 +1,14 @@
+{
+  "title": "Einen gleichmäßigen Puls fühlen",
+  "summary": "Zähle oder spiele einen gleichmäßigen Schlag, bei dem der Abstand zwischen jedem Ton immer gleich bleibt.",
+  "why": "Ein gleichmäßiger Puls ist die Grundlage für jedes Zusammenspiel mit Rhythmus – ohne ihn verschiebt sich jede Melodie.",
+  "steps": [
+    "Zähle laut und gleichmäßig '1, 2, 3, 4', so wie beim gemütlichen Gehen.",
+    "Klatsche bei jeder Zahl einmal und achte darauf, dass die Pausen dazwischen gleich lang bleiben.",
+    "Tippe stattdessen mit einem Finger auf den Tastendeckel oder Tisch, weiterhin bei jeder Zahl.",
+    "Spiele einen einzelnen Ton mit einem Finger bei jeder Zahl und lass ihn jedes Mal gleich lang klingen.",
+    "Wiederhole einen vollen Vierer-Zyklus mehrmals, ohne schneller oder langsamer zu werden."
+  ],
+  "commonMistake": "Am Anfang wird oft schneller gezählt, zum Ende hin langsamer – der Puls bleibt dann nicht wirklich gleich.",
+  "successMessage": "Du hast einen Schlag gehalten, der sich gleich anfühlt, egal wo du gerade zählst. Genau das ist ein Puls."
+}

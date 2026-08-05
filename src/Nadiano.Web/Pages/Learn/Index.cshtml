@@ -1,9 +1,61 @@
 @page
 @model IndexModel
+@using Nadiano.Core.Courses
 @inject IStringLocalizer<SharedResource> Localizer
 @{
     ViewData["Title"] = Localizer["Learn.Title"];
 }
 
 <h1>@Localizer["Learn.Title"]</h1>
-<p>@Localizer["Learn.Placeholder"]</p>
+
+@if (Model.Courses.Count == 0)
+{
+    <p>@Localizer["Learn.Placeholder"]</p>
+}
+else
+{
+    foreach (var course in Model.Courses)
+    {
+        <section class="card" aria-label="@course.CourseId">
+            @if (course.RecommendedLessonTitle is not null)
+            {
+                <p class="callout">@string.Format(Localizer["Learn.RecommendedNext"], course.RecommendedLessonTitle)</p>
+            }
+
+            @foreach (var stage in course.Stages)
+            {
+                <h2>@Localizer[stage.TitleKey]</h2>
+                <ul class="lesson-list">
+                    @foreach (var lesson in stage.Lessons)
+                    {
+                        var statusKey = lesson.Availability switch
+                        {
+                            LessonAvailability.Completed => "Learn.StatusCompleted",
+                            LessonAvailability.Available => "Learn.StatusAvailable",
+                            _ => "Learn.StatusLocked",
+                        };
+                        var badgeModifier = lesson.Availability.ToString().ToLowerInvariant();
+
+                        <li class="lesson-list-item">
+                            @if (lesson.Availability == LessonAvailability.Locked)
+                            {
+                                <span class="lesson-title">@lesson.Title</span>
+                            }
+                            else
+                            {
+                                <a class="lesson-title" asp-page="/Learn/Lesson" asp-route-lessonId="@lesson.LessonId">@lesson.Title</a>
+                            }
+                            <span class="badge badge--@badgeModifier">@Localizer[statusKey]</span>
+                            @if (lesson.Availability == LessonAvailability.Locked)
+                            {
+                                <p class="lesson-locked-reason help-text">
+                                    @string.Format(Localizer["Learn.LockedReason"], string.Join(", ", lesson.MissingPrerequisiteTitles))
+                                </p>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+        </section>
+    }
+}

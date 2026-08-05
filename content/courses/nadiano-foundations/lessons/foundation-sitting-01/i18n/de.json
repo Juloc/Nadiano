@@ -1,0 +1,14 @@
+{
+  "title": "Sitzhaltung und Abstand",
+  "summary": "Du sitzt so am Klavier, dass deine Ellenbogen etwa auf Höhe der Tastatur sind und deine Arme sich frei bewegen können.",
+  "why": "Eine gute Sitzposition gibt deinen Armen und Händen die Freiheit, sich später ohne Anstrengung zu bewegen.",
+  "steps": [
+    "Setz dich auf die vordere Hälfte der Sitzfläche.",
+    "Rücke so nah an die Tastatur, dass deine Arme locker nach vorne reichen.",
+    "Stell deine Füße flach und stabil auf den Boden oder eine Fußstütze.",
+    "Prüfe, ob deine Ellenbogen etwa auf Höhe der Tastatur liegen.",
+    "Bewege beide Arme einmal seitlich, um zu prüfen, ob genug Platz für die Ellenbogen bleibt."
+  ],
+  "commonMistake": "Der Sitzplatz ist so weit hinten oder tief, dass die Ellenbogen deutlich unter der Tastatur hängen und die Arme beim Bewegen anstoßen.",
+  "successMessage": "Du sitzt stabil und hast Platz für deine Arme. Genau darauf kommt es an."
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Menghitung diam yang lebih panjang",
+  "summary": "Hitung tanda diam yang berdurasi dua ketukan dengan setenang saat menghitung nada panjang.",
+  "why": "Semakin panjang tanda diam, semakin mudah kehilangan hitungan di dalamnya.",
+  "steps": [
+    "Hitung dalam hati terus-menerus \"satu, dua, tiga, empat\".",
+    "Mainkan pada \"satu\", diam pada \"dua\" dan \"tiga\", mainkan lagi pada \"empat\".",
+    "Tetap hitung kedua ketukan diam itu dengan sadar.",
+    "Ulangi kedua birama dengan tempo yang sama."
+  ],
+  "commonMistake": "Setelah diam, nada berikutnya masuk terlalu cepat atau terlalu lambat.",
+  "successMessage": "Masuknya nada setelah diam sekarang tepat waktu."
+}

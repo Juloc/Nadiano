@@ -1,0 +1,13 @@
+{
+  "title": "Nada berulang, dilepas dengan santai",
+  "summary": "Mainkan dua nada yang bergantian beberapa kali, masing-masing dilepas dengan santai, bukan tersambung.",
+  "why": "Memainkan nada berulang dengan pelepasan yang santai mencegah tangan menjadi kaku.",
+  "steps": [
+    "Mainkan birama pertama dengan kedua nada yang bergantian.",
+    "Lepaskan setiap tuts dengan sadar sebelum nada berikutnya.",
+    "Mainkan birama kedua dengan cara yang sama menggunakan dua nada berikutnya.",
+    "Ulangi kedua birama dengan tempo tenang yang sama."
+  ],
+  "commonMistake": "Tangan menjadi tegang saat bergantian nada dengan cepat.",
+  "successMessage": "Pergantiannya tetap santai dan lepas, bahkan saat diulang."
+}

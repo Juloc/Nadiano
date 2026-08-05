@@ -1,0 +1,14 @@
+{
+  "title": "Mengenal papan tuts",
+  "summary": "Temukan kelompok dua dan tiga tuts hitam, dan gunakan itu untuk mengenali posisimu di papan tuts.",
+  "why": "Tuts hitam membentuk pola yang berulang. Dengan mengenali pola ini, kamu bisa menemukan posisi di seluruh papan tuts tanpa harus menghitung satu per satu.",
+  "steps": [
+    "Cari satu kelompok yang terdiri dari dua tuts hitam.",
+    "Cari kelompok tiga tuts hitam di sebelahnya.",
+    "Gerakkan satu jari beberapa kali dari satu kelompok dua ke kelompok dua berikutnya.",
+    "Lakukan ini dari satu ujung papan tuts ke ujung lainnya.",
+    "Temukan satu tuts yang tinggi dan jauh di kanan, dan satu yang rendah dan jauh di kiri."
+  ],
+  "commonMistake": "Menghitung tuts satu per satu, bukan mengenali kelompok dua dan tiga sebagai pola.",
+  "successMessage": "Kamu bisa menemukan kembali kelompok-kelompok itu. Itu sudah cukup sebagai orientasi."
+}

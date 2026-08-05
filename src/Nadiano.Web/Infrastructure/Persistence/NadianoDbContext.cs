@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Nadiano.Core.Practice;
 using Nadiano.Core.Profiles;
+using Nadiano.Core.Progress;
 
 namespace Nadiano.Web.Infrastructure.Persistence;
 
@@ -11,6 +12,9 @@ public class NadianoDbContext(DbContextOptions<NadianoDbContext> options) : DbCo
     public DbSet<ProfilePreferences> ProfilePreferences => Set<ProfilePreferences>();
     public DbSet<PracticeSessionRecord> PracticeSessions => Set<PracticeSessionRecord>();
     public DbSet<PracticeAttemptRecord> PracticeAttempts => Set<PracticeAttemptRecord>();
+    public DbSet<CourseEnrollment> CourseEnrollments => Set<CourseEnrollment>();
+    public DbSet<LessonProgressRecord> LessonProgress => Set<LessonProgressRecord>();
+    public DbSet<SkillEvidenceRecord> SkillEvidence => Set<SkillEvidenceRecord>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

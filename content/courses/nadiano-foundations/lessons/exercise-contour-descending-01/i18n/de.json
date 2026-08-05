@@ -1,0 +1,13 @@
+{
+  "title": "Abwärtsbogen lesen",
+  "summary": "Lies die Notenlinie als Bogen, der zuerst absteigt und dann wieder ein Stück nach oben führt.",
+  "why": "Das Erkennen einer fallenden Linie ist genauso wichtig wie das Erkennen einer steigenden – beide Richtungen kommen in echten Stücken ständig vor.",
+  "steps": [
+    "Schau dir zuerst die fallende Linie im ersten Takt an.",
+    "Spiele die vier absteigenden Töne ruhig und gleichmäßig.",
+    "Spiele danach die vier Töne, die wieder nach oben führen.",
+    "Höre, ob der Übergang zwischen beiden Takten glatt klingt."
+  ],
+  "commonMistake": "Die fallende Linie wird gehetzt gespielt, weil sie einfacher wirkt als eine steigende.",
+  "successMessage": "Du hast die fallende Linie ruhig gespielt und den Rückweg nach oben genauso sicher gefunden."
+}

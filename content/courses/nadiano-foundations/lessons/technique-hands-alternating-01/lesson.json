@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "technique-hands-alternating-01",
+  "kind": "guided-lesson",
+  "stage": "F1",
+  "order": 130,
+  "estimatedMinutes": 6,
+  "skills": ["technique.hands-alternating", "body.wrist-release"],
+  "prerequisites": ["technique-touch-quality-01"],
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["technique.hands-alternating", "body.wrist-release"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

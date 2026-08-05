@@ -1,0 +1,14 @@
+{
+  "title": "Fingernummern",
+  "summary": "Du kennst die Nummern 1 bis 5 für die Finger beider Hände und kannst sie auf Zuruf zeigen.",
+  "why": "Fingernummern sind die gemeinsame Sprache für spätere Übungen. Ohne sie lässt sich nicht klar sagen, welcher Finger gemeint ist.",
+  "steps": [
+    "Halte beide Hände locker vor dich, mit den Handflächen nach unten.",
+    "Der Daumen ist bei beiden Händen Finger 1, der kleine Finger Finger 5.",
+    "Tippe nacheinander Finger 1 bis 5 auf einer Hand leicht gegen den Tisch oder Oberschenkel.",
+    "Wiederhole das mit der anderen Hand.",
+    "Nenne einen Finger und tippe ihn direkt, ohne vorher alle anderen abzuzählen."
+  ],
+  "commonMistake": "Ein Finger wird dauerhaft mit einer bestimmten Taste verknüpft, statt die Nummern unabhängig von einer Taste zu lernen.",
+  "successMessage": "Du findest jeden Finger sofort über seine Nummer. Das reicht für den nächsten Schritt völlig aus."
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Ein gehaltener Ton",
+  "summary": "Spiele denselben Ton mehrmals gleichmäßig und lass ihn jedes Mal wieder locker los.",
+  "why": "Ein ruhiger, wiederholter Ton ist die Grundlage für alles, was danach kommt.",
+  "steps": [
+    "Lege Finger 3 auf die Taste.",
+    "Spiele im gleichmäßigen Tempo, ohne zu drücken.",
+    "Löse die Taste nach jedem Ton bewusst.",
+    "Wiederhole, bis sich der Ablauf ruhig anfühlt."
+  ],
+  "commonMistake": "Die Taste wird nach dem Anschlag weiter heruntergedrückt, statt locker zu lösen.",
+  "successMessage": "Die Töne klingen gleichmäßig. Genau darum geht es hier."
+}

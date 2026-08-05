@@ -1,0 +1,13 @@
+{
+  "title": "Eine längere verbundene Phrase",
+  "summary": "Verbinde jetzt acht Töne mit einer kleinen Wendung in der Mitte, ohne die Verbindung zu verlieren.",
+  "why": "Eine längere Phrase verbunden zu halten ist anspruchsvoller als vier kurze Töne.",
+  "steps": [
+    "Spiele zuerst nur den ersten Takt verbunden.",
+    "Spiele danach nur den zweiten Takt verbunden.",
+    "Setze beide Takte langsam zusammen.",
+    "Achte besonders auf den Übergang zwischen den beiden Takten."
+  ],
+  "commonMistake": "Am Übergang zwischen den Takten entsteht eine kleine, unbeabsichtigte Lücke.",
+  "successMessage": "Die ganze Phrase klingt jetzt als ein zusammenhängender Bogen."
+}

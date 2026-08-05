@@ -1,0 +1,13 @@
+{
+  "title": "Zwei Finger im Wechsel",
+  "summary": "Wechsle ruhig zwischen zwei benachbarten Tönen, ohne die Hand zu bewegen.",
+  "why": "Das Gewicht sauber von einem Finger zum nächsten zu übergeben, ist die Grundlage jeder Fingerbewegung.",
+  "steps": [
+    "Lege Finger 2 und 3 auf die beiden Tasten.",
+    "Wechsle im gleichmäßigen Tempo zwischen beiden.",
+    "Halte die Hand ruhig, nur die Finger bewegen sich.",
+    "Wiederhole entspannt mehrmals."
+  ],
+  "commonMistake": "Die ganze Hand wackelt beim Wechsel mit, statt nur die Finger zu bewegen.",
+  "successMessage": "Der Wechsel klingt ruhig und gleichmäßig."
+}

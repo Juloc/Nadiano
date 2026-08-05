@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "ear-direction-01",
+  "kind": "ear-drill",
+  "stage": "F1",
+  "order": 410,
+  "estimatedMinutes": 4,
+  "skills": ["ear.direction"],
+  "prerequisites": ["listening-imitation-01"],
+  "technique": {
+    "id": "ear-direction-01-audio",
+    "views": [{ "kind": "audio", "path": "media/reference.wav" }],
+    "hasAudioDescription": true,
+    "loop": false
+  },
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["ear.direction"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

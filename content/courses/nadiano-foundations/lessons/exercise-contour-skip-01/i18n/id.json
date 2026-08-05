@@ -1,0 +1,13 @@
+{
+  "title": "Membaca lompatan kecil",
+  "summary": "Kenali kapan melodi bergerak selangkah dan kapan ia melompati satu nada.",
+  "why": "Bisa membaca lompatan adalah langkah berikutnya setelah langkah biasa terasa yakin.",
+  "steps": [
+    "Perhatikan mana not yang berjarak dekat dan mana yang berjarak lebih jauh di notasi.",
+    "Kenali sendiri mana yang selangkah dan mana yang melompat.",
+    "Mainkan pola ini dengan lambat.",
+    "Ulangi sampai lompatannya terasa yakin."
+  ],
+  "commonMistake": "Sebuah lompatan tanpa sengaja dimainkan seperti selangkah karena terasa lebih familiar.",
+  "successMessage": "Kamu berhasil mengenali dan memainkan lompatannya dengan yakin."
+}

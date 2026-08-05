@@ -1,0 +1,13 @@
+{
+  "title": "Geht es aufwärts oder abwärts?",
+  "summary": "Höre ein kurzes Muster aus drei Tönen und erkenne, ob die Melodie insgesamt nach oben, nach unten oder in beide Richtungen verläuft.",
+  "why": "Die grobe Richtung einer Melodie zu erkennen ist eine der ersten Fähigkeiten, mit denen sich das Gehör von der reinen Lautstärke hin zu echter Musikwahrnehmung entwickelt.",
+  "steps": [
+    "Setze Kopfhörer auf oder sorge für eine ruhige Umgebung.",
+    "Höre dir das Beispiel einmal vollständig an.",
+    "Höre es dir bei Bedarf ein zweites Mal an.",
+    "Entscheide für dich, ob die drei Töne insgesamt aufwärts gehen, abwärts gehen oder beides tun."
+  ],
+  "commonMistake": "Sich nur auf den ersten und letzten Ton konzentrieren und den mittleren Ton übersehen, der die Richtung noch einmal ändern kann.",
+  "successMessage": "Du hast dir die ganze Bewegung angehört, nicht nur Anfang und Ende. Das ist der richtige Weg, Richtung zu erkennen."
+}

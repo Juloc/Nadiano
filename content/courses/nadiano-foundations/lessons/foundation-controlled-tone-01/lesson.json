@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "foundation-controlled-tone-01",
+  "kind": "technique-drill",
+  "stage": "F0",
+  "order": 70,
+  "estimatedMinutes": 5,
+  "skills": ["technique.controlled-tone"],
+  "prerequisites": ["foundation-arm-weight-01"],
+  "technique": {
+    "id": "controlled-tone-illustration",
+    "views": [{ "kind": "top", "path": "media/technique-top.svg" }],
+    "hasAudioDescription": false,
+    "loop": false
+  },
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["technique.controlled-tone"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}

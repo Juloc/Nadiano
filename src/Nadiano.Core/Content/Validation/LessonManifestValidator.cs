@@ -20,6 +20,7 @@ public static class LessonManifestValidator
         ValidateSchema(lesson, manifestPath, result);
         ValidateReferences(lesson, manifestPath, knownSkillIds, knownLessonIdsInCourse, result);
         ValidateNotationAndPractice(lesson, manifestPath, repository, courseId, result);
+        ValidateTechniqueMedia(lesson, manifestPath, repository, courseId, result);
         ValidateLocalization(lesson, manifestPath, repository, courseId, courseSupportedLanguages, result);
         ValidateLicense(lesson, manifestPath, repository, courseId, result);
         ValidateRuntimeReadiness(lesson, manifestPath, repository, courseId, result);
@@ -118,6 +119,40 @@ public static class LessonManifestValidator
                 {
                     result.Add(manifestPath, "Practice.Sections", $"Section '{section.Id}' has FromMeasure greater than ToMeasure.");
                 }
+            }
+        }
+    }
+
+    private static void ValidateTechniqueMedia(
+        LessonManifest lesson,
+        string manifestPath,
+        BundledContentRepository repository,
+        string courseId,
+        ContentValidationResult result)
+    {
+        if (lesson.Technique is not { } technique)
+        {
+            return;
+        }
+
+        if (technique.Views.Count == 0)
+        {
+            result.Add(manifestPath, "Technique.Views", "Technique media must declare at least one view.");
+        }
+
+        var lessonDirectory = repository.GetLessonDirectory(courseId, lesson.Id);
+
+        foreach (var view in technique.Views)
+        {
+            var mediaPath = Path.Combine(lessonDirectory, view.Path);
+            if (!File.Exists(mediaPath))
+            {
+                result.Add(manifestPath, "Technique.Views", $"Referenced technique media file does not exist: {view.Path}");
+            }
+
+            if (view.Poster is { } poster && !File.Exists(Path.Combine(lessonDirectory, poster)))
+            {
+                result.Add(manifestPath, "Technique.Views", $"Referenced technique media poster does not exist: {poster}");
             }
         }
     }

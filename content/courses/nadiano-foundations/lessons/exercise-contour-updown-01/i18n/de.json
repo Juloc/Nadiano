@@ -1,0 +1,13 @@
+{
+  "title": "Ein Bogen nach oben und unten",
+  "summary": "Erkenne die Bogenform der Melodie, bevor du sie spielst: erst hoch, dann wieder zurück.",
+  "why": "Eine Melodie zuerst als Form zu sehen ist schneller als jede einzelne Note abzuzählen.",
+  "steps": [
+    "Schau dir das Notenbild an, bevor du spielst.",
+    "Beschreibe den Verlauf mit den Händen in der Luft: hoch, dann runter.",
+    "Spiele das Muster zweimal hintereinander.",
+    "Achte darauf, dass beide Wiederholungen gleich klingen."
+  ],
+  "commonMistake": "Jede Note wird einzeln gesucht, statt die Bogenform als Ganzes zu erkennen.",
+  "successMessage": "Du hast die Form erkannt und sicher gespielt."
+}

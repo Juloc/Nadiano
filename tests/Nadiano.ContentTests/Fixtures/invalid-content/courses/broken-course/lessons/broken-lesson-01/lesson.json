@@ -7,6 +7,12 @@
   "estimatedMinutes": 0,
   "skills": ["dup.skill", "totally-unknown-skill"],
   "prerequisites": ["broken-lesson-01"],
+  "technique": {
+    "id": "broken-technique",
+    "views": [
+      { "kind": "top", "path": "media/missing.webm" }
+    ]
+  },
   "assessment": {
     "categories": ["pitch"],
     "completionRule": { "requiredSuccessfulRuns": 1 },

@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "progress-fixture",
+  "version": "0.1.0",
+  "defaultLanguage": "de",
+  "supportedLanguages": ["de", "id"],
+  "stages": [
+    {
+      "id": "F0",
+      "titleKey": "course.stage.f0",
+      "items": ["lesson-a", "lesson-b"]
+    }
+  ]
+}

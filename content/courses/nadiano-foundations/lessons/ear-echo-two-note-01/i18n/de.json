@@ -1,0 +1,13 @@
+{
+  "title": "Ein Zwei-Ton-Echo",
+  "summary": "Höre ein kurzes Muster aus zwei Tönen und versuche, es direkt danach aus dem Gedächtnis zu singen oder zu spielen.",
+  "why": "Ein Muster nachzusingen oder nachzuspielen verbindet Hören und eigenes Handeln. So merkst du dir Klänge nicht nur, sondern lernst, sie aktiv wiederzugeben.",
+  "steps": [
+    "Setze Kopfhörer auf oder sorge für eine ruhige Umgebung.",
+    "Höre das Muster einmal an.",
+    "Singe oder spiele es sofort nach deinem Gefühl nach.",
+    "Vergleiche dein Ergebnis in Gedanken mit dem Original."
+  ],
+  "commonMistake": "Zu lange warten, bevor man nachsingt oder nachspielt, sodass das Muster aus dem Gedächtnis verschwindet, statt sofort nach dem Hören zu reagieren.",
+  "successMessage": "Du hast versucht, das Muster direkt aus dem Gedächtnis wiederzugeben. Genau dieser Versuch trainiert dein Gehör, ganz unabhängig davon, wie genau er war."
+}

@@ -133,6 +133,79 @@ namespace Nadiano.Web.Infrastructure.Persistence.Migrations
                     b.ToTable("ProfilePreferences", (string)null);
                 });
 
+            modelBuilder.Entity("Nadiano.Core.Progress.CourseEnrollment", b =>
+                {
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CourseId")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("EnrolledAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProfileId", "CourseId");
+
+                    b.ToTable("CourseEnrollments", (string)null);
+                });
+
+            modelBuilder.Entity("Nadiano.Core.Progress.LessonProgressRecord", b =>
+                {
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LessonId")
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CompletedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CourseId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ProfileId", "LessonId");
+
+                    b.HasIndex("ProfileId", "CourseId");
+
+                    b.ToTable("LessonProgress", (string)null);
+                });
+
+            modelBuilder.Entity("Nadiano.Core.Progress.SkillEvidenceRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("LessonId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("RecordedAtUtc")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("SelfReportedSuccess")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SkillId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfileId", "LessonId");
+
+                    b.ToTable("SkillEvidence", (string)null);
+                });
+
             modelBuilder.Entity("Nadiano.Core.Practice.PracticeAttemptRecord", b =>
                 {
                     b.HasOne("Nadiano.Core.Practice.PracticeSessionRecord", null)
@@ -156,6 +229,33 @@ namespace Nadiano.Web.Infrastructure.Persistence.Migrations
                     b.HasOne("Nadiano.Core.Profiles.LearnerProfile", null)
                         .WithOne()
                         .HasForeignKey("Nadiano.Core.Profiles.ProfilePreferences", "ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Nadiano.Core.Progress.CourseEnrollment", b =>
+                {
+                    b.HasOne("Nadiano.Core.Profiles.LearnerProfile", null)
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Nadiano.Core.Progress.LessonProgressRecord", b =>
+                {
+                    b.HasOne("Nadiano.Core.Profiles.LearnerProfile", null)
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Nadiano.Core.Progress.SkillEvidenceRecord", b =>
+                {
+                    b.HasOne("Nadiano.Core.Profiles.LearnerProfile", null)
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

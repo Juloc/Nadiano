@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "technique-finger-transfer-01",
+  "kind": "guided-lesson",
+  "stage": "F1",
+  "order": 110,
+  "estimatedMinutes": 6,
+  "skills": ["technique.single-tone-transfer", "technique.two-finger-transfer", "technique.three-finger-transfer"],
+  "prerequisites": ["pulse-steady-beat-01"],
+  "assessment": {
+    "categories": [],
+    "completionRule": { "requiredSuccessfulRuns": 1, "maximumPitchErrors": 0, "minimumTimingScore": 0 },
+    "selfChecks": ["technique.single-tone-transfer", "technique.two-finger-transfer", "technique.three-finger-transfer"]
+  },
+  "localization": { "directory": "i18n" },
+  "attribution": "attribution.json"
+}
