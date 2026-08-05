@@ -115,7 +115,7 @@ jobs:
           tags: nadiano:ci
 
       - name: Scan image for vulnerabilities (Trivy)
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: nadiano:ci
           severity: "CRITICAL,HIGH"
