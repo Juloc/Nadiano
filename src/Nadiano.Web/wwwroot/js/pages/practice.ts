@@ -293,6 +293,7 @@ function initPracticeWorkspace(): void {
     void start();
   });
 
+  workspace.dataset.initialized = "true";
   void loadLesson();
 }
 
