@@ -8,9 +8,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f6cbd" />
     <meta name="nadiano-version" content="@Nadiano.Core.Common.AppVersion.Current" />
     <title>@ViewData["Title"] - @Localizer["Common.AppName"]</title>
     <script type="importmap"></script>
+    <link rel="manifest" href="~/manifest.webmanifest" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Nadiano.Web.styles.css" asp-append-version="true" />
 </head>
@@ -24,6 +26,7 @@
                 <li><a asp-page="/Index">@Localizer["Nav.Home"]</a></li>
                 <li><a asp-page="/Learn/Index">@Localizer["Nav.Learn"]</a></li>
                 <li><a asp-page="/Practice/Index">@Localizer["Nav.Practice"]</a></li>
+                <li><a asp-page="/Practice/Beta">Training</a></li>
                 <li><a asp-page="/Library/Index">@Localizer["Nav.Library"]</a></li>
                 <li><a asp-page="/Progress/Index">@Localizer["Nav.Progress"]</a></li>
                 <li><a asp-page="/Settings/Index">@Localizer["Nav.Settings"]</a></li>
@@ -50,7 +53,6 @@
     </footer>
 
     <script src="~/dist/pages/main.js" type="module" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Nadiano.Core.Content;
 using Nadiano.Core.Content.Validation;
+using Nadiano.Web.Features.Beta;
 using Nadiano.Web.Features.Content;
 using Nadiano.Web.Features.Diagnostics;
 using Nadiano.Web.Features.Library;
@@ -44,6 +45,7 @@ builder.Services.AddScoped<CurrentProfileAccessor>();
 builder.Services.AddScoped<CourseProgressService>();
 builder.Services.AddScoped<ProgressSummaryService>();
 builder.Services.AddScoped<PrivateLibraryService>();
+builder.Services.AddScoped<BetaLearningService>();
 
 var app = builder.Build();
 
@@ -67,6 +69,7 @@ using (var startupScope = app.Services.CreateScope())
 }
 
 ValidateBundledContentOrThrow(app.Services.GetRequiredService<BundledContentRepository>(), app.Logger);
+ValidateBetaCurriculumOrThrow(app.Services, app.Logger);
 
 if (!app.Environment.IsDevelopment())
 {
@@ -90,6 +93,7 @@ app.MapSelfCheckEndpoints();
 app.MapContentMediaEndpoints();
 app.MapReleaseDiagnosticsEndpoints();
 app.MapPrivateLibraryEndpoints();
+app.MapBetaLearningEndpoints();
 
 app.MapStaticAssets();
 app.MapRazorPages()
@@ -121,6 +125,22 @@ static void ValidateBundledContentOrThrow(BundledContentRepository repository, I
 
     throw new InvalidOperationException(
         $"Bundled content under '{repository.ContentRoot}' failed validation with {result.Issues.Count} issue(s). Nadiano will not start until this is resolved.");
+}
+
+static void ValidateBetaCurriculumOrThrow(IServiceProvider services, ILogger logger)
+{
+    using var scope = services.CreateScope();
+    var curriculum = scope.ServiceProvider.GetRequiredService<BetaLearningService>().Curriculum;
+    var issues = Nadiano.Core.Beta.BetaCurriculumCatalogue.Validate(curriculum);
+    foreach (var issue in issues)
+    {
+        logger.LogError("Beta curriculum validation issue: {Issue}", issue);
+    }
+
+    if (issues.Count > 0)
+    {
+        throw new InvalidOperationException($"Beta curriculum failed validation with {issues.Count} issue(s).");
+    }
 }
 
 public partial class Program;

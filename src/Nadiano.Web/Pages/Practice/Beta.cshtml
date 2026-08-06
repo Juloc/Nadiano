@@ -1,0 +1,53 @@
+@page
+@model BetaModel
+@{
+    ViewData["Title"] = Model.T("Beta-Training", "Latihan Beta");
+}
+
+<h1>@Model.T("Beta-Training", "Latihan Beta")</h1>
+<p>@Model.T("Der Tagesplan mischt fällige Wiederholungen mit Lesen, Rhythmus und Gehör.", "Rencana harian menggabungkan ulasan yang jatuh tempo dengan membaca, ritme, dan pendengaran.")</p>
+
+<section class="card" aria-labelledby="plan-heading">
+    <h2 id="plan-heading">@Model.T("Tagesplan", "Rencana harian")</h2>
+    <button id="beta-load-plan" class="button-secondary" type="button">@Model.T("Plan laden", "Muat rencana")</button>
+    <ol id="beta-plan" aria-live="polite"></ol>
+</section>
+
+<section class="card" aria-labelledby="reading-heading">
+    <h2 id="reading-heading">@Model.T("Generierte Lesekarte", "Kartu membaca yang dibuat")</h2>
+    <button id="beta-reading-new" class="button" type="button">@Model.T("Neue Karte", "Kartu baru")</button>
+    <p id="beta-reading-seed" class="help-text"></p>
+    <ol id="beta-reading-events" class="practice-card-events"></ol>
+    <button id="beta-reading-correct" class="button-secondary" type="button" disabled>@Model.T("Richtig gelesen", "Dibaca dengan benar")</button>
+    <button id="beta-reading-retry" class="button-secondary" type="button" disabled>@Model.T("Noch üben", "Perlu latihan")</button>
+</section>
+
+<section class="card" aria-labelledby="rhythm-heading">
+    <h2 id="rhythm-heading">@Model.T("Rhythmus-Tap", "Ketuk ritme")</h2>
+    <button id="beta-rhythm-new" class="button" type="button">@Model.T("Neues Muster", "Pola baru")</button>
+    <p id="beta-rhythm-pattern" class="rhythm-pattern" aria-live="polite"></p>
+    <button id="beta-rhythm-start" class="button-secondary" type="button" disabled>@Model.T("Start mit Einzähler", "Mulai dengan hitungan")</button>
+    <button id="beta-rhythm-tap" class="button" type="button" disabled>@Model.T("Tippen / Leertaste", "Ketuk / spasi")</button>
+    <p id="beta-rhythm-result" aria-live="polite"></p>
+</section>
+
+<section class="card" aria-labelledby="ear-heading">
+    <h2 id="ear-heading">@Model.T("Tonrichtung hören", "Dengar arah nada")</h2>
+    <button id="beta-ear-play" class="button" type="button">@Model.T("Zwei Töne abspielen", "Putar dua nada")</button>
+    <div id="beta-ear-answers" hidden>
+        <button class="button-secondary" type="button" data-answer="higher">@Model.T("Höher", "Lebih tinggi")</button>
+        <button class="button-secondary" type="button" data-answer="lower">@Model.T("Tiefer", "Lebih rendah")</button>
+        <button class="button-secondary" type="button" data-answer="same">@Model.T("Gleich", "Sama")</button>
+    </div>
+    <p id="beta-ear-result" aria-live="polite"></p>
+</section>
+
+<section class="card" aria-labelledby="review-heading">
+    <h2 id="review-heading">@Model.T("Fällige Wiederholungen", "Ulasan jatuh tempo")</h2>
+    <button id="beta-load-reviews" class="button-secondary" type="button">@Model.T("Aktualisieren", "Perbarui")</button>
+    <ul id="beta-reviews"></ul>
+</section>
+
+@section Scripts {
+    <script src="~/dist/pages/beta-practice.js" type="module" asp-append-version="true"></script>
+}
