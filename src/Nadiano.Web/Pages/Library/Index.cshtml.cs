@@ -64,11 +64,43 @@ public sealed class IndexModel(
         int fromMeasure,
         int toMeasure,
         int targetTempoBpm,
+        string? leftHandPartId,
+        string? leftHandVoice,
+        string? rightHandPartId,
+        string? rightHandVoice,
+        string? fingeringOverrides,
         CancellationToken cancellationToken)
     {
         var profileId = await profiles.GetOrCreateProfileIdAsync(HttpContext, cancellationToken);
-        await library.UpdateAsync(profileId, itemId, title, fromMeasure, toMeasure, targetTempoBpm, cancellationToken);
-        return RedirectToPage();
+        var result = await library.UpdateAsync(
+            profileId,
+            itemId,
+            new LibraryEditRequest(
+                title,
+                fromMeasure,
+                toMeasure,
+                targetTempoBpm,
+                leftHandPartId,
+                leftHandVoice,
+                rightHandPartId,
+                rightHandVoice,
+                fingeringOverrides),
+            cancellationToken);
+
+        if (result.Success)
+        {
+            return RedirectToPage();
+        }
+
+        Error = result.ErrorCode switch
+        {
+            "invalid-part" => T("Die gewählte Part-ID ist in dieser Datei nicht vorhanden.", "ID bagian yang dipilih tidak ada dalam berkas ini."),
+            "invalid-voice" => T("Die gewählte Stimme gehört nicht zum gewählten Part.", "Suara yang dipilih tidak termasuk dalam bagian tersebut."),
+            "invalid-fingering" => T("Fingersätze müssen als Ereignis-ID=1,2,… mit Fingern 1 bis 5 angegeben werden.", "Penjarian harus ditulis sebagai ID-peristiwa=1,2,… dengan jari 1 sampai 5."),
+            _ => T("Die Metadaten konnten nicht gespeichert werden.", "Metadata tidak dapat disimpan."),
+        };
+        await LoadAsync(cancellationToken);
+        return Page();
     }
 
     public async Task<IActionResult> OnPostDeleteAsync(Guid itemId, CancellationToken cancellationToken)
@@ -78,9 +110,10 @@ public sealed class IndexModel(
         return RedirectToPage();
     }
 
-    public LibraryItemMetadata Metadata(PrivateLibraryItem item) =>
-        JsonSerializer.Deserialize<LibraryItemMetadata>(item.MetadataJson)
-        ?? new LibraryItemMetadata(1, 1, 0, 1, 1, 90);
+    public LibraryItemMetadata Metadata(PrivateLibraryItem item) => library.DeserializeMetadata(item.MetadataJson);
+
+    public string FingeringOverrides(LibraryItemMetadata metadata) =>
+        PrivateLibraryService.FormatFingeringOverrides(metadata.FingeringOverrides);
 
     public IReadOnlyList<string> Warnings(PrivateLibraryItem item) =>
         JsonSerializer.Deserialize<string[]>(item.WarningJson) ?? [];
