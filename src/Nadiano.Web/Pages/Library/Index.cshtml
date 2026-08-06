@@ -87,6 +87,10 @@
                 </form>
 
                 <p>
+                    @if (item.ValidationState == "ready")
+                    {
+                        <a class="button" asp-page="/Practice/Index" asp-route-libraryItemId="@item.Id">@Model.T("Üben", "Latihan")</a>
+                    }
                     <a class="button-secondary" href="/api/library/@item.Id/score">@Model.T("Vorschau-Datei", "Berkas pratinjau")</a>
                     <a class="button-secondary" href="/api/library/@item.Id/export">@Model.T("Original exportieren", "Ekspor asli")</a>
                 </p>

@@ -46,6 +46,7 @@ builder.Services.AddScoped<CourseProgressService>();
 builder.Services.AddScoped<ProgressSummaryService>();
 builder.Services.AddScoped<PrivateLibraryService>();
 builder.Services.AddScoped<BetaLearningService>();
+builder.Services.AddScoped<BetaCourseProgressService>();
 
 var app = builder.Build();
 
