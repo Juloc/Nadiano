@@ -14,13 +14,36 @@ namespace Nadiano.Web.Features.Library;
 
 public sealed record LibraryImportResult(bool Success, Guid? ItemId, string? ErrorCode, IReadOnlyList<string> Warnings);
 
+public sealed record LibraryPartMetadata(string Id, string Name, IReadOnlyList<string> Voices);
+
 public sealed record LibraryItemMetadata(
     int PartCount,
     int MeasureCount,
     int FingeringCount,
     int FromMeasure,
     int ToMeasure,
-    int TargetTempoBpm);
+    int TargetTempoBpm)
+{
+    public IReadOnlyList<LibraryPartMetadata> Parts { get; init; } = [];
+    public string? LeftHandPartId { get; init; }
+    public string? LeftHandVoice { get; init; }
+    public string? RightHandPartId { get; init; }
+    public string? RightHandVoice { get; init; }
+    public IReadOnlyDictionary<string, int[]> FingeringOverrides { get; init; } = new Dictionary<string, int[]>(StringComparer.Ordinal);
+}
+
+public sealed record LibraryEditRequest(
+    string? Title,
+    int FromMeasure,
+    int ToMeasure,
+    int TargetTempoBpm,
+    string? LeftHandPartId,
+    string? LeftHandVoice,
+    string? RightHandPartId,
+    string? RightHandVoice,
+    string? FingeringOverridesText);
+
+public sealed record LibraryUpdateResult(bool Success, string? ErrorCode);
 
 public sealed class PrivateLibraryService(
     NadianoDbContext db,
@@ -137,39 +160,59 @@ public sealed class PrivateLibraryService(
         }
     }
 
-    public async Task<bool> UpdateAsync(
+    public async Task<LibraryUpdateResult> UpdateAsync(
         Guid profileId,
         Guid itemId,
-        string? title,
-        int fromMeasure,
-        int toMeasure,
-        int targetTempoBpm,
+        LibraryEditRequest update,
         CancellationToken cancellationToken)
     {
         var item = await db.PrivateLibraryItems
             .SingleOrDefaultAsync(candidate => candidate.ProfileId == profileId && candidate.Id == itemId, cancellationToken);
         if (item is null)
         {
-            return false;
+            return new(false, "not-found");
         }
 
-        var existing = JsonSerializer.Deserialize<LibraryItemMetadata>(item.MetadataJson)
-            ?? new LibraryItemMetadata(1, 1, 0, 1, 1, 90);
-        var maximumMeasure = Math.Max(1, existing.MeasureCount);
-        var safeFrom = Math.Clamp(fromMeasure, 1, maximumMeasure);
-        var safeTo = Math.Clamp(toMeasure, safeFrom, maximumMeasure);
-        var safeTempo = Math.Clamp(targetTempoBpm, 30, 240);
+        var existing = DeserializeMetadata(item.MetadataJson);
+        var leftPart = NormalizePart(existing.Parts, update.LeftHandPartId);
+        var rightPart = NormalizePart(existing.Parts, update.RightHandPartId);
+        if (HasValue(update.LeftHandPartId) && leftPart is null || HasValue(update.RightHandPartId) && rightPart is null)
+        {
+            return new(false, "invalid-part");
+        }
 
-        item.DisplayTitle = CleanTitle(title) ?? item.DisplayTitle;
+        var leftVoice = NormalizeVoice(existing.Parts, leftPart, update.LeftHandVoice);
+        var rightVoice = NormalizeVoice(existing.Parts, rightPart, update.RightHandVoice);
+        if (HasValue(update.LeftHandVoice) && leftVoice is null || HasValue(update.RightHandVoice) && rightVoice is null)
+        {
+            return new(false, "invalid-voice");
+        }
+
+        if (!TryParseFingeringOverrides(update.FingeringOverridesText, out var fingeringOverrides))
+        {
+            return new(false, "invalid-fingering");
+        }
+
+        var maximumMeasure = Math.Max(1, existing.MeasureCount);
+        var safeFrom = Math.Clamp(update.FromMeasure, 1, maximumMeasure);
+        var safeTo = Math.Clamp(update.ToMeasure, safeFrom, maximumMeasure);
+        var safeTempo = Math.Clamp(update.TargetTempoBpm, 30, 240);
+
+        item.DisplayTitle = CleanTitle(update.Title) ?? item.DisplayTitle;
         item.MetadataJson = JsonSerializer.Serialize(existing with
         {
             FromMeasure = safeFrom,
             ToMeasure = safeTo,
             TargetTempoBpm = safeTempo,
+            LeftHandPartId = leftPart,
+            LeftHandVoice = leftVoice,
+            RightHandPartId = rightPart,
+            RightHandVoice = rightVoice,
+            FingeringOverrides = fingeringOverrides,
         });
         item.Version++;
         await db.SaveChangesAsync(cancellationToken);
-        return true;
+        return new(true, null);
     }
 
     public async Task<bool> DeleteAsync(Guid profileId, Guid itemId, CancellationToken cancellationToken)
@@ -214,6 +257,22 @@ public sealed class PrivateLibraryService(
 
         return path is not null && File.Exists(path) ? (item, path) : null;
     }
+
+    public LibraryItemMetadata DeserializeMetadata(string json)
+    {
+        var metadata = JsonSerializer.Deserialize<LibraryItemMetadata>(json)
+            ?? new LibraryItemMetadata(1, 1, 0, 1, 1, 90);
+        return metadata with
+        {
+            Parts = metadata.Parts ?? [],
+            FingeringOverrides = metadata.FingeringOverrides ?? new Dictionary<string, int[]>(StringComparer.Ordinal),
+        };
+    }
+
+    public static string FormatFingeringOverrides(IReadOnlyDictionary<string, int[]> overrides) =>
+        string.Join(Environment.NewLine, overrides
+            .OrderBy(item => item.Key, StringComparer.Ordinal)
+            .Select(item => $"{item.Key}={string.Join(',', item.Value)}"));
 
     public void RemoveAbandonedStagingData(TimeSpan maximumAge)
     {
@@ -315,16 +374,109 @@ public sealed class PrivateLibraryService(
     private static LibraryItemMetadata ReadMetadata(XDocument document)
     {
         var root = document.Root!;
-        var parts = root.Elements().Count(element => element.Name.LocalName == "part");
+        var partNames = root.Descendants()
+            .Where(element => element.Name.LocalName == "score-part")
+            .Where(element => element.Attribute("id") is not null)
+            .ToDictionary(
+                element => element.Attribute("id")!.Value,
+                element => element.Elements().FirstOrDefault(child => child.Name.LocalName == "part-name")?.Value.Trim()
+                    ?? element.Attribute("id")!.Value,
+                StringComparer.Ordinal);
+        var parts = root.Elements()
+            .Where(element => element.Name.LocalName == "part")
+            .Select(element =>
+            {
+                var id = element.Attribute("id")?.Value ?? string.Empty;
+                var voices = element.Descendants()
+                    .Where(child => child.Name.LocalName == "voice")
+                    .Select(child => child.Value.Trim())
+                    .Where(value => value.Length > 0)
+                    .Distinct(StringComparer.Ordinal)
+                    .OrderBy(value => value, StringComparer.Ordinal)
+                    .ToArray();
+                return new LibraryPartMetadata(id, partNames.GetValueOrDefault(id, id), voices);
+            })
+            .Where(part => part.Id.Length > 0)
+            .ToArray();
         var measures = root.Descendants().Count(element => element.Name.LocalName == "measure");
         var fingerings = root.Descendants().Count(element => element.Name.LocalName == "fingering");
-        var maximumMeasure = Math.Max(1, measures / Math.Max(1, parts));
-        return new LibraryItemMetadata(parts, maximumMeasure, fingerings, 1, maximumMeasure, 90);
+        var maximumMeasure = Math.Max(1, measures / Math.Max(1, parts.Length));
+        return new LibraryItemMetadata(parts.Length, maximumMeasure, fingerings, 1, maximumMeasure, 90)
+        {
+            Parts = parts,
+        };
     }
+
+    private static string? NormalizePart(IReadOnlyList<LibraryPartMetadata> parts, string? value)
+    {
+        var clean = CleanOptional(value);
+        return clean is null || parts.Any(part => part.Id == clean) ? clean : null;
+    }
+
+    private static string? NormalizeVoice(IReadOnlyList<LibraryPartMetadata> parts, string? partId, string? value)
+    {
+        var clean = CleanOptional(value);
+        if (clean is null)
+        {
+            return null;
+        }
+
+        var part = parts.SingleOrDefault(candidate => candidate.Id == partId);
+        return part is not null && part.Voices.Contains(clean, StringComparer.Ordinal) ? clean : null;
+    }
+
+    private static bool TryParseFingeringOverrides(string? text, out IReadOnlyDictionary<string, int[]> overrides)
+    {
+        var result = new Dictionary<string, int[]>(StringComparer.Ordinal);
+        foreach (var rawLine in (text ?? string.Empty).Split(['\r', '\n'], StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            var separator = rawLine.IndexOf('=');
+            if (separator <= 0 || separator == rawLine.Length - 1)
+            {
+                overrides = result;
+                return false;
+            }
+
+            var eventId = rawLine[..separator].Trim();
+            var values = rawLine[(separator + 1)..]
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+            if (!IsExpectedEventId(eventId) || values.Length == 0 || values.Length > 10)
+            {
+                overrides = result;
+                return false;
+            }
+
+            var fingers = new int[values.Length];
+            for (var index = 0; index < values.Length; index++)
+            {
+                if (!int.TryParse(values[index], out var finger) || finger is < 1 or > 5)
+                {
+                    overrides = result;
+                    return false;
+                }
+                fingers[index] = finger;
+            }
+            result[eventId] = fingers;
+        }
+
+        overrides = result;
+        return true;
+    }
+
+    private static bool IsExpectedEventId(string value) =>
+        value.Length is > 0 and <= 100 && value.StartsWith('m') && value.Contains("-v", StringComparison.Ordinal) && value.Contains("-n", StringComparison.Ordinal);
 
     private static string? ReadTitle(XDocument document) =>
         document.Descendants().FirstOrDefault(element => element.Name.LocalName == "work-title")?.Value
         ?? document.Descendants().FirstOrDefault(element => element.Name.LocalName == "movement-title")?.Value;
+
+    private static bool HasValue(string? value) => !string.IsNullOrWhiteSpace(value);
+
+    private static string? CleanOptional(string? value)
+    {
+        var clean = value?.Trim();
+        return string.IsNullOrWhiteSpace(clean) ? null : clean;
+    }
 
     private static string? CleanTitle(string? title)
     {
