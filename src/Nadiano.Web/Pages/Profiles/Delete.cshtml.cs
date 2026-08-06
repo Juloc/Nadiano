@@ -2,12 +2,16 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
+using Nadiano.Web.Features.Library;
 using Nadiano.Web.Infrastructure.Persistence;
 using Nadiano.Web.Infrastructure.Profiles;
 
 namespace Nadiano.Web.Pages.Profiles;
 
-public class DeleteModel(NadianoDbContext db, CurrentProfileAccessor profiles) : PageModel
+public class DeleteModel(
+    NadianoDbContext db,
+    CurrentProfileAccessor profiles,
+    PrivateLibraryStorage libraryStorage) : PageModel
 {
     [BindProperty]
     public Guid Id { get; set; }
@@ -26,7 +30,7 @@ public class DeleteModel(NadianoDbContext db, CurrentProfileAccessor profiles) :
 
         Id = profile.Id;
         ProfileName = profile.Name;
-        SessionCount = await db.PracticeSessions.CountAsync(s => s.ProfileId == id);
+        SessionCount = await db.PracticeSessions.CountAsync(item => item.ProfileId == id);
 
         return Page();
     }
@@ -40,9 +44,34 @@ public class DeleteModel(NadianoDbContext db, CurrentProfileAccessor profiles) :
         }
 
         var currentProfileId = await profiles.GetOrCreateProfileIdAsync(HttpContext);
+        var profileDirectory = Path.Combine(libraryStorage.RootPath, Id.ToString("N"));
+        var quarantineDirectory = Path.Combine(libraryStorage.StagingPath, $"deleted-profile-{Id:N}-{Guid.NewGuid():N}");
+        var movedLibrary = false;
 
-        db.LearnerProfiles.Remove(profile);
-        await db.SaveChangesAsync();
+        if (Directory.Exists(profileDirectory))
+        {
+            Directory.Move(profileDirectory, quarantineDirectory);
+            movedLibrary = true;
+        }
+
+        try
+        {
+            db.LearnerProfiles.Remove(profile);
+            await db.SaveChangesAsync();
+        }
+        catch
+        {
+            if (movedLibrary && Directory.Exists(quarantineDirectory) && !Directory.Exists(profileDirectory))
+            {
+                Directory.Move(quarantineDirectory, profileDirectory);
+            }
+            throw;
+        }
+
+        if (movedLibrary && Directory.Exists(quarantineDirectory))
+        {
+            Directory.Delete(quarantineDirectory, recursive: true);
+        }
 
         if (currentProfileId == Id)
         {
