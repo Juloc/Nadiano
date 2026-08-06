@@ -29,6 +29,36 @@ interface ReviewItem {
 
 type Outcome = "Good" | "NeedsWork" | "Failed";
 
+const indonesian = document.documentElement.lang.startsWith("id");
+
+const reasonLabels: Record<string, readonly [string, string]> = {
+  "balanced-reading": ["Lesen im Tagesplan", "Membaca dalam rencana harian"],
+  "balanced-rhythm": ["Rhythmus im Tagesplan", "Ritme dalam rencana harian"],
+  "balanced-ear": ["Gehör im Tagesplan", "Pendengaran dalam rencana harian"],
+  "review-after-failed-attempt": ["Wiederholung nach einem fehlgeschlagenen Versuch", "Ulangi setelah percobaan gagal"],
+  "review-after-weak-category": ["Wiederholung einer unsicheren Kompetenz", "Ulangi kompetensi yang belum stabil"],
+  "review-after-good-attempt": ["Geplante Festigung", "Penguatan terjadwal"],
+  "review-after-strong-attempt": ["Spätere Festigung", "Penguatan lanjutan"],
+};
+
+const skillLabels: Record<string, readonly [string, string]> = {
+  "reading.generated": ["Notenlesen", "Membaca not"],
+  "rhythm.generated": ["Rhythmus", "Ritme"],
+  "ear.direction": ["Tonrichtung hören", "Mendengar arah nada"],
+};
+
+function translated(labels: readonly [string, string]): string {
+  return indonesian ? labels[1] : labels[0];
+}
+
+function reasonLabel(code: string): string {
+  return translated(reasonLabels[code] ?? [code, code]);
+}
+
+function skillLabel(code: string): string {
+  return translated(skillLabels[code] ?? [code, code]);
+}
+
 function element<T extends HTMLElement>(id: string): T {
   const found = document.getElementById(id);
   if (!found) {
@@ -110,7 +140,7 @@ function init(): void {
     const items = await json<PlanItem[]>("/api/beta/session-plan");
     planList.replaceChildren(...items.map((item) => {
       const row = document.createElement("li");
-      row.textContent = `${item.skillId} — ${item.reasonCode}${item.seed === undefined ? "" : ` (seed ${item.seed})`}`;
+      row.textContent = `${skillLabel(item.skillId)} — ${reasonLabel(item.reasonCode)}${item.seed === undefined ? "" : ` (Seed ${item.seed})`}`;
       return row;
     }));
   }
@@ -119,12 +149,12 @@ function init(): void {
     const items = await json<ReviewItem[]>("/api/beta/reviews");
     const rows = items.map((item) => {
       const row = document.createElement("li");
-      row.textContent = `${item.skillId} — ${item.reasonCode}`;
+      row.textContent = `${skillLabel(item.skillId)} — ${reasonLabel(item.reasonCode)}`;
       return row;
     });
     if (rows.length === 0) {
       const empty = document.createElement("li");
-      empty.textContent = "—";
+      empty.textContent = indonesian ? "Tidak ada ulasan yang jatuh tempo." : "Keine Wiederholung ist fällig.";
       rows.push(empty);
     }
     reviewsList.replaceChildren(...rows);
@@ -136,7 +166,7 @@ function init(): void {
     readingSeed.textContent = `Seed ${card.seed}`;
     readingEvents.replaceChildren(...card.events.map((event) => {
       const row = document.createElement("li");
-      row.textContent = `M${event.measure} · ${noteName(event.midiNote)} · ${event.durationUnits}/${card.unitsPerBeat}`;
+      row.textContent = `${indonesian ? "Birama" : "Takt"} ${event.measure} · ${noteName(event.midiNote)} · ${event.durationUnits}/${card.unitsPerBeat}`;
       return row;
     }));
     readingCorrect.disabled = false;
@@ -240,7 +270,9 @@ function init(): void {
       ? 999
       : deviations.reduce((sum, value) => sum + value, 0) / deviations.length;
     const passed = missed === 0 && remaining.length <= 1 && average <= 95;
-    rhythmResult.textContent = `Treffer ${deviations.length}/${expected.length} · extra ${remaining.length} · Ø ${Math.round(average)} ms`;
+    rhythmResult.textContent = indonesian
+      ? `Cocok ${deviations.length}/${expected.length} · tambahan ${remaining.length} · rata-rata ${Math.round(average)} ms`
+      : `Treffer ${deviations.length}/${expected.length} · zusätzlich ${remaining.length} · Durchschnitt ${Math.round(average)} ms`;
     rhythmStart.disabled = false;
     await saveEvidence(
       `rhythm-${card.seed}`,
@@ -287,7 +319,9 @@ function init(): void {
     }
     const correct = answer === prompt.answer;
     earAnswers.hidden = true;
-    earResult.textContent = correct ? "✓" : "✗";
+    earResult.textContent = correct
+      ? (indonesian ? "Benar." : "Richtig.")
+      : (indonesian ? "Belum tepat. Dengarkan dan coba lagi." : "Noch nicht richtig. Höre erneut und versuche es noch einmal.");
     await saveEvidence(
       `ear-direction-${prompt.seed}`,
       "ear-direction",
