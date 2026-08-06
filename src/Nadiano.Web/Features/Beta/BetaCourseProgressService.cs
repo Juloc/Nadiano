@@ -88,15 +88,30 @@ public sealed class BetaCourseProgressService(
     private async Task<bool> HasStageEvidenceAsync(Guid profileId, CancellationToken cancellationToken)
     {
         var cutoff = DateTimeOffset.UtcNow.AddDays(-30);
-        var kinds = await db.LearningEvidence
+        var evidence = await db.LearningEvidence
             .AsNoTracking()
-            .Where(item => item.ProfileId == profileId && item.RecordedAtUtc >= cutoff)
-            .Select(item => item.ActivityKind)
-            .Distinct()
+            .Where(item => profileId == item.ProfileId && item.RecordedAtUtc >= cutoff)
+            .Where(item => item.ActivityKind == "reading-card" ||
+                item.ActivityKind == "rhythm-card" ||
+                item.ActivityKind == "ear-direction")
+            .Select(item => new { item.ActivityKind, item.ResultJson })
             .ToListAsync(cancellationToken);
 
-        return kinds.Contains("reading-card", StringComparer.Ordinal) &&
-            kinds.Contains("rhythm-card", StringComparer.Ordinal) &&
-            kinds.Contains("ear-direction", StringComparer.Ordinal);
+        return evidence.Any(item => item.ActivityKind == "reading-card" && Passed(item.ResultJson, "correct")) &&
+            evidence.Any(item => item.ActivityKind == "rhythm-card" && Passed(item.ResultJson, "passed")) &&
+            evidence.Any(item => item.ActivityKind == "ear-direction" && Passed(item.ResultJson, "correct"));
+    }
+
+    private static bool Passed(string resultJson, string propertyName)
+    {
+        try
+        {
+            using var document = JsonDocument.Parse(resultJson);
+            return document.RootElement.TryGetProperty(propertyName, out var value) && value.ValueKind == JsonValueKind.True;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
     }
 }
