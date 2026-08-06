@@ -25,11 +25,12 @@ Nadiano should help a complete beginner build correct foundations and continue t
 - [Quality and release requirements](docs/QUALITY_AND_RELEASE.md)
 - [First run and browser support](docs/FIRST_RUN_AND_BROWSER_SUPPORT.md)
 - [Backup and restore](docs/BACKUP_AND_RESTORE.md)
-- [Alpha known limitations](docs/KNOWN_LIMITATIONS_ALPHA.md)
+- [Beta release checklist](docs/BETA_RELEASE_CHECKLIST.md)
+- [Beta known limitations](docs/KNOWN_LIMITATIONS_BETA.md)
 - [Research basis and sources](docs/RESEARCH_BASIS.md)
 - [Architecture decisions](docs/decisions/README.md)
 
-## Planned stack
+## Stack
 
 - ASP.NET Core 10 Razor Pages
 - TypeScript browser modules
@@ -48,4 +49,4 @@ Read [AGENTS.md](AGENTS.md) before making changes. Documentation and implementat
 
 ## Status
 
-`0.1.0-alpha.1` is the first internal household pre-release. It includes the complete Alpha content set, profile-isolated progress, deterministic MIDI scoring, Docker deployment, release diagnostics and cold backup documentation. The real-piano test matrix remains a documented human verification step before the Alpha is considered hardware-verified.
+`0.2.0-beta.1` contains the complete planned B1/B2 functional path: 45 guided Beta lessons, 100 deterministic exercises, review scheduling, adaptive practice, secure private MusicXML/MXL import, PWA installation, offline result recovery and separate diagnostics for three standard piano pedal controllers. Real-piano and two-week household testing remain release evidence, not hidden assumptions.

@@ -8,7 +8,7 @@
     <TreatWarningsAsErrors Condition="'$(CI)' == 'true'">true</TreatWarningsAsErrors>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-    <Version>0.1.0-alpha.1</Version>
+    <Version>0.2.0-beta.1</Version>
   </PropertyGroup>
 
 </Project>
