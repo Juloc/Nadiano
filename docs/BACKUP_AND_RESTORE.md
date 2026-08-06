@@ -1,6 +1,6 @@
-# Alpha backup and restore
+# Backup and restore
 
-Nadiano stores its writable state in the Compose volume mounted at `/data`. The current Alpha contains `nadiano.db`; future imported content and application-managed files will also live below the same directory. Back up the complete volume, not only the database file.
+Nadiano stores all writable state below `/app/data`, mounted by the supplied Compose file from `./nadiano/data`. This includes the SQLite database, imported MusicXML/MXL files, profile progress and review data. Always back up the complete data directory.
 
 ## Create a consistent backup
 
@@ -11,35 +11,23 @@ set -euo pipefail
 backup_name="nadiano-$(date -u +%Y%m%dT%H%M%SZ)"
 mkdir -p "backups/$backup_name"
 
-curl -fsS http://localhost:8098/api/diagnostics/version \
+curl -fsS http://localhost:8087/api/diagnostics/version \
   > "backups/$backup_name/manifest.json"
 
 docker compose stop nadiano
 
-docker compose run --rm --no-deps --user 0 \
-  --entrypoint sh \
-  -v "$PWD/backups/$backup_name:/backup" \
-  nadiano \
-  -c 'tar -czf /backup/data.tar.gz -C /data .'
-
+tar -czf "backups/$backup_name/data.tar.gz" -C ./nadiano/data .
 tar -tzf "backups/$backup_name/data.tar.gz" >/dev/null
-test -s "backups/$backup_name/manifest.json"
 sha256sum "backups/$backup_name/data.tar.gz" \
   > "backups/$backup_name/SHA256SUMS"
 
 docker compose start nadiano
-curl -fsS http://localhost:8098/health/ready
+curl -fsS http://localhost:8087/health/ready
 ```
 
-Stopping the application before copying keeps SQLite and all related files consistent. The manifest records application, database migration and bundled content versions. Store the whole backup directory outside the Docker host.
+Stopping the application before copying keeps SQLite and imported files consistent. Store the complete backup directory outside the Docker host.
 
-## Restore into an empty deployment
-
-1. Keep the failed/current volume until the restored deployment has been checked.
-2. Verify `SHA256SUMS` and list the archive before extraction.
-3. Stop Nadiano.
-4. Restore the complete archive into `/data`.
-5. Start the same or a newer supported image; committed migrations run before readiness becomes healthy.
+## Restore
 
 ```bash
 set -euo pipefail
@@ -49,20 +37,22 @@ backup_dir="$PWD/backups/nadiano-YYYYMMDDTHHMMSSZ"
 tar -tzf "$backup_dir/data.tar.gz" >/dev/null
 
 docker compose stop nadiano
-
-docker compose run --rm --no-deps --user 0 \
-  --entrypoint sh \
-  -v "$backup_dir:/backup:ro" \
-  nadiano \
-  -c 'find /data -mindepth 1 -maxdepth 1 -exec rm -rf -- {} + && tar -xzf /backup/data.tar.gz -C /data && chown -R nadiano:nadiano /data'
+mv ./nadiano/data "./nadiano/data.before-restore-$(date -u +%Y%m%dT%H%M%SZ)"
+mkdir -p ./nadiano/data
+tar -xzf "$backup_dir/data.tar.gz" -C ./nadiano/data
 
 docker compose start nadiano
-curl -fsS http://localhost:8098/health/ready
-curl -fsS http://localhost:8098/api/diagnostics/version
+curl -fsS http://localhost:8087/health/ready
+curl -fsS http://localhost:8087/api/diagnostics/version
 ```
 
-After restore, verify every household profile, recent progress, completed lessons and the expected content version. If startup or verification fails, stop the new container and reattach the untouched previous volume or restore the previous backup.
+After restore, verify every profile, recent progress, completed lessons and imported library entries. Keep the previous data directory until the restored deployment has been checked.
 
-## Alpha limitation
+## Upgrade and rollback
 
-The Alpha provides a documented cold backup. An in-application online backup and automated restore validation are planned for a later release. Do not copy a running `/data` volume and treat it as a supported backup.
+1. Create a backup before changing the image tag.
+2. Pull and start the new image; committed migrations run before readiness becomes healthy.
+3. Verify `/health/ready`, the version endpoint and one profile.
+4. For rollback, stop the container, restore the pre-upgrade backup and select the previous image tag.
+
+Do not attach a database already migrated by a newer release to an older image. Restore the matching pre-upgrade backup instead.
