@@ -1,11 +1,11 @@
 @page
 @model BetaModel
 @{
-    ViewData["Title"] = Model.Text("Beta-Kurskarte", "Peta kursus Beta");
+    ViewData["Title"] = Model.Text("Anfängerkurs", "Kursus pemula");
 }
 
-<h1>@Model.Text("Beta-Kurskarte", "Peta kursus Beta")</h1>
-<p>@Model.Text("45 geführte Lektionen und 100 reproduzierbare Übungen führen durch B1 und B2. Jede Lektion baut auf der vorherigen auf.", "45 pelajaran terpandu dan 100 latihan yang dapat direproduksi membentuk jalur B1 dan B2. Setiap pelajaran bergantung pada pelajaran sebelumnya.")</p>
+<h1>@Model.Text("Anfängerkurs", "Kursus pemula")</h1>
+<p>@Model.Text("110 geführte Lektionen und 220 reproduzierbare Übungen führen von F0 über F1, B1 und B2 bis zu ausgewählten E1-Grundlagen. Jede Lektion baut auf der vorherigen auf.", "110 pelajaran terpandu dan 220 latihan yang dapat direproduksi membentuk jalur dari F0, F1, B1, dan B2 hingga dasar E1 pilihan. Setiap pelajaran bergantung pada pelajaran sebelumnya.")</p>
 
 @if (Model.NoticeCode is not null)
 {
@@ -22,7 +22,7 @@
 }
 
 <p>
-    <a class="button" asp-page="/Practice/Beta">@Model.Text("Beta-Training öffnen", "Buka latihan Beta")</a>
+    <a class="button" asp-page="/Practice/Beta">@Model.Text("Training öffnen", "Buka latihan")</a>
 </p>
 
 @foreach (var stage in Model.Items.GroupBy(item => item.Lesson.Stage))

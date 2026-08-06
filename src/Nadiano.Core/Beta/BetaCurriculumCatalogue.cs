@@ -29,30 +29,38 @@ public static class BetaCurriculumCatalogue
         new("pulse", "Puls halten", "Menjaga ketukan", "Halte einen ruhigen Grundpuls.", "Pertahankan ketukan dasar yang stabil.", "rhythm"),
         new("subdivision", "Unterteilungen", "Pembagian ketukan", "Zähle und spiele Achtel sicher.", "Hitung dan mainkan not seperdelapan dengan stabil.", "rhythm"),
         new("rests", "Pausen lesen", "Membaca tanda istirahat", "Halte Pausen exakt aus.", "Pertahankan durasi istirahat dengan tepat.", "rhythm"),
+        new("meter", "Taktarten", "Tanda birama", "Erkenne und fühle Zweier-, Dreier- und Vierertakte.", "Kenali dan rasakan birama dua, tiga, dan empat.", "rhythm"),
         new("treble-reading", "Violinschlüssel lesen", "Membaca kunci G", "Lies Töne schrittweise ohne Buchstabieren.", "Baca nada bertahap tanpa mengeja.", "reading"),
         new("bass-reading", "Bassschlüssel lesen", "Membaca kunci F", "Finde Basstöne über Orientierungspunkte.", "Temukan nada bas melalui titik acuan.", "reading"),
         new("intervals", "Intervalle erkennen", "Mengenali interval", "Erkenne Schritte, Sprünge und Wiederholungen.", "Kenali langkah, lompatan, dan pengulangan.", "reading"),
+        new("chords", "Akkorde lesen", "Membaca akor", "Erkenne einfache Dreiklänge als Form.", "Kenali triad sederhana sebagai bentuk.", "reading"),
         new("hands", "Hände getrennt", "Tangan terpisah", "Stabilisiere jede Hand einzeln.", "Stabilkan setiap tangan secara terpisah.", "technique"),
         new("coordination", "Hände koordinieren", "Koordinasi tangan", "Verbinde beide Hände in kleinen Abschnitten.", "Gabungkan kedua tangan dalam bagian kecil.", "technique"),
         new("legato", "Legato", "Legato", "Verbinde Töne ohne Lücken und ohne Verkrampfung.", "Hubungkan nada tanpa celah dan tanpa tegang.", "technique"),
         new("staccato", "Staccato", "Staccato", "Spiele kurze Töne mit lockerer Bewegung.", "Mainkan nada pendek dengan gerakan rileks.", "technique"),
         new("dynamics", "Lautstärke gestalten", "Membentuk dinamika", "Unterscheide leise, mittel und kräftig.", "Bedakan lembut, sedang, dan kuat.", "expression"),
+        new("articulation", "Artikulation gestalten", "Membentuk artikulasi", "Wechsle kontrolliert zwischen gebunden und kurz.", "Beralih dengan terkontrol antara legato dan pendek.", "expression"),
+        new("sustain", "Haltepedal grundlegend", "Dasar pedal sustain", "Wechsle das Haltepedal sauber ohne Klangbrei.", "Ganti pedal sustain dengan bersih tanpa suara kabur.", "pedal"),
         new("ear-direction", "Tonrichtung hören", "Mendengar arah nada", "Erkenne höher, tiefer und gleich.", "Kenali lebih tinggi, lebih rendah, dan sama.", "ear"),
         new("ear-pattern", "Muster nachspielen", "Meniru pola", "Höre kurze Muster und spiele sie nach.", "Dengarkan pola pendek lalu tirukan.", "ear"),
+        new("ear-memory", "Klang im Gedächtnis", "Mengingat bunyi", "Merke dir kurze Folgen und prüfe sie am Klavier.", "Ingat urutan pendek dan periksa di piano.", "ear"),
+        new("repertoire-reading", "Stück erschließen", "Mempelajari karya", "Teile ein kurzes Stück in lesbare Abschnitte.", "Bagi karya pendek menjadi bagian yang mudah dibaca.", "repertoire"),
+        new("repertoire-performance", "Stück vortragen", "Membawakan karya", "Spiele ein vollständiges kurzes Stück mit stabilem Puls und Gestaltung.", "Mainkan karya pendek secara utuh dengan ketukan dan ekspresi yang stabil.", "repertoire"),
         new("practice-plan", "Wirksam üben", "Berlatih efektif", "Wähle Abschnitt, Tempo und Wiederholung bewusst.", "Pilih bagian, tempo, dan pengulangan secara sadar.", "practice"),
-        new("stage-check", "Stufenprüfung", "Pemeriksaan tahap", "Verbinde Lesen, Rhythmus und Kontrolle.", "Gabungkan membaca, ritme, dan kontrol.", "stage-check"),
+        new("stage-check", "Stufenprüfung", "Pemeriksaan tahap", "Verbinde Lesen, Rhythmus, Gehör und Kontrolle.", "Gabungkan membaca, ritme, pendengaran, dan kontrol.", "stage-check"),
     ];
 
     public static BetaCurriculum Create()
     {
-        var lessons = new List<BetaLessonDescriptor>(45);
+        var stages = new[] { "F0", "F1", "B1", "B2", "E1" };
+        var lessons = new List<BetaLessonDescriptor>(stages.Length * Topics.Length);
         var order = 1;
-        foreach (var stage in new[] { "B1", "B2", "B2+" })
+        foreach (var stage in stages)
         {
             foreach (var topic in Topics)
             {
                 lessons.Add(new BetaLessonDescriptor(
-                    $"beta-{stage.ToLowerInvariant().Replace('+', 'p')}-{topic.Id}",
+                    $"course-{stage.ToLowerInvariant()}-{topic.Id}",
                     stage,
                     order++,
                     $"{topic.ActivityKind}.{topic.Id}",
@@ -64,13 +72,13 @@ public static class BetaCurriculumCatalogue
             }
         }
 
-        var exercises = Enumerable.Range(1, 100)
+        var exercises = Enumerable.Range(1, 220)
             .Select(index =>
             {
                 var lesson = lessons[(index - 1) % lessons.Count];
                 var kind = index % 2 == 0 ? GeneratedExerciseKind.Rhythm : GeneratedExerciseKind.Reading;
                 return new BetaExerciseDescriptor(
-                    $"beta-exercise-{index:000}",
+                    $"course-exercise-{index:000}",
                     lesson.Id,
                     lesson.SkillId,
                     kind,
@@ -84,25 +92,41 @@ public static class BetaCurriculumCatalogue
     public static IReadOnlyList<string> Validate(BetaCurriculum curriculum)
     {
         var issues = new List<string>();
-        if (curriculum.Lessons.Count < 45)
+        if (curriculum.Lessons.Count < 80)
         {
-            issues.Add("Beta catalogue must contain at least 45 guided lessons.");
+            issues.Add("The 1.0 catalogue must contain at least 80 guided lessons.");
         }
-        if (curriculum.Exercises.Count < 100)
+        if (curriculum.Exercises.Count < 180)
         {
-            issues.Add("Beta catalogue must contain at least 100 exercises.");
+            issues.Add("The 1.0 catalogue must contain at least 180 exercises.");
+        }
+        if (!curriculum.Lessons.Any(item => item.Stage == "E1"))
+        {
+            issues.Add("The 1.0 catalogue requires selected E1 lessons.");
+        }
+        if (curriculum.Lessons.Count(item => item.ActivityKind == "ear") < 12)
+        {
+            issues.Add("The 1.0 catalogue requires at least 12 listening tasks.");
+        }
+        if (curriculum.Lessons.Count(item => item.ActivityKind == "repertoire") < 8)
+        {
+            issues.Add("The 1.0 catalogue requires at least 8 repertoire tasks.");
+        }
+        if (curriculum.Lessons.Count(item => item.ActivityKind == "stage-check") < 5)
+        {
+            issues.Add("Every course stage requires an assessment.");
         }
         if (curriculum.Lessons.Select(item => item.Id).Distinct(StringComparer.Ordinal).Count() != curriculum.Lessons.Count)
         {
-            issues.Add("Beta lesson IDs must be unique.");
+            issues.Add("Lesson IDs must be unique.");
         }
         if (curriculum.Exercises.Select(item => item.Id).Distinct(StringComparer.Ordinal).Count() != curriculum.Exercises.Count)
         {
-            issues.Add("Beta exercise IDs must be unique.");
+            issues.Add("Exercise IDs must be unique.");
         }
         if (curriculum.Lessons.Any(item => string.IsNullOrWhiteSpace(item.TitleDe) || string.IsNullOrWhiteSpace(item.TitleId) || string.IsNullOrWhiteSpace(item.GoalDe) || string.IsNullOrWhiteSpace(item.GoalId)))
         {
-            issues.Add("Every Beta lesson requires German and Indonesian title and goal text.");
+            issues.Add("Every lesson requires German and Indonesian title and goal text.");
         }
         return issues;
     }

@@ -19,16 +19,19 @@ public sealed class BetaEndpointsTests : IClassFixture<NadianoWebApplicationFact
     }
 
     [Fact]
-    public async Task Curriculum_ContainsRequiredBetaQuantities()
+    public async Task Curriculum_ContainsRequiredReleaseQuantities()
     {
         using var client = _factory.CreateClient();
 
         using var response = await client.GetAsync("/api/beta/curriculum");
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+        var lessons = document.RootElement.GetProperty("lessons");
+        var exercises = document.RootElement.GetProperty("exercises");
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(45, document.RootElement.GetProperty("lessons").GetArrayLength());
-        Assert.Equal(100, document.RootElement.GetProperty("exercises").GetArrayLength());
+        Assert.True(lessons.GetArrayLength() >= 80);
+        Assert.True(exercises.GetArrayLength() >= 180);
+        Assert.Contains(lessons.EnumerateArray(), item => item.GetProperty("stage").GetString() == "E1");
     }
 
     [Fact]
@@ -40,9 +43,9 @@ public sealed class BetaEndpointsTests : IClassFixture<NadianoWebApplicationFact
         var html = await response.Content.ReadAsStringAsync();
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        Assert.Equal(45, Count(html, "data-status=\""));
+        Assert.Equal(110, Count(html, "data-status=\""));
         Assert.Equal(1, Count(html, "data-status=\"available\""));
-        Assert.Equal(44, Count(html, "data-status=\"locked\""));
+        Assert.Equal(109, Count(html, "data-status=\"locked\""));
     }
 
     [Fact]
