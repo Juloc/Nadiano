@@ -8,27 +8,29 @@
 4. Open **MIDI setup** from the start page.
 5. Confirm that secure context, MIDI and audio are available.
 6. Connect the digital piano by USB, select the input and play several notes in the live diagnostics view.
-7. Open **Learn** and begin with the first available F0 lesson.
+7. Verify sustain, sostenuto and soft pedal when the piano provides them.
+8. Open **Learn** and begin with the first available F0 lesson.
 
-Each household learner must select their own profile before practising. Progress, preferences, sessions and self-checks are stored per profile.
+Each learner must select their own profile before practising. Progress, preferences, sessions, imports and review data are stored per profile.
 
 ## Supported target
 
-The Alpha target is the current stable desktop versions of Chrome and Edge with Web MIDI available. Nadiano does not identify browsers by name to decide support; the capability checks on the setup page are authoritative.
+Nadiano 1.0 supports current stable desktop Chrome and Edge releases where Web MIDI is available. Automated Chromium tests verify the common application path; real-device tests verify notes and the three standard piano pedals.
 
-A secure context is required for Web MIDI. Use HTTPS through the reverse proxy for remote access. `http://localhost` is suitable for local development.
+Nadiano uses capability checks rather than browser-name detection. The setup page is authoritative. A secure context is required for Web MIDI. Use HTTPS through the reverse proxy for remote access. `http://localhost` is suitable for local access.
 
 When Web MIDI is unavailable or permission is denied:
 
 - text, media, listening and dry-task lessons remain usable;
+- generated reading and rhythm activities remain available where they do not require the piano;
 - MIDI-scored practice cannot start;
 - the setup page explains the missing capability without hiding the rest of the application.
 
-Mobile browsers and non-Chromium desktop browsers are not part of the Alpha test matrix. They may still open the application, but MIDI practice is unsupported until the capability and real-device matrix is completed for them.
+Mobile browsers and non-Chromium desktop browsers can use progressively enhanced non-MIDI areas, but MIDI practice is not a supported 1.0 target on them.
 
 ## Permission and reconnect problems
 
 - Start MIDI permission only from the setup button; browsers may reject background requests.
 - Reconnect the USB cable and reopen the setup page if the device disappears.
 - Remove the stored preference when a replacement keyboard should become the default.
-- Use the diagnostics export for capability and sanitized device information. It does not contain lesson prose or raw practice history.
+- Use the diagnostics export for capability and sanitized device information. It does not contain lesson prose, imported scores or raw practice history.
