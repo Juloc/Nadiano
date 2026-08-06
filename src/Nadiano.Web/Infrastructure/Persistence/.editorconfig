@@ -1,0 +1,5 @@
+[{BetaRecordConfigurations.cs,NadianoDbContext.cs}]
+insert_final_newline = true
+
+[Migrations/20260806060000_AddBetaLearningAndLibrary.cs]
+insert_final_newline = true

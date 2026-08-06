@@ -1,0 +1,134 @@
+name: Beta release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - release/beta.json
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: beta-release
+  cancel-in-progress: false
+
+env:
+  DOTNET_VERSION: "10.0.x"
+  NODE_VERSION: "22"
+  REGISTRY_IMAGE: ghcr.io/juloc/nadiano
+
+jobs:
+  release:
+    name: Verify, publish and release Beta
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: src/Nadiano.Web/package-lock.json
+
+      - name: Read release metadata
+        id: release
+        shell: bash
+        run: |
+          version="$(jq -r '.version' release/beta.json)"
+          notes="$(jq -r '.releaseNotes' release/beta.json)"
+          test -n "$version"
+          test -f "$notes"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "notes=$notes" >> "$GITHUB_OUTPUT"
+          echo "sha_tag=sha-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Frontend verification
+        working-directory: src/Nadiano.Web
+        run: |
+          npm ci
+          npm run build
+          npm run lint
+          npm run test
+          npm audit --audit-level=high
+
+      - name: .NET and content verification
+        run: |
+          dotnet restore Nadiano.slnx
+          dotnet format Nadiano.slnx --verify-no-changes --no-restore
+          dotnet build Nadiano.slnx -c Release --no-restore
+          dotnet test Nadiano.slnx -c Release --no-build
+          dotnet run --project tools/Nadiano.ContentValidator -c Release --no-build -- content
+
+      - name: Install Chromium
+        run: pwsh tests/Nadiano.BrowserTests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium
+      - name: Verify browser path
+        run: dotnet test tests/Nadiano.BrowserTests/Nadiano.BrowserTests.csproj -c Release --no-build
+        env:
+          NADIANO_RUN_BROWSER_TESTS: "1"
+
+      - name: Create release bundle
+        shell: bash
+        run: |
+          output="artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64"
+          mkdir -p "$output"
+          dotnet publish src/Nadiano.Web/Nadiano.Web.csproj -c Release -o "$output" --no-build -p:SkipFrontendBuild=true
+          cp -R content "$output/content"
+          cp README.md "$output/README.md"
+          cp docs/FIRST_RUN_AND_BROWSER_SUPPORT.md "$output/FIRST_RUN_AND_BROWSER_SUPPORT.md"
+          cp docs/BACKUP_AND_RESTORE.md "$output/BACKUP_AND_RESTORE.md"
+          cp docs/KNOWN_LIMITATIONS_BETA.md "$output/KNOWN_LIMITATIONS.md"
+          tar -czf "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz" -C "$output" .
+          sha256sum "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz" > "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz.sha256"
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build image
+        run: |
+          docker build \
+            -t "${REGISTRY_IMAGE}:${{ steps.release.outputs.version }}" \
+            -t "${REGISTRY_IMAGE}:${{ steps.release.outputs.sha_tag }}" \
+            .
+      - name: Scan image
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          image-ref: ${{ env.REGISTRY_IMAGE }}:${{ steps.release.outputs.version }}
+          severity: CRITICAL,HIGH
+          exit-code: "1"
+          ignore-unfixed: true
+      - name: Push immutable image tags
+        run: |
+          docker push "${REGISTRY_IMAGE}:${{ steps.release.outputs.version }}"
+          docker push "${REGISTRY_IMAGE}:${{ steps.release.outputs.sha_tag }}"
+
+      - name: Create prerelease
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          tag="${{ steps.release.outputs.tag }}"
+          git fetch --tags --force
+          if ! git rev-parse "$tag" >/dev/null 2>&1; then
+            git tag "$tag" "$GITHUB_SHA"
+            git push origin "$tag"
+          fi
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release edit "$tag" --prerelease --title "Nadiano ${{ steps.release.outputs.version }}" --notes-file "${{ steps.release.outputs.notes }}"
+          else
+            gh release create "$tag" --prerelease --verify-tag --title "Nadiano ${{ steps.release.outputs.version }}" --notes-file "${{ steps.release.outputs.notes }}"
+          fi
+          gh release upload "$tag" \
+            "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz" \
+            "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz.sha256" \
+            --clobber

@@ -1,10 +1,12 @@
 using System.Globalization;
+using System.Text.Json;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 using Nadiano.Core.Content;
 using Nadiano.Core.Content.Manifests;
+using Nadiano.Web.Features.Library;
 using Nadiano.Web.Infrastructure.Courses;
 using Nadiano.Web.Infrastructure.Profiles;
 
@@ -14,9 +16,11 @@ public class IndexModel(
     ContentCatalogue catalogue,
     CourseProgressService progress,
     BundledContentRepository content,
+    PrivateLibraryService library,
     CurrentProfileAccessor profiles) : PageModel
 {
     public bool HasLesson { get; private set; }
+    public bool IsPrivateLibraryItem { get; private set; }
     public string LessonId { get; private set; } = string.Empty;
     public string LessonTitle { get; private set; } = string.Empty;
     public string ContentVersion { get; private set; } = string.Empty;
@@ -28,8 +32,13 @@ public class IndexModel(
     public IReadOnlyList<string> SupportedModes { get; private set; } = [];
     public string AssessmentCategoriesJson { get; private set; } = "[]";
 
-    public async Task<IActionResult> OnGetAsync(string? lessonId, CancellationToken cancellationToken)
+    public async Task<IActionResult> OnGetAsync(string? lessonId, Guid? libraryItemId, CancellationToken cancellationToken)
     {
+        if (libraryItemId.HasValue)
+        {
+            return await LoadPrivateLibraryItemAsync(libraryItemId.Value, cancellationToken);
+        }
+
         if (string.IsNullOrWhiteSpace(lessonId))
         {
             return Page();
@@ -67,23 +76,59 @@ public class IndexModel(
         DefaultMode = ModeCode(lesson.Practice.DefaultMode);
         SupportedModes = lesson.Practice.SupportedModes
             .Select(ModeCode)
-            .Where(mode => mode is "wait" or "loop" or "hands-separate" or "performance")
+            .Where(IsSupportedMode)
             .Distinct(StringComparer.Ordinal)
             .ToArray();
-        AssessmentCategoriesJson = System.Text.Json.JsonSerializer.Serialize(
+        AssessmentCategoriesJson = JsonSerializer.Serialize(
             lesson.Assessment.Categories.Select(CategoryCode).ToArray());
 
         return Page();
     }
 
-    public static string ModeResourceKey(string mode) => mode switch
+    public string ModeDisplayName(string mode) => mode switch
     {
-        "wait" => "Practice.Workspace.ModeWait",
-        "loop" => "Practice.Workspace.ModeLoop",
-        "hands-separate" => "Practice.Workspace.ModeHandsSeparate",
-        "performance" => "Practice.Workspace.ModePerformance",
-        _ => "Practice.Workspace.ModeWait",
+        "wait" => T("Warten", "Tunggu"),
+        "loop" => T("Abschnitt wiederholen", "Ulangi bagian"),
+        "hands-separate" => T("Hände getrennt", "Tangan terpisah"),
+        "rhythm" => T("Nur Rhythmus", "Ritme saja"),
+        "tempo-ladder" => T("Tempo-Leiter", "Tangga tempo"),
+        "listen-and-copy" => T("Hören und nachspielen", "Dengar dan tirukan"),
+        "performance" => T("Durchspielen", "Pertunjukan"),
+        _ => mode,
     };
+
+    public string T(string german, string indonesian) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "id" ? indonesian : german;
+
+    private async Task<IActionResult> LoadPrivateLibraryItemAsync(Guid itemId, CancellationToken cancellationToken)
+    {
+        var profileId = await profiles.GetOrCreateProfileIdAsync(HttpContext, cancellationToken);
+        var resolved = await library.ResolveFileAsync(profileId, itemId, original: false, cancellationToken);
+        if (resolved is null)
+        {
+            return NotFound();
+        }
+
+        var metadata = JsonSerializer.Deserialize<LibraryItemMetadata>(resolved.Value.Item.MetadataJson)
+            ?? new LibraryItemMetadata(1, 1, 0, 1, 1, 90);
+
+        HasLesson = true;
+        IsPrivateLibraryItem = true;
+        LessonId = $"private:{itemId:N}";
+        LessonTitle = resolved.Value.Item.DisplayTitle;
+        ContentVersion = $"private-{resolved.Value.Item.Version}";
+        ScoreUrl = $"/api/library/{itemId}/score";
+        ExpectedEventsUrl = $"/api/library/{itemId}/expected-events";
+        TargetTempo = metadata.TargetTempoBpm;
+        CountInMeasures = 1;
+        DefaultMode = "wait";
+        SupportedModes = ["wait", "loop", "hands-separate", "rhythm", "tempo-ladder", "listen-and-copy", "performance"];
+        AssessmentCategoriesJson = JsonSerializer.Serialize(new[] { "pitch", "onset", "duration", "steadiness", "dynamics" });
+        return Page();
+    }
+
+    private static bool IsSupportedMode(string mode) =>
+        mode is "wait" or "loop" or "hands-separate" or "rhythm" or "tempo-ladder" or "listen-and-copy" or "performance";
 
     private static string ContentUrl(string lessonId, string relativePath) =>
         $"/api/content/lessons/{Uri.EscapeDataString(lessonId)}/files/{relativePath}";
@@ -93,6 +138,9 @@ public class IndexModel(
         PracticeMode.Wait => "wait",
         PracticeMode.Loop => "loop",
         PracticeMode.HandsSeparate => "hands-separate",
+        PracticeMode.Rhythm => "rhythm",
+        PracticeMode.TempoLadder => "tempo-ladder",
+        PracticeMode.ListenAndCopy => "listen-and-copy",
         PracticeMode.Performance => "performance",
         _ => "wait",
     };

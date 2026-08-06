@@ -1,3 +1,4 @@
+import { postOrQueue } from "../offline/requestQueue";
 import type { NextActionCode } from "../scoring/nextAction";
 
 export interface AttemptResponse {
@@ -8,16 +9,13 @@ export interface AttemptResponse {
   nextActionCode: string;
 }
 
-/** Thin wrapper around the WP-017 practice endpoints. Session/attempt ids are generated client-side for idempotent completion. */
+/** Thin wrapper around the practice endpoints. IDs are generated client-side so queued retries remain idempotent. */
 export async function createSession(lessonId: string, contentVersion: string, mode: string): Promise<string> {
   const sessionId = crypto.randomUUID();
-  const response = await fetch("/api/practice/sessions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sessionId, lessonId, contentVersion, mode }),
-  });
+  const body = JSON.stringify({ sessionId, lessonId, contentVersion, mode });
+  const response = await postOrQueue("/api/practice/sessions", body, `session:${sessionId}`);
 
-  if (!response.ok) {
+  if (response && !response.ok && response.status !== 409) {
     throw new Error(`Failed to create practice session: ${response.status}`);
   }
 
@@ -31,14 +29,33 @@ export async function completeSession(
   nextActionCode: NextActionCode,
 ): Promise<AttemptResponse> {
   const attemptId = crypto.randomUUID();
-  const response = await fetch(`/api/practice/sessions/${sessionId}/complete`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ attemptId, resultSchemaVersion, resultJson, nextActionCode }),
-  });
+  const body = JSON.stringify({ attemptId, resultSchemaVersion, resultJson, nextActionCode });
+  const response = await postOrQueue(
+    `/api/practice/sessions/${sessionId}/complete`,
+    body,
+    `attempt:${attemptId}`,
+  );
 
-  if (!response.ok) {
+  if (!response) {
+    return {
+      attemptId,
+      completedAtUtc: new Date().toISOString(),
+      resultSchemaVersion,
+      resultJson,
+      nextActionCode,
+    };
+  }
+  if (!response.ok && response.status !== 409) {
     throw new Error(`Failed to complete practice session: ${response.status}`);
+  }
+  if (response.status === 409) {
+    return {
+      attemptId,
+      completedAtUtc: new Date().toISOString(),
+      resultSchemaVersion,
+      resultJson,
+      nextActionCode,
+    };
   }
 
   return (await response.json()) as AttemptResponse;

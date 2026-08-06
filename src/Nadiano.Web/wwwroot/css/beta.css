@@ -1,0 +1,52 @@
+:focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+button,
+a.button,
+a.button-secondary,
+input,
+select {
+  min-height: 44px;
+}
+
+.rhythm-pattern {
+  overflow-wrap: anywhere;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+}
+
+.practice-card-events {
+  columns: 2 18rem;
+}
+
+.pedal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 0.75rem;
+  margin-block: 1rem;
+}
+
+.pedal-grid > div {
+  border: 1px solid var(--color-border, #d1d1d1);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.pedal-grid dt {
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

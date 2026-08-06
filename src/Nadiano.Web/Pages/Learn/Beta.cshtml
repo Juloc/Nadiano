@@ -1,0 +1,59 @@
+@page
+@model BetaModel
+@{
+    ViewData["Title"] = Model.Text("Beta-Kurskarte", "Peta kursus Beta");
+}
+
+<h1>@Model.Text("Beta-Kurskarte", "Peta kursus Beta")</h1>
+<p>@Model.Text("45 geführte Lektionen und 100 reproduzierbare Übungen führen durch B1 und B2. Jede Lektion baut auf der vorherigen auf.", "45 pelajaran terpandu dan 100 latihan yang dapat direproduksi membentuk jalur B1 dan B2. Setiap pelajaran bergantung pada pelajaran sebelumnya.")</p>
+
+@if (Model.NoticeCode is not null)
+{
+    <p class="callout" role="status">
+        @(Model.NoticeCode switch
+        {
+            "completed" => Model.Text("Lektion abgeschlossen.", "Pelajaran selesai."),
+            "already-completed" => Model.Text("Lektion war bereits abgeschlossen.", "Pelajaran sudah selesai."),
+            "locked" => Model.Text("Die Voraussetzung ist noch nicht erfüllt.", "Prasyarat belum terpenuhi."),
+            "stage-evidence-required" => Model.Text("Für die Stufenprüfung werden zuerst je ein aktueller Lese-, Rhythmus- und Gehörnachweis benötigt.", "Pemeriksaan tahap memerlukan bukti membaca, ritme, dan pendengaran terbaru."),
+            _ => Model.Text("Aktion konnte nicht gespeichert werden.", "Tindakan tidak dapat disimpan."),
+        })
+    </p>
+}
+
+<p>
+    <a class="button" asp-page="/Practice/Beta">@Model.Text("Beta-Training öffnen", "Buka latihan Beta")</a>
+</p>
+
+@foreach (var stage in Model.Items.GroupBy(item => item.Lesson.Stage))
+{
+    <section aria-labelledby="stage-@stage.Key">
+        <h2 id="stage-@stage.Key">@stage.Key</h2>
+        <ol class="course-map">
+        @foreach (var item in stage)
+        {
+            <li class="card" data-status="@item.Status">
+                <h3>@Model.Title(item)</h3>
+                <p>@Model.Goal(item)</p>
+                <p><strong>@Model.Text("Kompetenz", "Kompetensi"):</strong> @item.Lesson.SkillId</p>
+                <p><strong>@Model.Text("Status", "Status"):</strong> @item.Status</p>
+                @if (item.LockedBy is not null)
+                {
+                    <p class="help-text">@Model.Text("Gesperrt durch", "Dikunci oleh"): @item.LockedBy</p>
+                }
+                @if (item.Status == "available")
+                {
+                    <form method="post" asp-page-handler="Complete">
+                        <input type="hidden" name="lessonId" value="@item.Lesson.Id" />
+                        <button class="button-secondary" type="submit">
+                            @(item.Lesson.ActivityKind == "stage-check"
+                                ? Model.Text("Stufenprüfung auswerten", "Evaluasi pemeriksaan tahap")
+                                : Model.Text("Lektion abschließen", "Selesaikan pelajaran"))
+                        </button>
+                    </form>
+                }
+            </li>
+        }
+        </ol>
+    </section>
+}

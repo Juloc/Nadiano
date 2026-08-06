@@ -6,10 +6,13 @@ import { KeyboardView } from "../diagnostics/KeyboardView";
 import { RecentEventBuffer } from "../diagnostics/RecentEventBuffer";
 import type { MidiAccessAdapter } from "../midi/MidiAccessAdapter";
 import { midiNoteName } from "../midi/noteNames";
-import { SustainState } from "../midi/sustainState";
 import type { MidiInputDeviceInfo, PlayedMidiEvent } from "../midi/types";
 import { WebMidiAccessAdapter } from "../midi/WebMidiAccessAdapter";
 import { clearPreferredDevice, getPreferredDevice, setPreferredDevice } from "../setup/devicePreference";
+
+const PEDAL_CONTROLLERS = [64, 66, 67] as const;
+
+type PedalController = typeof PEDAL_CONTROLLERS[number];
 
 function requireElement<T extends HTMLElement>(id: string): T {
   const element = document.getElementById(id);
@@ -26,7 +29,6 @@ function setCapabilityBadge(elementId: string, supported: boolean): void {
 
 export function initSetupPage(adapter: MidiAccessAdapter): void {
   const capabilities = detectCapabilities();
-
   setCapabilityBadge("capability-secure-context", capabilities.secureContext);
   setCapabilityBadge("capability-midi", capabilities.midiAvailable);
   setCapabilityBadge("capability-audio", capabilities.audioAvailable);
@@ -42,26 +44,28 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
   const preferredHint = requireElement<HTMLElement>("setup-preferred-hint");
   const preferredHintName = requireElement<HTMLElement>("setup-preferred-hint-name");
   const forgetButton = requireElement<HTMLButtonElement>("setup-forget-button");
-
   const diagnosticsSection = requireElement<HTMLElement>("setup-diagnostics-section");
   const keyboardContainer = requireElement<HTMLElement>("setup-keyboard");
   const activeNotesEmpty = requireElement<HTMLElement>("setup-active-notes-empty");
   const activeNotesList = requireElement<HTMLUListElement>("setup-active-notes-list");
-  const sustainStateLabel = requireElement<HTMLElement>("setup-sustain-state");
   const recentEventsEmpty = requireElement<HTMLElement>("setup-recent-events-empty");
   const recentEventsList = requireElement<HTMLUListElement>("setup-recent-events-list");
   const exportButton = requireElement<HTMLButtonElement>("setup-export-button");
   const exportOutput = requireElement<HTMLElement>("setup-export-output");
 
+  const pedalElements = new Map<PedalController, HTMLElement>([
+    [64, requireElement<HTMLElement>("setup-pedal-sustain")],
+    [66, requireElement<HTMLElement>("setup-pedal-sostenuto")],
+    [67, requireElement<HTMLElement>("setup-pedal-soft")],
+  ]);
+  const pedalValues = new Map<PedalController, number>(PEDAL_CONTROLLERS.map((controller) => [controller, 0]));
   const keyboardView = new KeyboardView(keyboardContainer);
   const activeNotes = new ActiveNoteTracker();
-  const sustainState = new SustainState();
   const recentEvents = new RecentEventBuffer(20);
 
   guidanceInsecure.hidden = capabilities.secureContext;
-
   let selectedDeviceId: string | undefined = getPreferredDevice()?.id;
-  let deviceChangeSubscribed = false;
+  let subscribed = false;
 
   const existingHint = getPreferredDevice();
   if (existingHint) {
@@ -79,6 +83,7 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
     setPreferredDevice({ id: input.id, name: input.name });
     selectedDeviceId = input.id;
     showPreferredHint(input.name);
+    resetLiveState();
     renderDevices(inputs);
   }
 
@@ -93,10 +98,10 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
 
     for (const input of inputs) {
       const item = document.createElement("li");
-
       const label = document.createElement("span");
-      const stateLabel =
-        input.state === "connected" ? devicesSection.dataset.labelConnected : devicesSection.dataset.labelDisconnected;
+      const stateLabel = input.state === "connected"
+        ? devicesSection.dataset.labelConnected
+        : devicesSection.dataset.labelDisconnected;
       label.textContent = `${input.name}${input.manufacturer ? ` (${input.manufacturer})` : ""} — ${stateLabel ?? ""}`;
       item.appendChild(label);
 
@@ -110,7 +115,6 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
       button.disabled = isSelected;
       button.addEventListener("click", () => selectDevice(input, inputs));
       item.appendChild(button);
-
       devicesList.appendChild(item);
     }
   }
@@ -118,16 +122,17 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
   function resetLiveState(): void {
     activeNotes.clear();
     keyboardView.clearAll();
-    sustainState.reset();
+    for (const controller of PEDAL_CONTROLLERS) {
+      pedalValues.set(controller, 0);
+    }
     renderActiveNotes();
-    renderSustainState();
+    renderPedals();
   }
 
   function renderActiveNotes(): void {
     const notes = activeNotes.list();
     activeNotesEmpty.hidden = notes.length > 0;
     activeNotesList.replaceChildren();
-
     for (const note of notes) {
       const item = document.createElement("li");
       item.textContent = `${midiNoteName(note.note)} (velocity ${note.velocity})`;
@@ -135,21 +140,17 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
     }
   }
 
-  function renderSustainState(): void {
-    sustainStateLabel.textContent = sustainState.isAnySustained()
-      ? (diagnosticsSection.dataset.labelSustainOn ?? "")
-      : (diagnosticsSection.dataset.labelSustainOff ?? "");
-  }
-
-  function renderRecentEvents(): void {
-    const events = recentEvents.list();
-    recentEventsEmpty.hidden = events.length > 0;
-    recentEventsList.replaceChildren();
-
-    for (const event of [...events].reverse()) {
-      const item = document.createElement("li");
-      item.textContent = describeEvent(event);
-      recentEventsList.appendChild(item);
+  function renderPedals(): void {
+    for (const controller of PEDAL_CONTROLLERS) {
+      const element = pedalElements.get(controller);
+      const value = pedalValues.get(controller) ?? 0;
+      if (element) {
+        const state = value >= 64
+          ? (diagnosticsSection.dataset.labelPedalOn ?? "on")
+          : (diagnosticsSection.dataset.labelPedalOff ?? "off");
+        element.textContent = `${state} · ${value}`;
+        element.dataset.active = String(value >= 64);
+      }
     }
   }
 
@@ -159,6 +160,17 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
     }
     const noteName = event.note !== undefined ? midiNoteName(event.note) : "?";
     return `${event.kind} ${noteName} vel ${event.velocity ?? "-"} (ch ${event.channel})`;
+  }
+
+  function renderRecentEvents(): void {
+    const events = recentEvents.list();
+    recentEventsEmpty.hidden = events.length > 0;
+    recentEventsList.replaceChildren();
+    for (const event of [...events].reverse()) {
+      const item = document.createElement("li");
+      item.textContent = describeEvent(event);
+      recentEventsList.appendChild(item);
+    }
   }
 
   function handleMidiEvent(event: PlayedMidiEvent): void {
@@ -176,25 +188,20 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
       renderActiveNotes();
     }
 
-    sustainState.update(event);
-    renderSustainState();
+    if (event.kind === "controlChange" && PEDAL_CONTROLLERS.includes(event.controller as PedalController)) {
+      pedalValues.set(event.controller as PedalController, event.value ?? 0);
+      renderPedals();
+    }
   }
-
-  connectButton.addEventListener("click", () => {
-    void connect();
-  });
 
   async function connect(): Promise<void> {
     guidanceUnsupported.hidden = true;
     guidanceDenied.hidden = true;
-
     const result = await adapter.requestAccess();
-
     if (result.status === "unsupported") {
       guidanceUnsupported.hidden = false;
       return;
     }
-
     if (result.status === "denied") {
       guidanceDenied.hidden = false;
       return;
@@ -204,33 +211,33 @@ export function initSetupPage(adapter: MidiAccessAdapter): void {
     diagnosticsSection.hidden = false;
     renderDevices(result.inputs);
     renderActiveNotes();
-    renderSustainState();
+    renderPedals();
     renderRecentEvents();
 
-    if (!deviceChangeSubscribed) {
+    if (!subscribed) {
       adapter.onEvent(handleMidiEvent);
-      adapter.onDeviceChange((inputs) => renderDevices(inputs));
-      deviceChangeSubscribed = true;
+      adapter.onDeviceChange(renderDevices);
+      subscribed = true;
     }
-
     if (selectedDeviceId && result.inputs.some((input) => input.id === selectedDeviceId)) {
       adapter.selectInput(selectedDeviceId);
     }
   }
 
+  connectButton.addEventListener("click", () => void connect());
   forgetButton.addEventListener("click", () => {
     clearPreferredDevice();
     selectedDeviceId = undefined;
     preferredHint.hidden = true;
     forgetButton.hidden = true;
+    resetLiveState();
     renderDevices(adapter.listInputs());
   });
 
   exportButton.addEventListener("click", () => {
     const selectedDevice = adapter.listInputs().find((input) => input.id === selectedDeviceId);
     const diagnostics = buildDiagnosticsExport(getAppVersion(), capabilities, selectedDevice, adapter.getDiagnostics());
-    const json = JSON.stringify(diagnostics, null, 2);
-
+    const json = JSON.stringify({ ...diagnostics, pedalControllers: Object.fromEntries(pedalValues) }, null, 2);
     exportOutput.hidden = false;
     exportOutput.textContent = json;
 
