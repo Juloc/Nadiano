@@ -1,2 +1,2 @@
-[PrivateLibraryStorage.cs]
+[*.cs]
 insert_final_newline = true
