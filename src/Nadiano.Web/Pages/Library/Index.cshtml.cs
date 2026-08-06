@@ -72,6 +72,15 @@ public sealed class IndexModel(
         CancellationToken cancellationToken)
     {
         var profileId = await profiles.GetOrCreateProfileIdAsync(HttpContext, cancellationToken);
+        if (IsAmbiguousSamePartMapping(leftHandPartId, leftHandVoice, rightHandPartId, rightHandVoice))
+        {
+            Error = T(
+                "Wenn beide Hände denselben Part verwenden, müssen zwei verschiedene Stimmen ausgewählt werden.",
+                "Jika kedua tangan memakai bagian yang sama, pilih dua suara yang berbeda.");
+            await LoadAsync(cancellationToken);
+            return Page();
+        }
+
         var result = await library.UpdateAsync(
             profileId,
             itemId,
@@ -120,6 +129,27 @@ public sealed class IndexModel(
 
     public string T(string german, string indonesian) =>
         CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "id" ? indonesian : german;
+
+    private static bool IsAmbiguousSamePartMapping(
+        string? leftPart,
+        string? leftVoice,
+        string? rightPart,
+        string? rightVoice)
+    {
+        var normalizedLeftPart = leftPart?.Trim();
+        var normalizedRightPart = rightPart?.Trim();
+        if (string.IsNullOrWhiteSpace(normalizedLeftPart) ||
+            !string.Equals(normalizedLeftPart, normalizedRightPart, StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        var normalizedLeftVoice = leftVoice?.Trim();
+        var normalizedRightVoice = rightVoice?.Trim();
+        return string.IsNullOrWhiteSpace(normalizedLeftVoice) ||
+            string.IsNullOrWhiteSpace(normalizedRightVoice) ||
+            string.Equals(normalizedLeftVoice, normalizedRightVoice, StringComparison.Ordinal);
+    }
 
     private async Task LoadAsync(CancellationToken cancellationToken)
     {
