@@ -1,4 +1,5 @@
 using Nadiano.Core.Content;
+using Nadiano.Core.Content.Manifests;
 using Nadiano.Web.Infrastructure.Profiles;
 
 namespace Nadiano.Web.Features.Library;
@@ -45,12 +46,17 @@ public static class PrivateLibraryEndpoints
             return Results.NotFound();
         }
 
+        var metadata = library.DeserializeMetadata(result.Value.Item.MetadataJson);
+        var partMapping = BuildPartMapping(metadata);
         var musicXml = await File.ReadAllTextAsync(result.Value.Path, cancellationToken);
-        var generated = MusicXmlExpectedEventGenerator.Generate(musicXml);
+        var generated = MusicXmlExpectedEventGenerator.Generate(musicXml, partMapping, metadata.TargetTempoBpm);
         context.Response.Headers.CacheControl = "private, no-store";
-        return generated.Document is null
-            ? Results.UnprocessableEntity(new { warnings = generated.UnsupportedConstructs })
-            : Results.Ok(generated.Document);
+        if (generated.Document is null)
+        {
+            return Results.UnprocessableEntity(new { warnings = generated.UnsupportedConstructs });
+        }
+
+        return Results.Ok(ApplyOverrides(generated.Document, metadata));
     }
 
     private static async Task<IResult> ExportOriginalAsync(
@@ -73,5 +79,48 @@ public static class PrivateLibraryEndpoints
             "application/octet-stream",
             result.Value.Item.SourceFileName,
             enableRangeProcessing: false);
+    }
+
+    private static IReadOnlyDictionary<string, Hand> BuildPartMapping(LibraryItemMetadata metadata)
+    {
+        var mapping = new Dictionary<string, Hand>(StringComparer.Ordinal);
+        if (metadata.LeftHandPartId is not null && metadata.LeftHandPartId != metadata.RightHandPartId)
+        {
+            mapping[metadata.LeftHandPartId] = Hand.Left;
+        }
+        if (metadata.RightHandPartId is not null && metadata.RightHandPartId != metadata.LeftHandPartId)
+        {
+            mapping[metadata.RightHandPartId] = Hand.Right;
+        }
+        return mapping;
+    }
+
+    private static ExpectedEventDocument ApplyOverrides(ExpectedEventDocument source, LibraryItemMetadata metadata)
+    {
+        var events = source.Events.Select(item =>
+        {
+            var hand = item.Hand;
+            if (item.Voice is not null && item.Voice == metadata.LeftHandVoice)
+            {
+                hand = Hand.Left;
+            }
+            if (item.Voice is not null && item.Voice == metadata.RightHandVoice)
+            {
+                hand = Hand.Right;
+            }
+
+            var fingering = metadata.FingeringOverrides.TryGetValue(item.Id, out var configured)
+                ? configured
+                : item.Fingering;
+            return item with { Hand = hand, Fingering = fingering };
+        }).ToArray();
+
+        return new ExpectedEventDocument
+        {
+            SchemaVersion = source.SchemaVersion,
+            TimeBase = source.TimeBase,
+            TempoMap = source.TempoMap,
+            Events = events,
+        };
     }
 }
