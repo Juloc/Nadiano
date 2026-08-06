@@ -1,6 +1,6 @@
 import { postOrQueue } from "../offline/requestQueue";
 
-interface GeneratedPracticeEvent {
+interface PracticeEvent {
   index: number;
   measure: number;
   onsetUnits: number;
@@ -8,18 +8,15 @@ interface GeneratedPracticeEvent {
   midiNote: number;
 }
 
-interface GeneratedPracticeCard {
-  templateId: string;
+interface PracticeCard {
   seed: number;
-  kind: "reading" | "rhythm";
   skillId: string;
   beatsPerMeasure: number;
   unitsPerBeat: number;
-  events: GeneratedPracticeEvent[];
+  events: PracticeEvent[];
 }
 
-interface SessionPlanItem {
-  activityId: string;
+interface PlanItem {
   skillId: string;
   reasonCode: string;
   seed?: number;
@@ -27,31 +24,26 @@ interface SessionPlanItem {
 
 interface ReviewItem {
   skillId: string;
-  sourceId: string;
   reasonCode: string;
-  dueAtUtc: string;
 }
 
-function requireElement<T extends HTMLElement>(id: string): T {
-  const element = document.getElementById(id);
-  if (!element) {
-    throw new Error(`Beta practice markup is missing #${id}`);
+type Outcome = "Good" | "NeedsWork" | "Failed";
+
+function element<T extends HTMLElement>(id: string): T {
+  const found = document.getElementById(id);
+  if (!found) {
+    throw new Error(`Missing beta practice element: ${id}`);
   }
-  return element as T;
+  return found as T;
 }
 
-function randomSeed(): number {
+function seed(): number {
   const values = new Uint32Array(1);
   crypto.getRandomValues(values);
   return (values[0] ?? Date.now()) & 0x7fffffff;
 }
 
-function midiName(note: number): string {
-  const names = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
-  return `${names[note % 12] ?? "?"}${Math.floor(note / 12) - 1}`;
-}
-
-async function getJson<T>(url: string): Promise<T> {
+async function json<T>(url: string): Promise<T> {
   const response = await fetch(url, { headers: { Accept: "application/json" } });
   if (!response.ok) {
     throw new Error(`Request failed: ${response.status}`);
@@ -59,86 +51,111 @@ async function getJson<T>(url: string): Promise<T> {
   return await response.json() as T;
 }
 
-async function recordEvidence(
+async function saveEvidence(
   activityId: string,
   activityKind: string,
-  seed: number | undefined,
+  cardSeed: number,
   skillId: string,
   expected: unknown,
-  response: unknown,
+  answer: unknown,
   result: unknown,
-  outcome: "Excellent" | "Good" | "NeedsWork" | "Failed",
+  outcome: Outcome,
 ): Promise<void> {
-  const body = JSON.stringify({ activityId, activityKind, seed, skillId, expected, response, result, outcome });
-  const queuedId = `beta-evidence:${activityId}`;
-  const apiResponse = await postOrQueue("/api/beta/evidence", body, queuedId);
-  if (apiResponse && !apiResponse.ok && apiResponse.status !== 409) {
-    throw new Error(`Failed to record beta evidence: ${apiResponse.status}`);
+  const response = await postOrQueue(
+    "/api/beta/evidence",
+    JSON.stringify({
+      activityId,
+      activityKind,
+      seed: cardSeed,
+      skillId,
+      expected,
+      response: answer,
+      result,
+      outcome,
+    }),
+    `beta-evidence:${activityId}`,
+  );
+  if (response && !response.ok && response.status !== 409) {
+    throw new Error(`Evidence failed: ${response.status}`);
   }
 }
 
-function initBetaPractice(): void {
-  const loadPlanButton = requireElement<HTMLButtonElement>("beta-load-plan");
-  const planList = requireElement<HTMLOListElement>("beta-plan");
-  const readingNewButton = requireElement<HTMLButtonElement>("beta-reading-new");
-  const readingSeed = requireElement<HTMLElement>("beta-reading-seed");
-  const readingEvents = requireElement<HTMLOListElement>("beta-reading-events");
-  const readingCorrectButton = requireElement<HTMLButtonElement>("beta-reading-correct");
-  const readingRetryButton = requireElement<HTMLButtonElement>("beta-reading-retry");
-  const rhythmNewButton = requireElement<HTMLButtonElement>("beta-rhythm-new");
-  const rhythmPattern = requireElement<HTMLElement>("beta-rhythm-pattern");
-  const rhythmStartButton = requireElement<HTMLButtonElement>("beta-rhythm-start");
-  const rhythmTapButton = requireElement<HTMLButtonElement>("beta-rhythm-tap");
-  const rhythmResult = requireElement<HTMLElement>("beta-rhythm-result");
-  const earPlayButton = requireElement<HTMLButtonElement>("beta-ear-play");
-  const earAnswers = requireElement<HTMLElement>("beta-ear-answers");
-  const earResult = requireElement<HTMLElement>("beta-ear-result");
-  const loadReviewsButton = requireElement<HTMLButtonElement>("beta-load-reviews");
-  const reviewsList = requireElement<HTMLUListElement>("beta-reviews");
+function noteName(note: number): string {
+  const names = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
+  return `${names[note % 12] ?? "?"}${Math.floor(note / 12) - 1}`;
+}
 
-  let readingCard: GeneratedPracticeCard | undefined;
-  let rhythmCard: GeneratedPracticeCard | undefined;
+function init(): void {
+  const planList = element<HTMLOListElement>("beta-plan");
+  const readingSeed = element<HTMLElement>("beta-reading-seed");
+  const readingEvents = element<HTMLOListElement>("beta-reading-events");
+  const readingCorrect = element<HTMLButtonElement>("beta-reading-correct");
+  const readingRetry = element<HTMLButtonElement>("beta-reading-retry");
+  const rhythmPattern = element<HTMLElement>("beta-rhythm-pattern");
+  const rhythmStart = element<HTMLButtonElement>("beta-rhythm-start");
+  const rhythmTap = element<HTMLButtonElement>("beta-rhythm-tap");
+  const rhythmResult = element<HTMLElement>("beta-rhythm-result");
+  const earAnswers = element<HTMLElement>("beta-ear-answers");
+  const earResult = element<HTMLElement>("beta-ear-result");
+  const reviewsList = element<HTMLUListElement>("beta-reviews");
+
+  let readingCard: PracticeCard | undefined;
+  let rhythmCard: PracticeCard | undefined;
   let rhythmStartedAt = 0;
-  let rhythmTaps: number[] = [];
-  let rhythmTimer: number | undefined;
-  let currentEar: { first: number; second: number; answer: string; seed: number } | undefined;
+  let taps: number[] = [];
+  let timer: number | undefined;
+  let earPrompt: { first: number; second: number; answer: string; seed: number } | undefined;
 
   async function loadPlan(): Promise<void> {
-    planList.replaceChildren();
-    const plan = await getJson<SessionPlanItem[]>("/api/beta/session-plan");
-    for (const item of plan) {
+    const items = await json<PlanItem[]>("/api/beta/session-plan");
+    planList.replaceChildren(...items.map((item) => {
       const row = document.createElement("li");
       row.textContent = `${item.skillId} — ${item.reasonCode}${item.seed === undefined ? "" : ` (seed ${item.seed})`}`;
-      planList.appendChild(row);
-    }
+      return row;
+    }));
   }
 
-  async function newReadingCard(): Promise<void> {
-    const seed = randomSeed();
-    readingCard = await getJson<GeneratedPracticeCard>(`/api/beta/cards/reading/${seed}`);
-    readingEvents.replaceChildren();
-    readingSeed.textContent = `Seed ${readingCard.seed}`;
-    for (const event of readingCard.events) {
-      const item = document.createElement("li");
-      item.textContent = `M${event.measure} · ${midiName(event.midiNote)} · ${event.durationUnits}/${readingCard.unitsPerBeat}`;
-      readingEvents.appendChild(item);
+  async function loadReviews(): Promise<void> {
+    const items = await json<ReviewItem[]>("/api/beta/reviews");
+    const rows = items.map((item) => {
+      const row = document.createElement("li");
+      row.textContent = `${item.skillId} — ${item.reasonCode}`;
+      return row;
+    });
+    if (rows.length === 0) {
+      const empty = document.createElement("li");
+      empty.textContent = "—";
+      rows.push(empty);
     }
-    readingCorrectButton.disabled = false;
-    readingRetryButton.disabled = false;
+    reviewsList.replaceChildren(...rows);
+  }
+
+  async function newReading(): Promise<void> {
+    const card = await json<PracticeCard>(`/api/beta/cards/reading/${seed()}`);
+    readingCard = card;
+    readingSeed.textContent = `Seed ${card.seed}`;
+    readingEvents.replaceChildren(...card.events.map((event) => {
+      const row = document.createElement("li");
+      row.textContent = `M${event.measure} · ${noteName(event.midiNote)} · ${event.durationUnits}/${card.unitsPerBeat}`;
+      return row;
+    }));
+    readingCorrect.disabled = false;
+    readingRetry.disabled = false;
   }
 
   async function finishReading(success: boolean): Promise<void> {
-    if (!readingCard) {
+    const card = readingCard;
+    if (!card) {
       return;
     }
-    readingCorrectButton.disabled = true;
-    readingRetryButton.disabled = true;
-    await recordEvidence(
-      `reading-${readingCard.seed}`,
+    readingCorrect.disabled = true;
+    readingRetry.disabled = true;
+    await saveEvidence(
+      `reading-${card.seed}`,
       "reading-card",
-      readingCard.seed,
-      readingCard.skillId,
-      readingCard.events,
+      card.seed,
+      card.skillId,
+      card.events,
       { selfReportedSuccess: success },
       { correct: success },
       success ? "Good" : "NeedsWork",
@@ -146,71 +163,67 @@ function initBetaPractice(): void {
     await loadReviews();
   }
 
-  async function newRhythmCard(): Promise<void> {
-    const seed = randomSeed();
-    rhythmCard = await getJson<GeneratedPracticeCard>(`/api/beta/cards/rhythm/${seed}`);
-    const totalUnits = rhythmCard.beatsPerMeasure * rhythmCard.unitsPerBeat;
-    const symbols: string[] = [];
-    for (let measure = 1; measure <= 4; measure++) {
-      const starts = new Set(rhythmCard.events.filter((event) => event.measure === measure).map((event) => event.onsetUnits));
-      symbols.push(Array.from({ length: totalUnits }, (_, unit) => starts.has(unit) ? "●" : "·").join(" "));
+  async function newRhythm(): Promise<void> {
+    const card = await json<PracticeCard>(`/api/beta/cards/rhythm/${seed()}`);
+    rhythmCard = card;
+    const unitsPerMeasure = card.beatsPerMeasure * card.unitsPerBeat;
+    const measures: string[] = [];
+    for (let measure = 1; measure <= 4; measure += 1) {
+      const onsets = new Set(card.events.filter((event) => event.measure === measure).map((event) => event.onsetUnits));
+      measures.push(Array.from({ length: unitsPerMeasure }, (_, unit) => onsets.has(unit) ? "●" : "·").join(" "));
     }
-    rhythmPattern.textContent = symbols.join("  |  ");
-    rhythmStartButton.disabled = false;
-    rhythmTapButton.disabled = true;
+    rhythmPattern.textContent = measures.join("  |  ");
+    rhythmStart.disabled = false;
+    rhythmTap.disabled = true;
     rhythmResult.textContent = "";
   }
 
   async function startRhythm(): Promise<void> {
-    if (!rhythmCard) {
+    const card = rhythmCard;
+    if (!card) {
       return;
     }
-    rhythmTaps = [];
-    rhythmStartButton.disabled = true;
-    rhythmTapButton.disabled = true;
+    taps = [];
+    rhythmStart.disabled = true;
+    rhythmTap.disabled = true;
     rhythmResult.textContent = "4 · 3 · 2 · 1";
     await new Promise((resolve) => setTimeout(resolve, 2000));
     rhythmStartedAt = performance.now();
-    rhythmTapButton.disabled = false;
+    rhythmTap.disabled = false;
     rhythmResult.textContent = "";
 
-    const unitMs = 60000 / 80 / rhythmCard.unitsPerBeat;
-    const finalEvent = rhythmCard.events.at(-1);
-    const totalUnits = finalEvent
-      ? ((finalEvent.measure - 1) * rhythmCard.beatsPerMeasure * rhythmCard.unitsPerBeat) + finalEvent.onsetUnits + finalEvent.durationUnits
+    const last = card.events.at(-1);
+    const unitMs = 60000 / 80 / card.unitsPerBeat;
+    const totalUnits = last
+      ? (last.measure - 1) * card.beatsPerMeasure * card.unitsPerBeat + last.onsetUnits + last.durationUnits
       : 0;
-    rhythmTimer = window.setTimeout(() => void finishRhythm(), totalUnits * unitMs + 600);
+    timer = window.setTimeout(() => void finishRhythm(card), totalUnits * unitMs + 600);
   }
 
-  function tapRhythm(): void {
-    if (rhythmTapButton.disabled || rhythmStartedAt === 0) {
-      return;
+  function tap(): void {
+    if (!rhythmTap.disabled && rhythmStartedAt > 0) {
+      taps.push(performance.now() - rhythmStartedAt);
     }
-    rhythmTaps.push(performance.now() - rhythmStartedAt);
-    rhythmTapButton.dataset.count = String(rhythmTaps.length);
   }
 
-  async function finishRhythm(): Promise<void> {
-    if (!rhythmCard || rhythmStartedAt === 0) {
-      return;
+  async function finishRhythm(card: PracticeCard): Promise<void> {
+    if (timer !== undefined) {
+      window.clearTimeout(timer);
+      timer = undefined;
     }
-    if (rhythmTimer !== undefined) {
-      clearTimeout(rhythmTimer);
-      rhythmTimer = undefined;
-    }
-    rhythmTapButton.disabled = true;
+    rhythmTap.disabled = true;
     rhythmStartedAt = 0;
 
-    const unitMs = 60000 / 80 / rhythmCard.unitsPerBeat;
-    const expected = rhythmCard.events.map((event) =>
-      (((event.measure - 1) * rhythmCard.beatsPerMeasure * rhythmCard.unitsPerBeat) + event.onsetUnits) * unitMs);
-    const unused = [...rhythmTaps];
+    const unitMs = 60000 / 80 / card.unitsPerBeat;
+    const expected = card.events.map((event) =>
+      ((event.measure - 1) * card.beatsPerMeasure * card.unitsPerBeat + event.onsetUnits) * unitMs);
+    const remaining = [...taps];
     const deviations: number[] = [];
     for (const onset of expected) {
       let bestIndex = -1;
       let bestDeviation = 160;
-      unused.forEach((tap, index) => {
-        const deviation = Math.abs(tap - onset);
+      remaining.forEach((value, index) => {
+        const deviation = Math.abs(value - onset);
         if (deviation < bestDeviation) {
           bestDeviation = deviation;
           bestIndex = index;
@@ -218,68 +231,69 @@ function initBetaPractice(): void {
       });
       if (bestIndex >= 0) {
         deviations.push(bestDeviation);
-        unused.splice(bestIndex, 1);
+        remaining.splice(bestIndex, 1);
       }
     }
-    const missed = expected.length - deviations.length;
-    const average = deviations.length === 0 ? 999 : deviations.reduce((sum, value) => sum + value, 0) / deviations.length;
-    const passed = missed === 0 && unused.length <= 1 && average <= 95;
-    rhythmResult.textContent = `Treffer ${deviations.length}/${expected.length} · extra ${unused.length} · Ø ${Math.round(average)} ms`;
-    rhythmStartButton.disabled = false;
 
-    await recordEvidence(
-      `rhythm-${rhythmCard.seed}`,
+    const missed = expected.length - deviations.length;
+    const average = deviations.length === 0
+      ? 999
+      : deviations.reduce((sum, value) => sum + value, 0) / deviations.length;
+    const passed = missed === 0 && remaining.length <= 1 && average <= 95;
+    rhythmResult.textContent = `Treffer ${deviations.length}/${expected.length} · extra ${remaining.length} · Ø ${Math.round(average)} ms`;
+    rhythmStart.disabled = false;
+    await saveEvidence(
+      `rhythm-${card.seed}`,
       "rhythm-card",
-      rhythmCard.seed,
-      rhythmCard.skillId,
+      card.seed,
+      card.skillId,
       expected,
-      rhythmTaps,
-      { matched: deviations.length, missed, extra: unused.length, averageDeviationMs: average, passed },
+      taps,
+      { matched: deviations.length, missed, extra: remaining.length, averageDeviationMs: average, passed },
       passed ? "Good" : missed > 2 ? "Failed" : "NeedsWork",
     );
     await loadReviews();
   }
 
-  async function playEarPrompt(): Promise<void> {
-    const seed = randomSeed();
-    const first = 57 + (seed % 10);
-    const direction = seed % 3;
+  async function playEar(): Promise<void> {
+    const promptSeed = seed();
+    const first = 57 + promptSeed % 10;
+    const direction = promptSeed % 3;
     const second = direction === 0 ? first : direction === 1 ? first + 3 : first - 3;
-    const answer = direction === 0 ? "same" : direction === 1 ? "higher" : "lower";
-    currentEar = { first, second, answer, seed };
-    earResult.textContent = "";
+    earPrompt = { first, second, answer: direction === 0 ? "same" : direction === 1 ? "higher" : "lower", seed: promptSeed };
     earAnswers.hidden = true;
+    earResult.textContent = "";
 
     const context = new AudioContext();
-    const playTone = (note: number, at: number): void => {
+    [first, second].forEach((note, index) => {
       const oscillator = context.createOscillator();
       const gain = context.createGain();
+      const startsAt = context.currentTime + 0.05 + index * 0.75;
       oscillator.frequency.value = 440 * Math.pow(2, (note - 69) / 12);
-      gain.gain.setValueAtTime(0.0001, at);
-      gain.gain.exponentialRampToValueAtTime(0.16, at + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, at + 0.55);
+      gain.gain.setValueAtTime(0.0001, startsAt);
+      gain.gain.exponentialRampToValueAtTime(0.16, startsAt + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startsAt + 0.55);
       oscillator.connect(gain).connect(context.destination);
-      oscillator.start(at);
-      oscillator.stop(at + 0.6);
-    };
-    playTone(first, context.currentTime + 0.05);
-    playTone(second, context.currentTime + 0.8);
+      oscillator.start(startsAt);
+      oscillator.stop(startsAt + 0.6);
+    });
     window.setTimeout(() => { earAnswers.hidden = false; }, 1500);
   }
 
   async function answerEar(answer: string): Promise<void> {
-    if (!currentEar) {
+    const prompt = earPrompt;
+    if (!prompt) {
       return;
     }
-    const correct = answer === currentEar.answer;
-    earResult.textContent = correct ? "✓" : "✗";
+    const correct = answer === prompt.answer;
     earAnswers.hidden = true;
-    await recordEvidence(
-      `ear-direction-${currentEar.seed}`,
+    earResult.textContent = correct ? "✓" : "✗";
+    await saveEvidence(
+      `ear-direction-${prompt.seed}`,
       "ear-direction",
-      currentEar.seed,
+      prompt.seed,
       "ear.direction",
-      { notes: [currentEar.first, currentEar.second], answer: currentEar.answer },
+      { notes: [prompt.first, prompt.second], answer: prompt.answer },
       { answer },
       { correct },
       correct ? "Good" : "NeedsWork",
@@ -287,38 +301,22 @@ function initBetaPractice(): void {
     await loadReviews();
   }
 
-  async function loadReviews(): Promise<void> {
-    reviewsList.replaceChildren();
-    const reviews = await getJson<ReviewItem[]>("/api/beta/reviews");
-    if (reviews.length === 0) {
-      const item = document.createElement("li");
-      item.textContent = "—";
-      reviewsList.appendChild(item);
-      return;
-    }
-    for (const review of reviews) {
-      const item = document.createElement("li");
-      item.textContent = `${review.skillId} — ${review.reasonCode}`;
-      reviewsList.appendChild(item);
-    }
-  }
-
-  loadPlanButton.addEventListener("click", () => void loadPlan());
-  readingNewButton.addEventListener("click", () => void newReadingCard());
-  readingCorrectButton.addEventListener("click", () => void finishReading(true));
-  readingRetryButton.addEventListener("click", () => void finishReading(false));
-  rhythmNewButton.addEventListener("click", () => void newRhythmCard());
-  rhythmStartButton.addEventListener("click", () => void startRhythm());
-  rhythmTapButton.addEventListener("click", tapRhythm);
-  earPlayButton.addEventListener("click", () => void playEarPrompt());
+  element<HTMLButtonElement>("beta-load-plan").addEventListener("click", () => void loadPlan());
+  element<HTMLButtonElement>("beta-reading-new").addEventListener("click", () => void newReading());
+  readingCorrect.addEventListener("click", () => void finishReading(true));
+  readingRetry.addEventListener("click", () => void finishReading(false));
+  element<HTMLButtonElement>("beta-rhythm-new").addEventListener("click", () => void newRhythm());
+  rhythmStart.addEventListener("click", () => void startRhythm());
+  rhythmTap.addEventListener("click", tap);
+  element<HTMLButtonElement>("beta-ear-play").addEventListener("click", () => void playEar());
   earAnswers.querySelectorAll<HTMLButtonElement>("button[data-answer]").forEach((button) => {
     button.addEventListener("click", () => void answerEar(button.dataset.answer ?? ""));
   });
-  loadReviewsButton.addEventListener("click", () => void loadReviews());
+  element<HTMLButtonElement>("beta-load-reviews").addEventListener("click", () => void loadReviews());
   window.addEventListener("keydown", (event) => {
-    if (event.code === "Space" && !rhythmTapButton.disabled) {
+    if (event.code === "Space" && !rhythmTap.disabled) {
       event.preventDefault();
-      tapRhythm();
+      tap();
     }
   });
 
@@ -327,5 +325,5 @@ function initBetaPractice(): void {
 }
 
 if (document.getElementById("beta-load-plan")) {
-  initBetaPractice();
+  init();
 }
