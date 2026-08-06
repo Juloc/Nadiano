@@ -44,6 +44,11 @@ else
 
         <p id="workspace-load-error" class="callout" hidden>@Localizer["Practice.Workspace.LoadError"]</p>
         <div id="workspace-notation" class="notation-container"></div>
+        <section id="workspace-fingering-section" class="card" aria-labelledby="workspace-fingering-heading" hidden>
+            <h3 id="workspace-fingering-heading">@Model.T("Fingersatzhinweise", "Petunjuk penjarian")</h3>
+            <p class="help-text">@Model.T("Die Ereignis-ID kann in der privaten Bibliothek für eine begrenzte Fingersatz-Korrektur verwendet werden.", "ID peristiwa dapat digunakan di perpustakaan pribadi untuk koreksi penjarian terbatas.")</p>
+            <ul id="workspace-fingering-list"></ul>
+        </section>
         <div class="field-list">
             <div>
                 <label for="workspace-zoom">@Localizer["Practice.Notation.ZoomLabel"]</label>
