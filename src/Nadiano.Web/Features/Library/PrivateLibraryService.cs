@@ -246,7 +246,7 @@ public sealed class PrivateLibraryService(
             }
 
             if (entry.FullName.Contains('\0', StringComparison.Ordinal) ||
-                entry.FullName.StartsWith('/', StringComparison.Ordinal) ||
+                entry.FullName.StartsWith("/", StringComparison.Ordinal) ||
                 entry.FullName.Contains("..", StringComparison.Ordinal))
             {
                 throw new InvalidDataException("Archive contains an unsafe path.");
@@ -337,7 +337,7 @@ public sealed class PrivateLibraryService(
         using var reader = new StreamReader(path);
         var buffer = new char[maximumCharacters + 1];
         var read = await reader.ReadBlockAsync(buffer.AsMemory(), cancellationToken);
-        if (read > maximumCharacters || !reader.EndOfStream)
+        if (read > maximumCharacters)
         {
             throw new InvalidDataException("MusicXML document is too large.");
         }

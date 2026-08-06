@@ -1,3 +1,5 @@
+import { postOrQueue } from "../offline/requestQueue";
+
 interface GeneratedPracticeEvent {
   index: number;
   measure: number;
@@ -67,11 +69,12 @@ async function recordEvidence(
   result: unknown,
   outcome: "Excellent" | "Good" | "NeedsWork" | "Failed",
 ): Promise<void> {
-  await fetch("/api/beta/evidence", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ activityId, activityKind, seed, skillId, expected, response, result, outcome }),
-  });
+  const body = JSON.stringify({ activityId, activityKind, seed, skillId, expected, response, result, outcome });
+  const queuedId = `beta-evidence:${activityId}`;
+  const apiResponse = await postOrQueue("/api/beta/evidence", body, queuedId);
+  if (apiResponse && !apiResponse.ok && apiResponse.status !== 409) {
+    throw new Error(`Failed to record beta evidence: ${apiResponse.status}`);
+  }
 }
 
 function initBetaPractice(): void {

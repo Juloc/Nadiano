@@ -11,22 +11,10 @@
 <section aria-labelledby="setup-capabilities-heading" class="card">
     <h2 id="setup-capabilities-heading">@Localizer["Setup.Capabilities.Heading"]</h2>
     <ul>
-        <li>
-            @Localizer["Setup.Capabilities.SecureContext"]:
-            <strong id="capability-secure-context" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong>
-        </li>
-        <li>
-            @Localizer["Setup.Capabilities.Midi"]:
-            <strong id="capability-midi" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong>
-        </li>
-        <li>
-            @Localizer["Setup.Capabilities.Audio"]:
-            <strong id="capability-audio" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong>
-        </li>
-        <li>
-            @Localizer["Setup.Capabilities.IndexedDb"]:
-            <strong id="capability-indexeddb" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong>
-        </li>
+        <li>@Localizer["Setup.Capabilities.SecureContext"]: <strong id="capability-secure-context" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+        <li>@Localizer["Setup.Capabilities.Midi"]: <strong id="capability-midi" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+        <li>@Localizer["Setup.Capabilities.Audio"]: <strong id="capability-audio" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+        <li>@Localizer["Setup.Capabilities.IndexedDb"]: <strong id="capability-indexeddb" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
     </ul>
 </section>
 
@@ -34,19 +22,13 @@
 <p id="setup-guidance-unsupported" class="callout" hidden>@Localizer["Setup.Guidance.Unsupported"]</p>
 <p id="setup-guidance-denied" class="callout" hidden>@Localizer["Setup.Guidance.Denied"]</p>
 
-<p id="setup-preferred-hint" hidden>
-    <span>@Localizer["Setup.PreferredDeviceHint"]:</span> <strong id="setup-preferred-hint-name"></strong>
-</p>
-
+<p id="setup-preferred-hint" hidden><span>@Localizer["Setup.PreferredDeviceHint"]:</span> <strong id="setup-preferred-hint-name"></strong></p>
 <p>
     <button id="setup-connect-button" type="button" class="button">@Localizer["Setup.ConnectButton"]</button>
     <button id="setup-forget-button" type="button" class="button-secondary" hidden>@Localizer["Setup.ForgetPreference"]</button>
 </p>
 
-<section
-    id="setup-devices-section"
-    aria-labelledby="setup-devices-heading"
-    hidden
+<section id="setup-devices-section" aria-labelledby="setup-devices-heading" hidden
     data-label-select="@Localizer["Setup.Devices.SelectButton"]"
     data-label-selected="@Localizer["Setup.Devices.Selected"]"
     data-label-connected="@Localizer["Setup.Devices.StateConnected"]"
@@ -56,28 +38,28 @@
     <ul id="setup-devices-list"></ul>
 </section>
 
-<section
-    id="setup-diagnostics-section"
-    aria-labelledby="setup-diagnostics-heading"
-    hidden
-    data-label-sustain-on="@Localizer["Setup.Diagnostics.SustainOn"]"
-    data-label-sustain-off="@Localizer["Setup.Diagnostics.SustainOff"]">
+<section id="setup-diagnostics-section" aria-labelledby="setup-diagnostics-heading" hidden
+    data-label-pedal-on="@Localizer["Setup.Diagnostics.SustainOn"]"
+    data-label-pedal-off="@Localizer["Setup.Diagnostics.SustainOff"]">
     <h2 id="setup-diagnostics-heading">@Localizer["Setup.Diagnostics.Heading"]</h2>
-
     <div id="setup-keyboard" class="keyboard" role="img" aria-label="@Localizer["Setup.Diagnostics.Heading"]"></div>
 
     <h3>@Localizer["Setup.Diagnostics.ActiveNotesHeading"]</h3>
     <p id="setup-active-notes-empty">@Localizer["Setup.Diagnostics.ActiveNotesEmpty"]</p>
     <ul id="setup-active-notes-list"></ul>
-    <p id="setup-sustain-state"></p>
+
+    <h3>Pedale / Pedal</h3>
+    <dl class="pedal-grid" aria-live="polite">
+        <div><dt>Sustain · CC64</dt><dd id="setup-pedal-sustain">0</dd></div>
+        <div><dt>Sostenuto · CC66</dt><dd id="setup-pedal-sostenuto">0</dd></div>
+        <div><dt>Soft / Una corda · CC67</dt><dd id="setup-pedal-soft">0</dd></div>
+    </dl>
 
     <h3>@Localizer["Setup.Diagnostics.RecentEventsHeading"]</h3>
     <p id="setup-recent-events-empty">@Localizer["Setup.Diagnostics.RecentEventsEmpty"]</p>
     <ul id="setup-recent-events-list"></ul>
 
-    <p>
-        <button id="setup-export-button" type="button" class="button-secondary">@Localizer["Setup.Diagnostics.ExportButton"]</button>
-    </p>
+    <p><button id="setup-export-button" type="button" class="button-secondary">@Localizer["Setup.Diagnostics.ExportButton"]</button></p>
     <pre id="setup-export-output" hidden></pre>
 </section>
 

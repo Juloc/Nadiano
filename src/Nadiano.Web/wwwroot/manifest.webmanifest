@@ -1,0 +1,16 @@
+{
+  "id": "/",
+  "name": "Nadiano Piano Learning",
+  "short_name": "Nadiano",
+  "description": "Structured piano learning with USB MIDI practice.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f5f5",
+  "theme_color": "#0f6cbd",
+  "lang": "de",
+  "icons": [
+    { "src": "/icons/nadiano-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/icons/nadiano-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
