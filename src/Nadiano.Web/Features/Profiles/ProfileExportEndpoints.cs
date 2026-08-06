@@ -35,15 +35,39 @@ public static class ProfileExportEndpoints
         }
 
         var preferences = await db.ProfilePreferences.AsNoTracking().SingleOrDefaultAsync(item => item.ProfileId == profileId);
-        var sessions = await db.PracticeSessions
+        var sessionRecords = await db.PracticeSessions
             .AsNoTracking()
             .Include(item => item.Attempt)
             .Where(item => item.ProfileId == profileId)
-            .OrderBy(item => item.StartedAtUtc)
             .ToListAsync();
-        var learningEvidence = await db.LearningEvidence
+        var evidenceRecords = await db.LearningEvidence
             .AsNoTracking()
             .Where(item => item.ProfileId == profileId)
+            .ToListAsync();
+        var reviewRecords = await db.ReviewQueue
+            .AsNoTracking()
+            .Where(item => item.ProfileId == profileId)
+            .ToListAsync();
+        var libraryRecords = await db.PrivateLibraryItems
+            .AsNoTracking()
+            .Where(item => item.ProfileId == profileId)
+            .ToListAsync();
+
+        var sessions = sessionRecords
+            .OrderBy(item => item.StartedAtUtc)
+            .Select(item => new ProfileExportSession(
+                item.Id,
+                item.LessonId,
+                item.ContentVersion,
+                item.Mode,
+                item.StartedAtUtc,
+                item.Attempt is null ? null : new ProfileExportAttempt(
+                    item.Attempt.CompletedAtUtc,
+                    item.Attempt.ResultSchemaVersion,
+                    item.Attempt.ResultJson,
+                    item.Attempt.NextActionCode)))
+            .ToList();
+        var learningEvidence = evidenceRecords
             .OrderBy(item => item.RecordedAtUtc)
             .Select(item => new ProfileExportEvidence(
                 item.ActivityId,
@@ -53,10 +77,8 @@ public static class ProfileExportEndpoints
                 item.ResponseJson,
                 item.ResultJson,
                 item.RecordedAtUtc))
-            .ToListAsync();
-        var reviewQueue = await db.ReviewQueue
-            .AsNoTracking()
-            .Where(item => item.ProfileId == profileId)
+            .ToList();
+        var reviewQueue = reviewRecords
             .OrderBy(item => item.DueAtUtc)
             .Select(item => new ProfileExportReview(
                 item.SkillId,
@@ -65,10 +87,8 @@ public static class ProfileExportEndpoints
                 item.IntervalDays,
                 item.ReasonCode,
                 item.UpdatedAtUtc))
-            .ToListAsync();
-        var library = await db.PrivateLibraryItems
-            .AsNoTracking()
-            .Where(item => item.ProfileId == profileId)
+            .ToList();
+        var library = libraryRecords
             .OrderBy(item => item.ImportedAtUtc)
             .Select(item => new ProfileExportLibraryItem(
                 item.Id,
@@ -81,25 +101,14 @@ public static class ProfileExportEndpoints
                 item.MetadataJson,
                 item.Version,
                 item.ImportedAtUtc))
-            .ToListAsync();
+            .ToList();
 
         var export = new ProfileExport(
             profile.Id,
             profile.Name,
             profile.CreatedAtUtc,
             preferences is null ? null : new ProfileExportPreferences(preferences.Language, preferences.NoteNameSystem, preferences.SessionLengthMinutes),
-            sessions.Select(item => new ProfileExportSession(
-                item.Id,
-                item.LessonId,
-                item.ContentVersion,
-                item.Mode,
-                item.StartedAtUtc,
-                item.Attempt is null ? null : new ProfileExportAttempt(
-                    item.Attempt.CompletedAtUtc,
-                    item.Attempt.ResultSchemaVersion,
-                    item.Attempt.ResultJson,
-                    item.Attempt.NextActionCode)))
-                .ToList(),
+            sessions,
             learningEvidence,
             reviewQueue,
             library);
