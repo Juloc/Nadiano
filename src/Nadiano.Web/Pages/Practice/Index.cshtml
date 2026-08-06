@@ -40,7 +40,7 @@ else
         <p id="workspace-device-status" class="callout" hidden
            data-connected="@Localizer["Practice.Workspace.DeviceConnected"]"
            data-not-connected="@Localizer["Practice.Workspace.DeviceNotConnected"]"></p>
-        <p><button id="workspace-connect-button" type="button" class="button-secondary">@Localizer["Practice.Workspace.ConnectButton"]</button></p>
+        <p><button id="workspace-connect-button" type="button" class="button-secondary" disabled>@Localizer["Practice.Workspace.ConnectButton"]</button></p>
 
         <p id="workspace-load-error" class="callout" hidden>@Localizer["Practice.Workspace.LoadError"]</p>
         <div id="workspace-notation" class="notation-container"></div>
@@ -118,6 +118,7 @@ else
     @if (Model.HasLesson)
     {
         <script src="~/dist/pages/practice.js" type="module" asp-append-version="true"></script>
+        <script src="~/dist/pages/practice-ready.js" type="module" asp-append-version="true"></script>
         <script src="~/dist/pages/practice-fingering.js" type="module" asp-append-version="true"></script>
     }
 }
