@@ -51,7 +51,7 @@ The architecture is intentionally a modular monolith. Microservices, distributed
 
 ## Run with Docker
 
-Use `ghcr.io/juloc/nadiano:1.0.0`, expose container port `8080`, mount a persistent directory at `/app/data`, and mount or use the bundled content at `/app/Content`.
+Use `ghcr.io/juloc/nadiano:1.0.1`, expose container port `8080`, mount persistent storage at `/data`, and use the bundled content at `/app/content`.
 
 ## Repository rules
 
