@@ -51,6 +51,17 @@ public sealed class BetaLearningService(NadianoDbContext db)
     public async Task RecordAsync(Guid profileId, RecordBetaEvidenceRequest request, CancellationToken cancellationToken)
     {
         ValidateRequest(request);
+
+        var alreadyRecorded = await db.LearningEvidence
+            .AsNoTracking()
+            .AnyAsync(
+                item => item.ProfileId == profileId && item.ActivityId == request.ActivityId,
+                cancellationToken);
+        if (alreadyRecorded)
+        {
+            return;
+        }
+
         var now = DateTimeOffset.UtcNow;
         db.LearningEvidence.Add(new LearningEvidenceRecord
         {
