@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
+using Nadiano.Core.Beta;
 using Nadiano.Core.Practice;
 using Nadiano.Core.Profiles;
 using Nadiano.Core.Progress;
@@ -15,6 +16,9 @@ public class NadianoDbContext(DbContextOptions<NadianoDbContext> options) : DbCo
     public DbSet<CourseEnrollment> CourseEnrollments => Set<CourseEnrollment>();
     public DbSet<LessonProgressRecord> LessonProgress => Set<LessonProgressRecord>();
     public DbSet<SkillEvidenceRecord> SkillEvidence => Set<SkillEvidenceRecord>();
+    public DbSet<LearningEvidenceRecord> LearningEvidence => Set<LearningEvidenceRecord>();
+    public DbSet<ReviewQueueItem> ReviewQueue => Set<ReviewQueueItem>();
+    public DbSet<PrivateLibraryItem> PrivateLibraryItems => Set<PrivateLibraryItem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
