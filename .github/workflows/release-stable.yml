@@ -22,7 +22,7 @@ env:
 
 jobs:
   release:
-    name: Verify, publish and release 1.0
+    name: Verify, publish and release stable 1.0
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -43,7 +43,7 @@ jobs:
         run: |
           version="$(jq -r '.version' release/stable.json)"
           notes="$(jq -r '.releaseNotes' release/stable.json)"
-          test "$version" = "1.0.0"
+          [[ "$version" =~ ^1\.0\.[0-9]+$ ]]
           test -f "$notes"
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "tag=v$version" >> "$GITHUB_OUTPUT"
@@ -114,33 +114,52 @@ jobs:
           exit-code: "1"
           ignore-unfixed: true
 
-      - name: Rehearse Beta database upgrade
+      - name: Rehearse Beta database upgrade and profile persistence
         shell: bash
         run: |
           set -euo pipefail
           volume="nadiano-upgrade-${GITHUB_RUN_ID}"
+          cookies="${RUNNER_TEMP}/nadiano-cookies.txt"
           docker volume create "$volume"
           cleanup() {
             docker rm -f nadiano-upgrade-test >/dev/null 2>&1 || true
             docker volume rm "$volume" >/dev/null 2>&1 || true
           }
           trap cleanup EXIT
+
           docker pull "${REGISTRY_IMAGE}:0.2.0-beta.1"
-          docker run -d --name nadiano-upgrade-test -p 18087:8080 -v "$volume:/app/data" "${REGISTRY_IMAGE}:0.2.0-beta.1"
+          docker run -d --name nadiano-upgrade-test -p 18087:8080 -v "$volume:/data" "${REGISTRY_IMAGE}:0.2.0-beta.1"
           for attempt in $(seq 1 60); do
             curl -fsS http://localhost:18087/health/ready && break
             sleep 2
           done
           curl -fsS http://localhost:18087/health/ready
+          curl -fsS -c "$cookies" http://localhost:18087/Profiles -o "${RUNNER_TEMP}/beta-profiles.html"
+          profile_id="$(awk '$6 == "nadiano-profile-id" {print $7}' "$cookies" | tail -1)"
+          test -n "$profile_id"
+          curl -fsS -b "$cookies" "http://localhost:18087/api/profiles/${profile_id}/export" \
+            -o "${RUNNER_TEMP}/beta-profile.json"
+          jq -e --arg id "$profile_id" '.id == $id' "${RUNNER_TEMP}/beta-profile.json"
+
           docker rm -f nadiano-upgrade-test
-          docker run -d --name nadiano-upgrade-test -p 18087:8080 -v "$volume:/app/data" "${REGISTRY_IMAGE}:${{ steps.release.outputs.version }}"
+          docker run -d --name nadiano-upgrade-test -p 18087:8080 -v "$volume:/data" "${REGISTRY_IMAGE}:${{ steps.release.outputs.version }}"
           for attempt in $(seq 1 60); do
             curl -fsS http://localhost:18087/health/ready && break
             sleep 2
           done
           curl -fsS http://localhost:18087/health/ready
-          curl -fsS http://localhost:18087/api/diagnostics/version | tee artifacts/upgrade-rehearsal.json
-          grep -q '1.0.0' artifacts/upgrade-rehearsal.json
+          curl -fsS http://localhost:18087/api/diagnostics/version -o "${RUNNER_TEMP}/stable-version.json"
+          jq -e --arg version "${{ steps.release.outputs.version }}" '.applicationVersion == $version' "${RUNNER_TEMP}/stable-version.json"
+          curl -fsS -b "$cookies" "http://localhost:18087/api/profiles/${profile_id}/export" \
+            -o "${RUNNER_TEMP}/stable-profile.json"
+          jq -e --arg id "$profile_id" '.id == $id and (.sessions | type == "array")' "${RUNNER_TEMP}/stable-profile.json"
+
+          jq -n \
+            --arg source "0.2.0-beta.1" \
+            --arg target "${{ steps.release.outputs.version }}" \
+            --arg profileId "$profile_id" \
+            '{sourceVersion: $source, targetVersion: $target, preservedProfileId: $profileId, result: "success"}' \
+            > artifacts/upgrade-rehearsal.json
 
       - name: Push stable image tags
         run: |
