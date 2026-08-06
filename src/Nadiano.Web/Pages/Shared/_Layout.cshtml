@@ -2,6 +2,7 @@
 @{
     var currentPath = Context.Request.Path + Context.Request.QueryString;
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
+    var isIndonesian = currentCulture.StartsWith("id", StringComparison.OrdinalIgnoreCase);
 }
 <!DOCTYPE html>
 <html lang="@currentCulture">
@@ -26,9 +27,9 @@
             <ul class="app-nav-list">
                 <li><a asp-page="/Index">@Localizer["Nav.Home"]</a></li>
                 <li><a asp-page="/Learn/Index">@Localizer["Nav.Learn"]</a></li>
-                <li><a asp-page="/Learn/Beta">Beta-Kurs</a></li>
+                <li><a asp-page="/Learn/Beta">@(isIndonesian ? "Kursus Beta" : "Beta-Kurs")</a></li>
                 <li><a asp-page="/Practice/Index">@Localizer["Nav.Practice"]</a></li>
-                <li><a asp-page="/Practice/Beta">Training</a></li>
+                <li><a asp-page="/Practice/Beta">@(isIndonesian ? "Latihan" : "Training")</a></li>
                 <li><a asp-page="/Library/Index">@Localizer["Nav.Library"]</a></li>
                 <li><a asp-page="/Progress/Index">@Localizer["Nav.Progress"]</a></li>
                 <li><a asp-page="/Settings/Index">@Localizer["Nav.Settings"]</a></li>
