@@ -5,12 +5,15 @@ namespace Nadiano.Core.Tests.Beta;
 public class BetaCurriculumTests
 {
     [Fact]
-    public void Catalogue_MeetsBetaQuantityAndLanguageGate()
+    public void Catalogue_MeetsReleaseQuantityAndLanguageGate()
     {
         var catalogue = BetaCurriculumCatalogue.Create();
 
-        Assert.Equal(45, catalogue.Lessons.Count);
-        Assert.Equal(100, catalogue.Exercises.Count);
+        Assert.True(catalogue.Lessons.Count >= 80);
+        Assert.True(catalogue.Exercises.Count >= 180);
+        Assert.True(catalogue.Lessons.Count(item => item.ActivityKind == "ear") >= 12);
+        Assert.True(catalogue.Lessons.Count(item => item.ActivityKind == "repertoire") >= 8);
+        Assert.Contains(catalogue.Lessons, item => item.Stage == "E1");
         Assert.Empty(BetaCurriculumCatalogue.Validate(catalogue));
     }
 
