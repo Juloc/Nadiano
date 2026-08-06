@@ -14,14 +14,16 @@
 ## Functional gate
 
 - [ ] Course map exposes 45 guided lessons and 100 exercises.
-- [ ] Stage checks cannot be completed from repertoire-only activity.
+- [ ] Stage checks cannot be completed from repertoire-only or failed activity.
 - [ ] Reading and rhythm cards repeat exactly for the same seed.
 - [ ] Review items become due according to explicit interval rules.
 - [ ] The daily plan explains every recommendation.
 - [ ] MusicXML and MXL imports use the normal practice workspace.
 - [ ] Invalid and unsupported imports produce different messages.
+- [ ] Imported parts and voices can be assigned explicitly to left and right hand.
+- [ ] Limited fingering overrides appear in the practice cues without changing the original file.
 - [ ] Private library files never enter the public service-worker cache.
-- [ ] Offline completion retry does not duplicate an attempt.
+- [ ] Offline completion and evidence retry do not create duplicate records.
 - [ ] German and Indonesian learner-facing Beta paths contain equivalent information.
 
 ## Manual browser and hardware gate
