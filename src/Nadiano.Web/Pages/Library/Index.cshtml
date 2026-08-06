@@ -48,10 +48,25 @@
         {
             var metadata = Model.Metadata(item);
             var warnings = Model.Warnings(item);
+            var voices = metadata.Parts.SelectMany(part => part.Voices).Distinct(StringComparer.Ordinal).OrderBy(value => value, StringComparer.Ordinal).ToArray();
             <article class="card">
                 <h3>@item.DisplayTitle</h3>
                 <p><strong>@Model.T("Status", "Status"):</strong> @item.ValidationState</p>
-                <p>@metadata.PartCount @Model.T("Stimmen/Parts", "bagian") · @metadata.MeasureCount @Model.T("Takte", "birama") · @metadata.FingeringCount @Model.T("Fingersätze", "penjarian")</p>
+                <p>@metadata.PartCount @Model.T("Parts", "bagian") · @metadata.MeasureCount @Model.T("Takte", "birama") · @metadata.FingeringCount @Model.T("Fingersätze aus der Datei", "penjarian dari berkas")</p>
+
+                @if (metadata.Parts.Count > 0)
+                {
+                    <details>
+                        <summary>@Model.T("Erkannte Parts und Stimmen", "Bagian dan suara yang terdeteksi")</summary>
+                        <ul>
+                        @foreach (var part in metadata.Parts)
+                        {
+                            <li><strong>@part.Id</strong> — @part.Name · @Model.T("Stimmen", "suara"): @(part.Voices.Count == 0 ? "—" : string.Join(", ", part.Voices))</li>
+                        }
+                        </ul>
+                    </details>
+                }
+
                 @if (warnings.Count > 0)
                 {
                     <details>
@@ -67,6 +82,19 @@
 
                 <form method="post" asp-page-handler="Update" class="field-list">
                     <input type="hidden" name="itemId" value="@item.Id" />
+                    <datalist id="parts-@item.Id">
+                    @foreach (var part in metadata.Parts)
+                    {
+                        <option value="@part.Id">@part.Name</option>
+                    }
+                    </datalist>
+                    <datalist id="voices-@item.Id">
+                    @foreach (var voice in voices)
+                    {
+                        <option value="@voice"></option>
+                    }
+                    </datalist>
+
                     <div>
                         <label for="title-@item.Id">@Model.T("Titel", "Judul")</label>
                         <input id="title-@item.Id" name="title" value="@item.DisplayTitle" maxlength="300" />
@@ -83,15 +111,39 @@
                         <label for="tempo-@item.Id">@Model.T("Zieltempo", "Tempo target")</label>
                         <input id="tempo-@item.Id" name="targetTempoBpm" type="number" min="30" max="240" value="@metadata.TargetTempoBpm" />
                     </div>
-                    <button class="button-secondary" type="submit">@Model.T("Metadaten speichern", "Simpan metadata")</button>
+                    <fieldset>
+                        <legend>@Model.T("Hände zuordnen", "Tetapkan tangan")</legend>
+                        <div>
+                            <label for="left-part-@item.Id">@Model.T("Linke Hand: Part-ID", "Tangan kiri: ID bagian")</label>
+                            <input id="left-part-@item.Id" name="leftHandPartId" list="parts-@item.Id" value="@metadata.LeftHandPartId" />
+                        </div>
+                        <div>
+                            <label for="left-voice-@item.Id">@Model.T("Linke Hand: Stimme (optional)", "Tangan kiri: suara (opsional)")</label>
+                            <input id="left-voice-@item.Id" name="leftHandVoice" list="voices-@item.Id" value="@metadata.LeftHandVoice" />
+                        </div>
+                        <div>
+                            <label for="right-part-@item.Id">@Model.T("Rechte Hand: Part-ID", "Tangan kanan: ID bagian")</label>
+                            <input id="right-part-@item.Id" name="rightHandPartId" list="parts-@item.Id" value="@metadata.RightHandPartId" />
+                        </div>
+                        <div>
+                            <label for="right-voice-@item.Id">@Model.T("Rechte Hand: Stimme (optional)", "Tangan kanan: suara (opsional)")</label>
+                            <input id="right-voice-@item.Id" name="rightHandVoice" list="voices-@item.Id" value="@metadata.RightHandVoice" />
+                        </div>
+                    </fieldset>
+                    <div>
+                        <label for="fingering-@item.Id">@Model.T("Fingersatz-Korrekturen", "Koreksi penjarian")</label>
+                        <textarea id="fingering-@item.Id" name="fingeringOverrides" rows="4" placeholder="m1-v1-n1=1&#10;m1-v1-n2=2">@Model.FingeringOverrides(metadata)</textarea>
+                        <p class="help-text">@Model.T("Eine Zeile je Ereignis. Bei Akkorden mehrere Finger mit Komma. Die IDs werden im Übungsbereich angezeigt.", "Satu baris untuk setiap peristiwa. Untuk akor, pisahkan beberapa jari dengan koma. ID ditampilkan di area latihan.")</p>
+                    </div>
+                    <button class="button-secondary" type="submit">@Model.T("Zuordnung speichern", "Simpan pengaturan")</button>
                 </form>
 
                 <p>
                     @if (item.ValidationState == "ready")
                     {
-                        <a class="button" asp-page="/Practice/Index" asp-route-libraryItemId="@item.Id">@Model.T("Üben", "Latihan")</a>
+                        <a class="button" asp-page="/Practice/Index" asp-route-libraryItemId="@item.Id">@Model.T("Vorschau und Üben", "Pratinjau dan latihan")</a>
                     }
-                    <a class="button-secondary" href="/api/library/@item.Id/score">@Model.T("Vorschau-Datei", "Berkas pratinjau")</a>
+                    <a class="button-secondary" href="/api/library/@item.Id/score">@Model.T("MusicXML anzeigen", "Tampilkan MusicXML")</a>
                     <a class="button-secondary" href="/api/library/@item.Id/export">@Model.T("Original exportieren", "Ekspor asli")</a>
                 </p>
                 <form method="post" asp-page-handler="Delete">
