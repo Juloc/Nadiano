@@ -18,6 +18,7 @@ import type { ExpectedEventDocument } from "../scoring/types";
 const RESULT_SCHEMA_VERSION = 1;
 const BEATS_PER_MEASURE = 4;
 const RHYTHM_PITCH = 60;
+const LIVE_SLOT_COUNT = 8;
 
 class RhythmMidiAdapter implements MidiAccessAdapter {
   constructor(private readonly inner: MidiAccessAdapter) {}
@@ -72,6 +73,19 @@ function policyForMode(mode: PracticeMode) {
   return mode === "performance" ? PERFORMANCE_MODE_POLICY : NORMAL_MODE_POLICY;
 }
 
+function measureFromGroupId(groupId: string): number | undefined {
+  const match = /^m(\d+)-/i.exec(groupId);
+  if (!match) {
+    return undefined;
+  }
+  const measure = Number(match[1]);
+  return Number.isInteger(measure) && measure > 0 ? measure : undefined;
+}
+
+function clampTempo(value: number): number {
+  return Math.min(240, Math.max(30, Math.round(value)));
+}
+
 function initPracticeWorkspace(): void {
   const workspace = requireElement<HTMLElement>("practice-workspace");
   const lessonId = workspace.dataset.lessonId ?? "";
@@ -88,6 +102,7 @@ function initPracticeWorkspace(): void {
   const loadError = requireElement<HTMLElement>("workspace-load-error");
   const notationContainer = requireElement<HTMLElement>("workspace-notation");
   const zoomInput = requireElement<HTMLInputElement>("workspace-zoom");
+  const tempoInput = requireElement<HTMLInputElement>("workspace-tempo");
   const modeSelect = requireElement<HTMLSelectElement>("workspace-mode");
   const modeHint = requireElement<HTMLElement>("workspace-mode-hint");
   const handFields = requireElement<HTMLElement>("workspace-hand-range");
@@ -97,10 +112,14 @@ function initPracticeWorkspace(): void {
   const toInput = requireElement<HTMLInputElement>("workspace-to-measure");
   const startButton = requireElement<HTMLButtonElement>("workspace-start-button");
   const stopButton = requireElement<HTMLButtonElement>("workspace-stop-button");
+  const referenceButton = requireElement<HTMLButtonElement>("workspace-reference-button");
+  const metronomeButton = requireElement<HTMLButtonElement>("workspace-metronome-button");
+  const fullscreenButton = requireElement<HTMLButtonElement>("workspace-fullscreen-button");
   const liveSection = requireElement<HTMLElement>("workspace-live-section");
   const liveList = requireElement<HTMLUListElement>("workspace-live-list");
   const resultSection = requireElement<HTMLElement>("workspace-result-section");
   const resultList = requireElement<HTMLUListElement>("workspace-result-list");
+  const problemLocation = requireElement<HTMLElement>("workspace-problem-location");
   const nextActionLabel = requireElement<HTMLElement>("workspace-next-action");
   const retryButton = requireElement<HTMLButtonElement>("workspace-retry-button");
 
@@ -111,6 +130,7 @@ function initPracticeWorkspace(): void {
   let expectedDocument: ExpectedEventDocument | undefined;
   let audioContext: AudioContext | undefined;
   let metronome: Metronome | undefined;
+  let metronomePreviewActive = false;
   let session: PracticeSession | undefined;
   let currentResolvedExpected: ResolvedExpectedEvent[] = [];
   let currentSessionId: string | undefined;
@@ -118,6 +138,16 @@ function initPracticeWorkspace(): void {
 
   function updateTempoLabel(): void {
     targetTempoLabel.textContent = String(currentTempoBpm);
+    tempoInput.value = String(currentTempoBpm);
+  }
+
+  function stopMetronomePreview(): void {
+    if (!metronomePreviewActive) {
+      return;
+    }
+    metronome?.stop();
+    metronomePreviewActive = false;
+    metronomeButton.textContent = metronomeButton.dataset.startLabel ?? "Metronome";
   }
 
   function updateModeControls(): void {
@@ -147,6 +177,7 @@ function initPracticeWorkspace(): void {
       if (renderResult.status === "error") {
         throw new Error(renderResult.reason);
       }
+      notationAdapter.hideCursor();
       expectedDocument = (await eventsResponse.json()) as ExpectedEventDocument;
       fromInput.max = String(notationAdapter.measureCount);
       toInput.max = String(notationAdapter.measureCount);
@@ -154,10 +185,16 @@ function initPracticeWorkspace(): void {
     } catch {
       loadError.hidden = false;
       startButton.disabled = true;
+      referenceButton.disabled = true;
     }
   }
 
   zoomInput.addEventListener("input", () => notationAdapter.setZoom(Number(zoomInput.value) || 1));
+  tempoInput.addEventListener("change", () => {
+    currentTempoBpm = clampTempo(Number(tempoInput.value) || initialTempoBpm);
+    updateTempoLabel();
+    stopMetronomePreview();
+  });
   modeSelect.addEventListener("change", updateModeControls);
   handSelect.addEventListener("change", () => {
     liveSection.hidden = true;
@@ -201,20 +238,31 @@ function initPracticeWorkspace(): void {
   }
 
   function renderLiveList(resolvedExpected: readonly ResolvedExpectedEvent[], matchResult: MatchResult | undefined): void {
-    const statusByKey = new Map<string, "correct" | "missed">();
+    const correctByKey = new Set<string>();
     if (matchResult) {
       for (const outcome of matchResult.expected) {
-        statusByKey.set(`${outcome.expectedGroupId}|${outcome.pitch}`, outcome.status === "matched" ? "correct" : "missed");
+        if (outcome.status === "matched") {
+          correctByKey.add(`${outcome.expectedGroupId}|${outcome.pitch}`);
+        }
       }
     }
+
+    const firstPendingIndex = resolvedExpected.findIndex((slot) => !correctByKey.has(`${slot.groupId}|${slot.pitch}`));
+    const startIndex = firstPendingIndex < 0 ? Math.max(0, resolvedExpected.length - LIVE_SLOT_COUNT) : Math.max(0, firstPendingIndex - 1);
+    const visibleSlots = resolvedExpected.slice(startIndex, startIndex + LIVE_SLOT_COUNT);
+
+    const currentSlot = firstPendingIndex >= 0 ? resolvedExpected[firstPendingIndex] : resolvedExpected.at(-1);
+    if (currentSlot) {
+      const measure = measureFromGroupId(currentSlot.groupId);
+      if (measure !== undefined) {
+        notationAdapter.moveCursorToMeasure(measure);
+      }
+    }
+
     liveList.replaceChildren();
-    for (const slot of resolvedExpected) {
-      const status = statusByKey.get(`${slot.groupId}|${slot.pitch}`) ?? "pending";
-      const label = status === "correct"
-        ? liveList.dataset.statusCorrect
-        : status === "missed"
-          ? liveList.dataset.statusMissed
-          : liveList.dataset.statusPending;
+    for (const slot of visibleSlots) {
+      const status = correctByKey.has(`${slot.groupId}|${slot.pitch}`) ? "correct" : "pending";
+      const label = status === "correct" ? liveList.dataset.statusCorrect : liveList.dataset.statusPending;
       const item = document.createElement("li");
       item.textContent = `${midiNoteName(slot.pitch)}: ${label ?? ""}`;
       item.className = `practice-status-${status}`;
@@ -235,6 +283,26 @@ function initPracticeWorkspace(): void {
     liveSection.hidden = true;
     resultSection.hidden = false;
     resultList.replaceChildren();
+
+    const issueMeasures = [...new Set(
+      result.matchResult.expected
+        .filter((outcome) => outcome.status === "omitted")
+        .map((outcome) => measureFromGroupId(outcome.expectedGroupId))
+        .filter((measure): measure is number => measure !== undefined),
+    )].sort((a, b) => a - b);
+
+    if (issueMeasures.length > 0) {
+      const visibleMeasures = issueMeasures.slice(0, 4).join(", ");
+      problemLocation.textContent = indonesian
+        ? `Periksa dulu birama ${visibleMeasures}${issueMeasures.length > 4 ? " …" : ""}. Kursor menunjukkan masalah pertama.`
+        : `Prüfe zuerst Takt ${visibleMeasures}${issueMeasures.length > 4 ? " …" : ""}. Der Cursor zeigt die erste Problemstelle.`;
+      problemLocation.hidden = false;
+      notationAdapter.moveCursorToMeasure(issueMeasures[0]);
+    } else {
+      problemLocation.hidden = true;
+      notationAdapter.hideCursor();
+    }
+
     const facts = result.facts;
     if (facts.pitch) {
       addResultItem((resultSection.dataset.pitchTemplate ?? "").replace("{0}", String(facts.pitch.correctCount)).replace("{1}", String(facts.pitch.totalExpected)));
@@ -295,10 +363,22 @@ function initPracticeWorkspace(): void {
     return metronome;
   }
 
+  async function toggleMetronomePreview(): Promise<void> {
+    if (metronomePreviewActive) {
+      stopMetronomePreview();
+      return;
+    }
+    const activeMetronome = await ensureMetronome();
+    await activeMetronome.start({ bpm: currentTempoBpm, beatsPerMeasure: BEATS_PER_MEASURE });
+    metronomePreviewActive = true;
+    metronomeButton.textContent = metronomeButton.dataset.stopLabel ?? "Stop metronome";
+  }
+
   async function playCountIn(): Promise<void> {
     if (countInMeasures <= 0) {
       return;
     }
+    stopMetronomePreview();
     const activeMetronome = await ensureMetronome();
     await activeMetronome.start({ bpm: currentTempoBpm, beatsPerMeasure: BEATS_PER_MEASURE });
     const countInDurationMs = (60000 / currentTempoBpm) * BEATS_PER_MEASURE * countInMeasures;
@@ -307,6 +387,7 @@ function initPracticeWorkspace(): void {
   }
 
   async function playReference(document: ExpectedEventDocument): Promise<void> {
+    stopMetronomePreview();
     const context = await ensureAudioContext();
     const msPerBeat = 60000 / currentTempoBpm;
     const previewEvents = document.events.slice(0, 12);
@@ -341,7 +422,9 @@ function initPracticeWorkspace(): void {
     if (!events || events.events.length === 0) {
       return;
     }
+    stopMetronomePreview();
     resultSection.hidden = true;
+    problemLocation.hidden = true;
     startButton.disabled = true;
     stopButton.disabled = false;
     const mode = modeSelect.value as PracticeMode;
@@ -359,8 +442,10 @@ function initPracticeWorkspace(): void {
     const policy = policyForMode(mode);
     const sessionStartAtMs = performance.now();
     currentResolvedExpected = resolveExpectedEventTiming(events, BEATS_PER_MEASURE, sessionStartAtMs, currentTempoBpm);
-    liveSection.hidden = false;
-    renderLiveList(currentResolvedExpected, undefined);
+    liveSection.hidden = mode === "performance";
+    if (mode !== "performance") {
+      renderLiveList(currentResolvedExpected, undefined);
+    }
 
     const categories = mode === "rhythm"
       ? enabledCategories.filter((category) => category === "onset" || category === "steadiness")
@@ -371,7 +456,9 @@ function initPracticeWorkspace(): void {
       enabledCategories: categories,
       onTimeToleranceMs: policy.onTimeToleranceMs,
     });
-    session.onLiveUpdate = (result) => renderLiveList(currentResolvedExpected, result);
+    session.onLiveUpdate = mode === "performance"
+      ? undefined
+      : (result) => renderLiveList(currentResolvedExpected, result);
     session.onComplete = (result) => {
       renderResult(result);
       void persistResult(result);
@@ -393,6 +480,20 @@ function initPracticeWorkspace(): void {
   startButton.addEventListener("click", () => void start());
   stopButton.addEventListener("click", () => session?.finishNow());
   retryButton.addEventListener("click", () => void start());
+  referenceButton.addEventListener("click", () => {
+    const events = eventsForCurrentMode();
+    if (events) {
+      void playReference(events);
+    }
+  });
+  metronomeButton.addEventListener("click", () => void toggleMetronomePreview());
+  fullscreenButton.addEventListener("click", () => {
+    if (document.fullscreenElement) {
+      void document.exitFullscreen();
+    } else {
+      void workspace.requestFullscreen();
+    }
+  });
 
   updateTempoLabel();
   updateModeControls();
