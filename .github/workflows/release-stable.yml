@@ -87,7 +87,7 @@ jobs:
 
       - name: Install Chromium
         run: pwsh tests/Nadiano.BrowserTests/bin/Release/net10.0/playwright.ps1 install --with-deps chromium
-      - name: Verify browser path
+      - name: Verify browser and accessibility paths
         run: dotnet test tests/Nadiano.BrowserTests/Nadiano.BrowserTests.csproj -c Release --no-build
         env:
           NADIANO_RUN_BROWSER_TESTS: "1"
@@ -132,6 +132,91 @@ jobs:
           severity: CRITICAL,HIGH
           exit-code: "1"
           ignore-unfixed: true
+
+      - name: Profile container on modest hardware limits
+        shell: bash
+        run: |
+          set -euo pipefail
+          candidate="${REGISTRY_IMAGE}:${{ steps.release.outputs.version }}"
+          volume="nadiano-performance-${GITHUB_RUN_ID}"
+          container="nadiano-performance-${GITHUB_RUN_ID}"
+          timings="${RUNNER_TEMP}/nadiano-performance-times.tsv"
+          docker volume create "$volume" >/dev/null
+          cleanup() {
+            docker rm -f "$container" >/dev/null 2>&1 || true
+            docker volume rm "$volume" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          started_ms="$(date +%s%3N)"
+          docker run -d --name "$container" \
+            --cpus=1 --memory=512m --memory-swap=512m \
+            -p 18088:8080 -v "$volume:/data" "$candidate" >/dev/null
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://localhost:18088/health/ready >/dev/null; then
+              break
+            fi
+            sleep 0.5
+          done
+          curl -fsS http://localhost:18088/health/ready >/dev/null
+          ready_ms="$(date +%s%3N)"
+          startup_ms="$((ready_ms - started_ms))"
+          test "$startup_ms" -le 30000
+
+          : > "$timings"
+          for path in / /Setup /Learn /Practice/Beta /health/ready; do
+            curl -fsS "http://localhost:18088${path}" >/dev/null
+            for sample in $(seq 1 10); do
+              seconds="$(curl -fsS -o /dev/null -w '%{time_total}' "http://localhost:18088${path}")"
+              printf '%s\t%s\n' "$path" "$seconds" >> "$timings"
+            done
+          done
+
+          STARTUP_MS="$startup_ms" TIMINGS="$timings" python3 <<'PY'
+          import json
+          import math
+          import os
+          from collections import defaultdict
+          from pathlib import Path
+
+          samples = defaultdict(list)
+          for line in Path(os.environ["TIMINGS"]).read_text().splitlines():
+              path, seconds = line.split("\t")
+              samples[path].append(float(seconds) * 1000.0)
+
+          thresholds = {
+              "/": 1500.0,
+              "/Setup": 1500.0,
+              "/Learn": 1500.0,
+              "/Practice/Beta": 1500.0,
+              "/health/ready": 500.0,
+          }
+          results = {}
+          failed = False
+          for path, values in samples.items():
+              ordered = sorted(values)
+              p95 = ordered[max(0, math.ceil(len(ordered) * 0.95) - 1)]
+              results[path] = {
+                  "samples": len(values),
+                  "medianMs": round(ordered[len(ordered) // 2], 2),
+                  "p95Ms": round(p95, 2),
+                  "limitMs": thresholds[path],
+              }
+              if p95 > thresholds[path]:
+                  failed = True
+
+          output = {
+              "limits": {"cpus": 1, "memoryMiB": 512},
+              "startupMs": int(os.environ["STARTUP_MS"]),
+              "startupLimitMs": 30000,
+              "routes": results,
+              "result": "failure" if failed else "success",
+          }
+          Path("artifacts/performance-profile.json").write_text(json.dumps(output, indent=2) + "\n")
+          print(json.dumps(output, indent=2))
+          if failed:
+              raise SystemExit(1)
+          PY
 
       - name: Rehearse upgrade, cold restore and rollback
         shell: bash
@@ -251,6 +336,7 @@ jobs:
             artifacts/dotnet-packages.txt \
             artifacts/npm-packages.json \
             artifacts/third-party-licenses.tsv \
+            artifacts/performance-profile.json \
             artifacts/upgrade-rehearsal.json \
             artifacts/restore-rehearsal.json \
             artifacts/rollback-rehearsal.json \

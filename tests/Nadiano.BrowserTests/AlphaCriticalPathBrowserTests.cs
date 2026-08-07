@@ -103,6 +103,99 @@ public sealed class AlphaCriticalPathBrowserTests
         }
     }
 
+    [Fact]
+    public async Task CoreLearnerPagesMeetAutomatedAccessibilityBaseline()
+    {
+        if (Environment.GetEnvironmentVariable("NADIANO_RUN_BROWSER_TESTS") != "1")
+        {
+            return;
+        }
+
+        var repositoryRoot = FindRepositoryRoot();
+        var dataPath = Path.Combine(Path.GetTempPath(), $"nadiano-a11y-{Guid.NewGuid():N}");
+        var port = ReservePort();
+        var baseUrl = $"http://127.0.0.1:{port}";
+        Directory.CreateDirectory(dataPath);
+
+        using var app = StartApplication(repositoryRoot, dataPath, port);
+        try
+        {
+            await WaitUntilReadyAsync(baseUrl, app);
+
+            using var playwright = await Playwright.CreateAsync();
+            await using var browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+            {
+                Headless = true,
+            });
+            await using var context = await browser.NewContextAsync(new BrowserNewContextOptions
+            {
+                Locale = "de-DE",
+            });
+            var page = await context.NewPageAsync();
+
+            foreach (var path in new[] { "/", "/Setup", "/Learn", "/Practice/Beta", "/Library", "/Progress" })
+            {
+                var response = await page.GotoAsync(baseUrl + path);
+                Assert.NotNull(response);
+                Assert.Equal((int)HttpStatusCode.OK, response.Status);
+
+                var issues = await page.EvaluateAsync<string[]>(
+                    """
+                    () => {
+                      const issues = [];
+                      const ids = new Map();
+                      document.querySelectorAll('[id]').forEach(element => {
+                        const id = element.id;
+                        ids.set(id, (ids.get(id) ?? 0) + 1);
+                      });
+                      for (const [id, count] of ids) {
+                        if (count > 1) issues.push(`duplicate-id:${id}`);
+                      }
+
+                      if (!document.querySelector('main')) issues.push('missing-main-landmark');
+                      if (document.querySelectorAll('h1').length !== 1) issues.push('page-requires-one-h1');
+                      if (document.querySelector('[tabindex]:not([tabindex="0"]):not([tabindex="-1"])')) issues.push('positive-tabindex');
+
+                      document.querySelectorAll('img').forEach(image => {
+                        if (!image.hasAttribute('alt')) issues.push(`image-without-alt:${image.src}`);
+                      });
+
+                      document.querySelectorAll('input:not([type="hidden"]), select, textarea').forEach(control => {
+                        const labels = control.labels?.length ?? 0;
+                        const ariaLabel = control.getAttribute('aria-label')?.trim();
+                        const ariaLabelledBy = control.getAttribute('aria-labelledby')?.trim();
+                        if (labels === 0 && !ariaLabel && !ariaLabelledBy) {
+                          issues.push(`unlabelled-control:${control.id || control.name || control.tagName}`);
+                        }
+                      });
+
+                      document.querySelectorAll('button, a[href]').forEach(control => {
+                        const text = control.textContent?.trim();
+                        const ariaLabel = control.getAttribute('aria-label')?.trim();
+                        const ariaLabelledBy = control.getAttribute('aria-labelledby')?.trim();
+                        if (!text && !ariaLabel && !ariaLabelledBy) {
+                          issues.push(`unnamed-action:${control.id || control.getAttribute('href') || control.tagName}`);
+                        }
+                      });
+                      return issues;
+                    }
+                    """);
+
+                Assert.True(issues.Length == 0, $"Accessibility baseline failed on {path}: {string.Join(", ", issues)}");
+            }
+
+            await page.GotoAsync(baseUrl + "/Practice/Beta");
+            await page.Locator("body").PressAsync("Tab");
+            var focusedTag = await page.EvaluateAsync<string>("document.activeElement?.tagName ?? ''");
+            Assert.Contains(focusedTag, new[] { "A", "BUTTON", "INPUT", "SELECT", "TEXTAREA" });
+        }
+        finally
+        {
+            StopApplication(app);
+            TryDeleteDirectory(dataPath);
+        }
+    }
+
     private static async Task InstallFakeMidiAndAudioAsync(IPage page)
     {
         await page.AddInitScriptAsync(
