@@ -3,13 +3,68 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @{
     ViewData["Title"] = Localizer["Home.Title"];
+    var isIndonesian = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("id", StringComparison.OrdinalIgnoreCase);
+    string T(string de, string id) => isIndonesian ? id : de;
 }
 
-<h1>@Localizer["Home.Title"]</h1>
-<p>@Localizer["Home.Intro"]</p>
+<div class="today-hero">
+    <section class="today-primary" aria-labelledby="today-heading">
+        <div>
+            <span class="eyebrow">@T("Heute", "Hari ini")</span>
+            <h1 id="today-heading">@T("Deine nächste Klaviereinheit", "Sesi piano berikutnya")</h1>
+            <p>@T("Nadiano verbindet Wiederholung, Lesen, Rhythmus, Gehör und echte Stücke zu einer klaren Übungseinheit.", "Nadiano menggabungkan ulasan, membaca, ritme, pendengaran, dan lagu nyata menjadi satu sesi latihan yang jelas.")</p>
+        </div>
+        <div class="today-actions">
+            <a class="button" asp-page="/Practice/Beta">@T("Heutiges Training starten", "Mulai latihan hari ini")</a>
+            <a class="button-secondary" asp-page="/Learn/Index">@T("Lernpfad öffnen", "Buka jalur belajar")</a>
+        </div>
+    </section>
 
-<p class="callout">@Localizer["Home.NoTeacherReplacement"]</p>
+    <aside class="today-side" aria-label="@T("Übersicht", "Ringkasan")">
+        <section class="surface">
+            <span class="eyebrow">@T("Ablauf", "Urutan")</span>
+            <h2>@T("Eine klare Einheit", "Satu sesi yang jelas")</h2>
+            <ol class="session-outline">
+                <li><span class="session-step">1</span><span>@T("Kurz aufwärmen", "Pemanasan singkat")</span><span class="chip">2–3 min</span></li>
+                <li><span class="session-step">2</span><span>@T("Fälliges wiederholen", "Ulangi materi jatuh tempo")</span><span class="chip">3–5 min</span></li>
+                <li><span class="session-step">3</span><span>@T("Lesen oder Rhythmus", "Membaca atau ritme")</span><span class="chip">3–5 min</span></li>
+                <li><span class="session-step">4</span><span>@T("An einem Stück arbeiten", "Latih sebuah lagu")</span><span class="chip">5–10 min</span></li>
+                <li><span class="session-step">5</span><span>@T("Ergebnis prüfen", "Tinjau hasil")</span><span class="chip">1 min</span></li>
+            </ol>
+        </section>
 
-<p>
-    <a class="button" asp-page="/Setup/Index">@Localizer["Home.GetStarted"]</a>
-</p>
+        <section class="surface quick-status">
+            <div>
+                <strong>@T("MIDI bereit machen", "Siapkan MIDI")</strong>
+                <span class="help-text">@T("Verbindung vor dem Spielen prüfen", "Periksa koneksi sebelum bermain")</span>
+            </div>
+            <a class="button-secondary" asp-page="/Setup/Index">@T("Prüfen", "Periksa")</a>
+        </section>
+    </aside>
+</div>
+
+<section class="page-heading" aria-labelledby="today-next-heading">
+    <div class="page-heading-copy">
+        <span class="eyebrow">@T("Direkt weiter", "Lanjut langsung")</span>
+        <h2 id="today-next-heading">@T("Wähle nur, wenn du gezielt üben willst", "Pilih hanya jika ingin latihan khusus")</h2>
+        <p>@T("Für normales tägliches Lernen reicht der Start oben. Einzelbereiche bleiben jederzeit erreichbar.", "Untuk latihan harian normal, tombol mulai di atas sudah cukup. Area khusus tetap selalu tersedia.")</p>
+    </div>
+</section>
+
+<div class="card-grid">
+    <a class="surface" asp-page="/Learn/Index" style="text-decoration:none;color:inherit">
+        <span class="eyebrow">@T("Lernen", "Belajar")</span>
+        <h3>@T("Kurs fortsetzen", "Lanjutkan kursus")</h3>
+        <p class="help-text">@T("Notenlesen, Technik, Rhythmus und musikalische Grundlagen.", "Membaca not, teknik, ritme, dan dasar musik.")</p>
+    </a>
+    <a class="surface" asp-page="/Library/Index" style="text-decoration:none;color:inherit">
+        <span class="eyebrow">@T("Songs", "Lagu")</span>
+        <h3>@T("Eigene Noten üben", "Latih partitur sendiri")</h3>
+        <p class="help-text">@T("MusicXML/MXL importieren und mit derselben Übungsengine spielen.", "Impor MusicXML/MXL dan gunakan mesin latihan yang sama.")</p>
+    </a>
+    <a class="surface" asp-page="/Progress/Index" style="text-decoration:none;color:inherit">
+        <span class="eyebrow">@T("Fortschritt", "Kemajuan")</span>
+        <h3>@T("Schwächen gezielt sehen", "Lihat area yang perlu diperbaiki")</h3>
+        <p class="help-text">@T("Kompetenzen, Wiederholungen und nächste sinnvolle Schritte.", "Kompetensi, ulasan, dan langkah berikutnya yang masuk akal.")</p>
+    </a>
+</div>
