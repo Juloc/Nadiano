@@ -1,3 +1,6 @@
+using System.IO.Compression;
+using System.Text.Json;
+
 using Nadiano.Core.Content;
 using Nadiano.Core.Content.Manifests;
 using Nadiano.Web.Infrastructure.Profiles;
@@ -11,6 +14,7 @@ public static class PrivateLibraryEndpoints
         endpoints.MapGet("/api/library/{itemId:guid}/score", ServeScoreAsync);
         endpoints.MapGet("/api/library/{itemId:guid}/expected-events", ServeExpectedEventsAsync);
         endpoints.MapGet("/api/library/{itemId:guid}/export", ExportOriginalAsync);
+        endpoints.MapGet("/api/library/{itemId:guid}/package", ExportPackageAsync);
         return endpoints;
     }
 
@@ -79,6 +83,78 @@ public static class PrivateLibraryEndpoints
             "application/octet-stream",
             result.Value.Item.SourceFileName,
             enableRangeProcessing: false);
+    }
+
+    private static async Task<IResult> ExportPackageAsync(
+        Guid itemId,
+        HttpContext context,
+        CurrentProfileAccessor profiles,
+        PrivateLibraryService library,
+        CancellationToken cancellationToken)
+    {
+        var profileId = await profiles.GetOrCreateProfileIdAsync(context, cancellationToken);
+        var original = await library.ResolveFileAsync(profileId, itemId, original: true, cancellationToken);
+        var normalized = await library.ResolveFileAsync(profileId, itemId, original: false, cancellationToken);
+        if (original is null || normalized is null)
+        {
+            return Results.NotFound();
+        }
+
+        var item = original.Value.Item;
+        var manifest = new
+        {
+            schemaVersion = 1,
+            item.Id,
+            item.DisplayTitle,
+            item.SourceFileName,
+            item.OriginalSha256,
+            item.ContentLength,
+            item.ValidationState,
+            warnings = JsonSerializer.Deserialize<string[]>(item.WarningJson) ?? [],
+            metadata = library.DeserializeMetadata(item.MetadataJson),
+            item.Version,
+            item.ImportedAtUtc,
+        };
+
+        using var output = new MemoryStream();
+        using (var archive = new ZipArchive(output, ZipArchiveMode.Create, leaveOpen: true))
+        {
+            await CopyIntoArchiveAsync(
+                archive,
+                $"original/{Path.GetFileName(item.SourceFileName)}",
+                original.Value.Path,
+                cancellationToken);
+            await CopyIntoArchiveAsync(archive, "score.musicxml", normalized.Value.Path, cancellationToken);
+            var manifestEntry = archive.CreateEntry("nadiano-package.json", CompressionLevel.Optimal);
+            await using var manifestStream = manifestEntry.Open();
+            await JsonSerializer.SerializeAsync(manifestStream, manifest, cancellationToken: cancellationToken);
+        }
+
+        context.Response.Headers.CacheControl = "private, no-store";
+        var safeName = string.Concat(item.DisplayTitle.Select(character => Path.GetInvalidFileNameChars().Contains(character) ? '-' : character)).Trim();
+        if (string.IsNullOrWhiteSpace(safeName))
+        {
+            safeName = "nadiano-score";
+        }
+        return Results.File(output.ToArray(), "application/zip", $"{safeName}.nadiano.zip");
+    }
+
+    private static async Task CopyIntoArchiveAsync(
+        ZipArchive archive,
+        string entryName,
+        string sourcePath,
+        CancellationToken cancellationToken)
+    {
+        var entry = archive.CreateEntry(entryName, CompressionLevel.Optimal);
+        await using var target = entry.Open();
+        await using var source = new FileStream(
+            sourcePath,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            81920,
+            FileOptions.Asynchronous | FileOptions.SequentialScan);
+        await source.CopyToAsync(target, cancellationToken);
     }
 
     private static IReadOnlyDictionary<string, Hand> BuildPartMapping(LibraryItemMetadata metadata)

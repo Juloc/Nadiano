@@ -11,14 +11,17 @@ Nadiano helps a complete beginner build correct foundations and continue into se
 ## Nadiano 1.0
 
 - complete F0, F1, B1 and B2 path plus selected E1 foundations;
-- 110 guided bilingual lessons and 220 deterministic exercises;
+- 110 guided bilingual lessons;
+- 120 deterministic rhythm/technique exercises and 120 reading configurations;
+- 60 deterministic ear-training tasks;
+- 24 original Nadiano mini-pieces and 12 public-domain melodies in independently authored Nadiano study editions;
 - reading, rhythm, ear training, technique, expression, basic pedal, repertoire and practice planning;
-- Web MIDI practice and three-pedal diagnostics;
-- profile-private MusicXML/MXL import with hand, voice and fingering controls;
+- Web MIDI practice, sight-reading and three-pedal diagnostics;
+- profile-private MusicXML/MXL import with hand, voice and fingering controls plus private Nadiano package export;
 - adaptive review, session planning, PWA installation and offline result recovery;
 - separate profiles with complete progress export and deletion of profile-private files;
-- documented backup, restore, upgrade and rollback;
-- reproducible scanned Docker release.
+- release-gated backup, cold restore, upgrade and rollback rehearsals;
+- reproducible scanned Docker release with dependency and license reports.
 
 ## Documentation
 
@@ -51,7 +54,7 @@ The architecture is intentionally a modular monolith. Microservices, distributed
 
 ## Run with Docker
 
-Use `ghcr.io/juloc/nadiano:1.0.1`, expose container port `8080`, mount persistent storage at `/data`, and use the bundled content at `/app/content`.
+Use `ghcr.io/juloc/nadiano:1.0.2`, expose container port `8080`, mount persistent storage at `/data`, and use the bundled content at `/app/content`.
 
 ## Repository rules
 

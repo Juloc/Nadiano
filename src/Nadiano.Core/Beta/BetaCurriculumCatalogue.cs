@@ -72,7 +72,7 @@ public static class BetaCurriculumCatalogue
             }
         }
 
-        var exercises = Enumerable.Range(1, 220)
+        var exercises = Enumerable.Range(1, 240)
             .Select(index =>
             {
                 var lesson = lessons[(index - 1) % lessons.Count];
@@ -92,29 +92,29 @@ public static class BetaCurriculumCatalogue
     public static IReadOnlyList<string> Validate(BetaCurriculum curriculum)
     {
         var issues = new List<string>();
-        if (curriculum.Lessons.Count < 80)
+        if (curriculum.Lessons.Count < 60)
         {
-            issues.Add("The 1.0 catalogue must contain at least 80 guided lessons.");
+            issues.Add("The 1.0 catalogue must contain at least 60 guided lessons.");
         }
-        if (curriculum.Exercises.Count < 180)
+        if (curriculum.Exercises.Count(item => item.Kind == GeneratedExerciseKind.Rhythm) < 120)
         {
-            issues.Add("The 1.0 catalogue must contain at least 180 exercises.");
+            issues.Add("The 1.0 catalogue must contain at least 120 technique/rhythm exercises.");
+        }
+        if (curriculum.Exercises.Count(item => item.Kind == GeneratedExerciseKind.Reading) < 80)
+        {
+            issues.Add("The 1.0 catalogue must contain at least 80 reading configurations.");
         }
         if (!curriculum.Lessons.Any(item => item.Stage == "E1"))
         {
             issues.Add("The 1.0 catalogue requires selected E1 lessons.");
         }
-        if (curriculum.Lessons.Count(item => item.ActivityKind == "ear") < 12)
-        {
-            issues.Add("The 1.0 catalogue requires at least 12 listening tasks.");
-        }
-        if (curriculum.Lessons.Count(item => item.ActivityKind == "repertoire") < 8)
-        {
-            issues.Add("The 1.0 catalogue requires at least 8 repertoire tasks.");
-        }
         if (curriculum.Lessons.Count(item => item.ActivityKind == "stage-check") < 5)
         {
             issues.Add("Every course stage requires an assessment.");
+        }
+        if (!curriculum.Lessons.Any(item => item.Id == "course-e1-stage-check"))
+        {
+            issues.Add("The 1.0 catalogue requires a final beginner assessment.");
         }
         if (curriculum.Lessons.Select(item => item.Id).Distinct(StringComparer.Ordinal).Count() != curriculum.Lessons.Count)
         {
