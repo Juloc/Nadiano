@@ -86,6 +86,11 @@ else
                         </select>
                     </div>
 
+                    <div class="practice-control">
+                        <label for="workspace-tempo">@Model.T("Tempo", "Tempo")</label>
+                        <input id="workspace-tempo" type="number" min="30" max="240" step="1" value="@Model.TargetTempo" inputmode="numeric" />
+                    </div>
+
                     <div class="practice-control practice-control--zoom">
                         <label for="workspace-zoom">@Localizer["Practice.Notation.ZoomLabel"]</label>
                         <input id="workspace-zoom" type="range" min="0.5" max="2" step="0.1" value="1" />
@@ -95,6 +100,13 @@ else
                 <details class="practice-more">
                     <summary>@Model.T("Mehr", "Lainnya")</summary>
                     <div class="practice-more-panel">
+                        <div class="train-card-actions">
+                            <button id="workspace-reference-button" type="button" class="button-secondary">@Model.T("Referenz hören", "Dengar contoh")</button>
+                            <button id="workspace-metronome-button" type="button" class="button-secondary"
+                                    data-start-label="@Model.T("Metronom", "Metronom")"
+                                    data-stop-label="@Model.T("Metronom stoppen", "Hentikan metronom")">@Model.T("Metronom", "Metronom")</button>
+                            <button id="workspace-fullscreen-button" type="button" class="button-secondary">@Model.T("Vollbild", "Layar penuh")</button>
+                        </div>
                         <div id="workspace-loop-range" hidden>
                             <strong>@Model.T("Übungsbereich", "Bagian latihan")</strong>
                             <div class="practice-loop-grid">
@@ -143,9 +155,13 @@ else
                 data-next-action-well-done="@Localizer["Practice.NextAction.WellDone"]">
                 <span class="eyebrow">@Model.T("Auswertung", "Hasil")</span>
                 <h2 id="workspace-result-heading">@Localizer["Practice.Workspace.ResultHeading"]</h2>
-                <ul id="workspace-result-list"></ul>
+                <p id="workspace-problem-location" class="callout" hidden></p>
                 <p id="workspace-next-action" aria-live="polite"></p>
                 <button id="workspace-retry-button" type="button" class="button">@Localizer["Practice.Workspace.RetryButton"]</button>
+                <details class="song-settings">
+                    <summary>@Model.T("Details", "Detail")</summary>
+                    <ul id="workspace-result-list"></ul>
+                </details>
             </section>
         </div>
     </div>
