@@ -1,5 +1,6 @@
 using System.Text.Json;
 
+using Nadiano.Core.Beta;
 using Nadiano.Core.Content;
 using Nadiano.Core.Content.Manifests;
 using Nadiano.Core.Content.Validation;
@@ -21,17 +22,40 @@ if (!Directory.Exists(fullContentRoot))
 var repository = new BundledContentRepository(fullContentRoot);
 var validator = new ContentValidator(repository);
 var result = validator.ValidateAll();
+var curriculum = BetaCurriculumCatalogue.Create();
+var releaseContent = ReleaseContentCatalogue.Create();
+var roadmapIssues = BetaCurriculumCatalogue.Validate(curriculum)
+    .Concat(ReleaseContentCatalogue.Validate(releaseContent))
+    .ToArray();
 
-if (result.IsValid)
+if (result.IsValid && roadmapIssues.Length == 0)
 {
     Console.WriteLine($"Content validation passed. Content root: {fullContentRoot}");
+    Console.WriteLine($"1.0 roadmap inventory: {curriculum.Lessons.Count} lessons, " +
+        $"{curriculum.Exercises.Count(item => item.Kind == GeneratedExerciseKind.Rhythm)} rhythm/technique exercises, " +
+        $"{curriculum.Exercises.Count(item => item.Kind == GeneratedExerciseKind.Reading)} reading configurations, " +
+        $"{releaseContent.EarTasks.Count} ear tasks, " +
+        $"{releaseContent.Repertoire.Count(item => item.SourceKind == ReleaseContentCatalogue.OriginalSourceKind)} original mini-pieces, " +
+        $"{releaseContent.Repertoire.Count(item => item.SourceKind == ReleaseContentCatalogue.PublicDomainSourceKind)} public-domain Nadiano editions.");
     return 0;
 }
 
-Console.WriteLine($"Content validation found {result.Issues.Count} issue(s):");
-foreach (var issue in result.Issues)
+if (!result.IsValid)
 {
-    Console.WriteLine($"  {issue}");
+    Console.WriteLine($"Content validation found {result.Issues.Count} package issue(s):");
+    foreach (var issue in result.Issues)
+    {
+        Console.WriteLine($"  {issue}");
+    }
+}
+
+if (roadmapIssues.Length > 0)
+{
+    Console.WriteLine($"1.0 roadmap validation found {roadmapIssues.Length} issue(s):");
+    foreach (var issue in roadmapIssues)
+    {
+        Console.WriteLine($"  {issue}");
+    }
 }
 
 return 1;
