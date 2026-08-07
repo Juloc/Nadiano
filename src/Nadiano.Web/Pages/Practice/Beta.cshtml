@@ -1,10 +1,10 @@
 @page
 @model BetaModel
 @{
-    ViewData["Title"] = Model.T("Beta-Training", "Latihan Beta");
+    ViewData["Title"] = Model.T("1.0-Training", "Latihan 1.0");
 }
 
-<h1>@Model.T("Beta-Training", "Latihan Beta")</h1>
+<h1>@Model.T("1.0-Training", "Latihan 1.0")</h1>
 <p>@Model.T("Der Tagesplan mischt fällige Wiederholungen mit Lesen, Rhythmus und Gehör.", "Rencana harian menggabungkan ulasan yang jatuh tempo dengan membaca, ritme, dan pendengaran.")</p>
 
 <section class="card" aria-labelledby="plan-heading">
@@ -32,7 +32,8 @@
 </section>
 
 <section class="card" aria-labelledby="ear-heading">
-    <h2 id="ear-heading">@Model.T("Tonrichtung hören", "Dengar arah nada")</h2>
+    <h2 id="ear-heading">@Model.T("Gehörtraining", "Latihan pendengaran")</h2>
+    <p>@Model.T("Der 1.0-Katalog enthält 60 reproduzierbare Gehöraufgaben für Tonrichtung, Muster und Klanggedächtnis.", "Katalog 1.0 berisi 60 tugas pendengaran yang dapat direproduksi untuk arah nada, pola, dan memori bunyi.")</p>
     <button id="beta-ear-play" class="button" type="button">@Model.T("Zwei Töne abspielen", "Putar dua nada")</button>
     <div id="beta-ear-answers" hidden>
         <button class="button-secondary" type="button" data-answer="higher">@Model.T("Höher", "Lebih tinggi")</button>
@@ -40,6 +41,20 @@
         <button class="button-secondary" type="button" data-answer="same">@Model.T("Gleich", "Sama")</button>
     </div>
     <p id="beta-ear-result" aria-live="polite"></p>
+</section>
+
+<section class="card" aria-labelledby="repertoire-heading">
+    <h2 id="repertoire-heading">@Model.T("Stücke", "Repertoar")</h2>
+    <p>@Model.T("24 originale Miniaturen und 12 gemeinfreie Melodien nutzen denselben Notations-, MIDI- und Bewertungsweg wie andere Übungen.", "24 miniatur orisinal dan 12 melodi domain publik memakai jalur notasi, MIDI, dan penilaian yang sama seperti latihan lain.")</p>
+    <ul class="lesson-list">
+        @foreach (var piece in Model.Repertoire)
+        {
+            <li>
+                <a class="button-secondary" asp-page="/Practice/Index" asp-route-repertoireId="@piece.Id">@Model.PieceTitle(piece)</a>
+                <span class="help-text">@piece.Stage · @piece.Composer · @piece.TargetTempoBpm BPM</span>
+            </li>
+        }
+    </ul>
 </section>
 
 <section class="card" aria-labelledby="review-heading">
