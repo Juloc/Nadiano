@@ -59,6 +59,24 @@ jobs:
           npm run test
           npm audit --audit-level=high
 
+      - name: Enforce frontend performance budget
+        working-directory: src/Nadiano.Web
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          const limits = {
+            'wwwroot/dist/pages/practice.js': 2300000,
+            'wwwroot/dist/pages/beta-practice.js': 300000,
+            'wwwroot/dist/pages/setup.js': 100000,
+          };
+          for (const [file, limit] of Object.entries(limits)) {
+            const size = fs.statSync(file).size;
+            console.log(`${file}: ${size} bytes / ${limit} bytes`);
+            if (size > limit) process.exitCode = 1;
+          }
+          NODE
+
       - name: .NET and content verification
         run: |
           dotnet restore Nadiano.slnx
@@ -88,6 +106,7 @@ jobs:
           cp docs/PRIVACY.md "$output/PRIVACY.md"
           dotnet list Nadiano.slnx package --include-transitive > artifacts/dotnet-packages.txt
           (cd src/Nadiano.Web && npm ls --all --json) > artifacts/npm-packages.json
+          python3 tools/generate-license-report.py artifacts/third-party-licenses.tsv
           tar -czf "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz" -C "$output" .
           sha256sum "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz" > "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz.sha256"
 
@@ -114,52 +133,95 @@ jobs:
           exit-code: "1"
           ignore-unfixed: true
 
-      - name: Rehearse Beta database upgrade and profile persistence
+      - name: Rehearse upgrade, cold restore and rollback
         shell: bash
         run: |
           set -euo pipefail
-          volume="nadiano-upgrade-${GITHUB_RUN_ID}"
+          source_volume="nadiano-upgrade-${GITHUB_RUN_ID}"
+          backup_volume="nadiano-backup-${GITHUB_RUN_ID}"
+          restore_volume="nadiano-restore-${GITHUB_RUN_ID}"
+          rollback_volume="nadiano-rollback-${GITHUB_RUN_ID}"
           cookies="${RUNNER_TEMP}/nadiano-cookies.txt"
-          docker volume create "$volume"
+          candidate="${REGISTRY_IMAGE}:${{ steps.release.outputs.version }}"
+          source_beta="${REGISTRY_IMAGE}:0.2.0-beta.1"
+
+          for volume in "$source_volume" "$backup_volume" "$restore_volume" "$rollback_volume"; do
+            docker volume create "$volume" >/dev/null
+          done
+
           cleanup() {
-            docker rm -f nadiano-upgrade-test >/dev/null 2>&1 || true
-            docker volume rm "$volume" >/dev/null 2>&1 || true
+            docker rm -f nadiano-roadmap-rehearsal >/dev/null 2>&1 || true
+            for volume in "$source_volume" "$backup_volume" "$restore_volume" "$rollback_volume"; do
+              docker volume rm "$volume" >/dev/null 2>&1 || true
+            done
           }
           trap cleanup EXIT
 
-          docker pull "${REGISTRY_IMAGE}:0.2.0-beta.1"
-          docker run -d --name nadiano-upgrade-test -p 18087:8080 -v "$volume:/data" "${REGISTRY_IMAGE}:0.2.0-beta.1"
-          for attempt in $(seq 1 60); do
-            curl -fsS http://localhost:18087/health/ready && break
-            sleep 2
-          done
-          curl -fsS http://localhost:18087/health/ready
+          wait_ready() {
+            for attempt in $(seq 1 60); do
+              if curl -fsS http://localhost:18087/health/ready >/dev/null; then
+                return 0
+              fi
+              sleep 2
+            done
+            curl -fsS http://localhost:18087/health/ready >/dev/null
+          }
+
+          start_image() {
+            local image="$1"
+            local volume="$2"
+            docker rm -f nadiano-roadmap-rehearsal >/dev/null 2>&1 || true
+            docker run -d --name nadiano-roadmap-rehearsal -p 18087:8080 -v "$volume:/data" "$image" >/dev/null
+            wait_ready
+          }
+
+          copy_volume() {
+            local source="$1"
+            local target="$2"
+            docker run --rm --user 0 --entrypoint /bin/sh \
+              -v "$source:/from:ro" -v "$target:/to" "$candidate" \
+              -c 'cp -a /from/. /to/'
+          }
+
+          verify_profile() {
+            local output="$1"
+            curl -fsS -b "$cookies" "http://localhost:18087/api/profiles/${profile_id}/export" -o "$output"
+            jq -e --arg id "$profile_id" '.id == $id and (.sessions | type == "array")' "$output" >/dev/null
+          }
+
+          docker pull "$source_beta"
+          start_image "$source_beta" "$source_volume"
           curl -fsS -c "$cookies" http://localhost:18087/Profiles -o "${RUNNER_TEMP}/beta-profiles.html"
           profile_id="$(awk '$6 == "nadiano-profile-id" {print $7}' "$cookies" | tail -1)"
           test -n "$profile_id"
-          curl -fsS -b "$cookies" "http://localhost:18087/api/profiles/${profile_id}/export" \
-            -o "${RUNNER_TEMP}/beta-profile.json"
-          jq -e --arg id "$profile_id" '.id == $id' "${RUNNER_TEMP}/beta-profile.json"
+          verify_profile "${RUNNER_TEMP}/beta-profile.json"
+          docker rm -f nadiano-roadmap-rehearsal >/dev/null
 
-          docker rm -f nadiano-upgrade-test
-          docker run -d --name nadiano-upgrade-test -p 18087:8080 -v "$volume:/data" "${REGISTRY_IMAGE}:${{ steps.release.outputs.version }}"
-          for attempt in $(seq 1 60); do
-            curl -fsS http://localhost:18087/health/ready && break
-            sleep 2
-          done
-          curl -fsS http://localhost:18087/health/ready
+          copy_volume "$source_volume" "$backup_volume"
+
+          start_image "$candidate" "$source_volume"
           curl -fsS http://localhost:18087/api/diagnostics/version -o "${RUNNER_TEMP}/stable-version.json"
-          jq -e --arg version "${{ steps.release.outputs.version }}" '.applicationVersion == $version' "${RUNNER_TEMP}/stable-version.json"
-          curl -fsS -b "$cookies" "http://localhost:18087/api/profiles/${profile_id}/export" \
-            -o "${RUNNER_TEMP}/stable-profile.json"
-          jq -e --arg id "$profile_id" '.id == $id and (.sessions | type == "array")' "${RUNNER_TEMP}/stable-profile.json"
-
-          jq -n \
-            --arg source "0.2.0-beta.1" \
-            --arg target "${{ steps.release.outputs.version }}" \
-            --arg profileId "$profile_id" \
+          jq -e --arg version "${{ steps.release.outputs.version }}" '.applicationVersion == $version' "${RUNNER_TEMP}/stable-version.json" >/dev/null
+          verify_profile "${RUNNER_TEMP}/upgraded-profile.json"
+          jq -n --arg source "0.2.0-beta.1" --arg target "${{ steps.release.outputs.version }}" --arg profileId "$profile_id" \
             '{sourceVersion: $source, targetVersion: $target, preservedProfileId: $profileId, result: "success"}' \
             > artifacts/upgrade-rehearsal.json
+          docker rm -f nadiano-roadmap-rehearsal >/dev/null
+
+          copy_volume "$backup_volume" "$restore_volume"
+          start_image "$candidate" "$restore_volume"
+          verify_profile "${RUNNER_TEMP}/restored-profile.json"
+          jq -n --arg target "${{ steps.release.outputs.version }}" --arg profileId "$profile_id" \
+            '{targetVersion: $target, restoredIntoCleanVolume: true, preservedProfileId: $profileId, result: "success"}' \
+            > artifacts/restore-rehearsal.json
+          docker rm -f nadiano-roadmap-rehearsal >/dev/null
+
+          copy_volume "$backup_volume" "$rollback_volume"
+          start_image "$source_beta" "$rollback_volume"
+          verify_profile "${RUNNER_TEMP}/rollback-profile.json"
+          jq -n --arg version "0.2.0-beta.1" --arg profileId "$profile_id" \
+            '{rollbackVersion: $version, restoredPreUpgradeBackup: true, preservedProfileId: $profileId, result: "success"}' \
+            > artifacts/rollback-rehearsal.json
 
       - name: Push stable image tags
         run: |
@@ -188,5 +250,8 @@ jobs:
             "artifacts/Nadiano-${{ steps.release.outputs.version }}-linux-x64.tar.gz.sha256" \
             artifacts/dotnet-packages.txt \
             artifacts/npm-packages.json \
+            artifacts/third-party-licenses.tsv \
             artifacts/upgrade-rehearsal.json \
+            artifacts/restore-rehearsal.json \
+            artifacts/rollback-rehearsal.json \
             --clobber
