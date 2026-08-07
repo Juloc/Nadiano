@@ -4,58 +4,76 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @{
     ViewData["Title"] = Localizer["Learn.Title"];
+    var isIndonesian = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("id", StringComparison.OrdinalIgnoreCase);
+    string T(string de, string id) => isIndonesian ? id : de;
 }
 
-<h1>@Localizer["Learn.Title"]</h1>
+<header class="page-heading">
+    <div class="page-heading-copy">
+        <span class="eyebrow">@T("Lernpfad", "Jalur belajar")</span>
+        <h1>@T("Schritt für Schritt Klavier lernen", "Belajar piano langkah demi langkah")</h1>
+        <p>@T("Arbeite in klaren Einheiten. Voraussetzungen sperren nur Inhalte, die wirklich darauf aufbauen.", "Belajar dalam unit yang jelas. Prasyarat hanya mengunci materi yang benar-benar membutuhkannya.")</p>
+    </div>
+    <a class="button-secondary" asp-page="/Practice/Beta">@T("Gezielt trainieren", "Latihan khusus")</a>
+</header>
 
 @if (Model.Courses.Count == 0)
 {
-    <p>@Localizer["Learn.Placeholder"]</p>
+    <section class="surface">
+        <p>@Localizer["Learn.Placeholder"]</p>
+    </section>
 }
 else
 {
-    foreach (var course in Model.Courses)
-    {
-        <section class="card" aria-label="@course.CourseId">
-            @if (course.RecommendedLessonTitle is not null)
-            {
-                <p class="callout">@string.Format(Localizer["Learn.RecommendedNext"], course.RecommendedLessonTitle)</p>
-            }
+    <div class="course-shell">
+        @foreach (var course in Model.Courses)
+        {
+            <section class="course-block" aria-label="@course.CourseId">
+                @if (course.RecommendedLessonTitle is not null)
+                {
+                    <p class="course-recommendation">
+                        <strong>@T("Als Nächstes:", "Berikutnya:")</strong>
+                        @string.Format(Localizer["Learn.RecommendedNext"], course.RecommendedLessonTitle)
+                    </p>
+                }
 
-            @foreach (var stage in course.Stages)
-            {
-                <h2>@Localizer[stage.TitleKey]</h2>
-                <ul class="lesson-list">
-                    @foreach (var lesson in stage.Lessons)
-                    {
-                        var statusKey = lesson.Availability switch
-                        {
-                            LessonAvailability.Completed => "Learn.StatusCompleted",
-                            LessonAvailability.Available => "Learn.StatusAvailable",
-                            _ => "Learn.StatusLocked",
-                        };
-                        var badgeModifier = lesson.Availability.ToString().ToLowerInvariant();
+                @foreach (var stage in course.Stages)
+                {
+                    <div class="course-stage">
+                        <h2>@Localizer[stage.TitleKey]</h2>
+                        <ul class="lesson-list">
+                            @foreach (var lesson in stage.Lessons)
+                            {
+                                var statusKey = lesson.Availability switch
+                                {
+                                    LessonAvailability.Completed => "Learn.StatusCompleted",
+                                    LessonAvailability.Available => "Learn.StatusAvailable",
+                                    _ => "Learn.StatusLocked",
+                                };
+                                var badgeModifier = lesson.Availability.ToString().ToLowerInvariant();
 
-                        <li class="lesson-list-item">
-                            @if (lesson.Availability == LessonAvailability.Locked)
-                            {
-                                <span class="lesson-title">@lesson.Title</span>
+                                <li class="lesson-list-item">
+                                    @if (lesson.Availability == LessonAvailability.Locked)
+                                    {
+                                        <span class="lesson-title">@lesson.Title</span>
+                                    }
+                                    else
+                                    {
+                                        <a class="lesson-title" asp-page="/Learn/Lesson" asp-route-lessonId="@lesson.LessonId">@lesson.Title</a>
+                                    }
+                                    <span class="badge badge--@badgeModifier">@Localizer[statusKey]</span>
+                                    @if (lesson.Availability == LessonAvailability.Locked)
+                                    {
+                                        <p class="lesson-locked-reason help-text">
+                                            @string.Format(Localizer["Learn.LockedReason"], string.Join(", ", lesson.MissingPrerequisiteTitles))
+                                        </p>
+                                    }
+                                </li>
                             }
-                            else
-                            {
-                                <a class="lesson-title" asp-page="/Learn/Lesson" asp-route-lessonId="@lesson.LessonId">@lesson.Title</a>
-                            }
-                            <span class="badge badge--@badgeModifier">@Localizer[statusKey]</span>
-                            @if (lesson.Availability == LessonAvailability.Locked)
-                            {
-                                <p class="lesson-locked-reason help-text">
-                                    @string.Format(Localizer["Learn.LockedReason"], string.Join(", ", lesson.MissingPrerequisiteTitles))
-                                </p>
-                            }
-                        </li>
-                    }
-                </ul>
-            }
-        </section>
-    }
+                        </ul>
+                    </div>
+                }
+            </section>
+        }
+    </div>
 }
