@@ -37,6 +37,11 @@ select {
   font-weight: 700;
 }
 
+.pedal-grid dd[data-active="true"] {
+  color: var(--nadiano-color-correct, #18785f);
+  font-weight: 750;
+}
+
 .library-filter {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(11rem, 15rem);
@@ -82,12 +87,128 @@ select {
   min-height: calc(100vh - 5rem);
 }
 
+.setup-progress {
+  margin-bottom: 1rem;
+}
+
+.setup-progress li {
+  color: var(--nadiano-color-muted, #69717b);
+}
+
+.setup-progress li[data-state="current"] {
+  color: var(--nadiano-color-fg, #17191d);
+  font-weight: 700;
+}
+
+.setup-progress li[data-state="complete"] {
+  color: var(--nadiano-color-correct, #18785f);
+}
+
+.setup-progress li[data-state="current"] .session-step {
+  background: var(--nadiano-color-accent, #5b52d6);
+  color: #fff;
+}
+
+.setup-progress li[data-state="complete"] .session-step,
+.setup-progress li[data-state="complete"] .setup-progress-state {
+  border-color: #b9dfd3;
+  background: var(--nadiano-color-correct-soft, #e9f6f1);
+  color: var(--nadiano-color-correct, #18785f);
+}
+
+.setup-wizard-step {
+  max-width: 48rem;
+  margin: 1rem auto 0;
+  padding: clamp(1.1rem, 2.5vw, 1.6rem);
+}
+
+.setup-check-list,
+.setup-device-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.setup-check-list li,
+.setup-device-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 54px;
+  padding: 0.65rem 0;
+}
+
+.setup-check-list li + li,
+.setup-device-item + .setup-device-item {
+  border-top: 1px solid var(--nadiano-color-border, #dde1e7);
+}
+
+.setup-check-list strong[data-supported="true"] {
+  color: var(--nadiano-color-correct, #18785f);
+}
+
+.setup-check-list strong[data-supported="false"] {
+  color: var(--nadiano-color-error, #b83b45);
+}
+
+.setup-device-item > div {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.setup-test-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 1rem 0;
+}
+
+.setup-test-summary > div {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.8rem;
+  border: 1px solid var(--nadiano-color-border, #dde1e7);
+  border-radius: var(--nadiano-radius-sm, 8px);
+  background: var(--nadiano-color-surface-subtle, #f0f2f5);
+}
+
+.setup-test-summary span {
+  color: var(--nadiano-color-muted, #69717b);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.setup-test-summary strong[data-complete="true"] {
+  color: var(--nadiano-color-correct, #18785f);
+}
+
+.setup-complete {
+  border-color: #b9dfd3;
+  background: var(--nadiano-color-correct-soft, #e9f6f1);
+}
+
 @media (max-width: 560px) {
   .practice-card-events {
     columns: 1;
   }
 
-  .library-filter {
+  .library-filter,
+  .setup-test-summary {
     grid-template-columns: 1fr;
+  }
+
+  .setup-check-list li,
+  .setup-device-item {
+    align-items: flex-start;
+  }
+
+  .setup-device-item {
+    flex-direction: column;
+  }
+
+  .setup-device-item button {
+    width: 100%;
   }
 }
