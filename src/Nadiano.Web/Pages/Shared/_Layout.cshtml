@@ -1,15 +1,20 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @{
     var currentPath = Context.Request.Path + Context.Request.QueryString;
+    var path = Context.Request.Path;
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
     var isIndonesian = currentCulture.StartsWith("id", StringComparison.OrdinalIgnoreCase);
+    var isPracticeWorkspace = path.StartsWithSegments("/Practice") && !path.StartsWithSegments("/Practice/Beta");
+
+    string T(string de, string id) => isIndonesian ? id : de;
+    string Current(bool active) => active ? "page" : "false";
 }
 <!DOCTYPE html>
 <html lang="@currentCulture">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0f6cbd" />
+    <meta name="theme-color" content="#5b52d6" />
     <meta name="nadiano-version" content="@Nadiano.Core.Common.AppVersion.Current" />
     <title>@ViewData["Title"] - @Localizer["Common.AppName"]</title>
     <script type="importmap"></script>
@@ -18,32 +23,47 @@
     <link rel="stylesheet" href="~/css/beta.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Nadiano.Web.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="@(isPracticeWorkspace ? "practice-focus" : null)">
     <a class="skip-link" href="#main-content">@Localizer["Common.SkipToContent"]</a>
 
     <header class="app-header">
         <nav class="app-nav" aria-label="@Localizer["Common.AppName"]">
-            <a class="app-brand" asp-page="/Index">@Localizer["Common.AppName"]</a>
-            <ul class="app-nav-list">
-                <li><a asp-page="/Index">@Localizer["Nav.Home"]</a></li>
-                <li><a asp-page="/Learn/Index">@Localizer["Nav.Learn"]</a></li>
-                <li><a asp-page="/Learn/Beta">@(isIndonesian ? "Kursus pemula" : "Anfängerkurs")</a></li>
-                <li><a asp-page="/Practice/Index">@Localizer["Nav.Practice"]</a></li>
-                <li><a asp-page="/Practice/Beta">@(isIndonesian ? "Latihan" : "Training")</a></li>
-                <li><a asp-page="/Library/Index">@Localizer["Nav.Library"]</a></li>
-                <li><a asp-page="/Progress/Index">@Localizer["Nav.Progress"]</a></li>
-                <li><a asp-page="/Settings/Index">@Localizer["Nav.Settings"]</a></li>
-                <li><a asp-page="/Profiles/Index">@Localizer["Nav.Profiles"]</a></li>
-            </ul>
-            <form class="app-culture-form" method="post" action="/culture/set" asp-antiforgery="true">
-                <label for="culture-select" class="visually-hidden">@Localizer["Common.Language"]</label>
-                <select id="culture-select" name="culture" onchange="this.form.submit()">
-                    <option value="de" selected="@(currentCulture == "de" ? "selected" : null)">@Localizer["Common.LanguageGerman"]</option>
-                    <option value="id" selected="@(currentCulture == "id" ? "selected" : null)">@Localizer["Common.LanguageIndonesian"]</option>
-                </select>
-                <input type="hidden" name="returnUrl" value="@currentPath" />
-                <noscript><button type="submit">@Localizer["Settings.Save"]</button></noscript>
-            </form>
+            @if (isPracticeWorkspace)
+            {
+                <a class="practice-back" asp-page="/Learn/Index" aria-label="@T("Übung verlassen", "Keluar dari latihan")">←</a>
+                <a class="app-brand" asp-page="/Index">@Localizer["Common.AppName"]</a>
+                <span class="practice-shell-label">@T("Übungsmodus", "Mode latihan")</span>
+                <a class="nav-utility-link" asp-page="/Setup/Index">@T("MIDI", "MIDI")</a>
+            }
+            else
+            {
+                <a class="app-brand" asp-page="/Index">@Localizer["Common.AppName"]</a>
+                <ul class="app-nav-list">
+                    <li><a asp-page="/Index" aria-current="@Current(path == "/")">@T("Heute", "Hari ini")</a></li>
+                    <li><a asp-page="/Learn/Index" aria-current="@Current(path.StartsWithSegments("/Learn"))">@T("Lernen", "Belajar")</a></li>
+                    <li><a asp-page="/Library/Index" aria-current="@Current(path.StartsWithSegments("/Library"))">@T("Songs", "Lagu")</a></li>
+                    <li><a asp-page="/Practice/Beta" aria-current="@Current(path.StartsWithSegments("/Practice/Beta"))">@T("Trainieren", "Latihan")</a></li>
+                    <li><a asp-page="/Progress/Index" aria-current="@Current(path.StartsWithSegments("/Progress"))">@T("Fortschritt", "Kemajuan")</a></li>
+                </ul>
+
+                <details class="app-menu">
+                    <summary aria-label="@T("Weitere Optionen", "Opsi lainnya")">•••</summary>
+                    <div class="app-menu-popover">
+                        <a asp-page="/Setup/Index">@T("MIDI & Einrichtung", "MIDI & penyiapan")</a>
+                        <a asp-page="/Settings/Index">@Localizer["Nav.Settings"]</a>
+                        <a asp-page="/Profiles/Index">@Localizer["Nav.Profiles"]</a>
+                        <form class="app-culture-form" method="post" action="/culture/set" asp-antiforgery="true">
+                            <label for="culture-select">@Localizer["Common.Language"]</label>
+                            <select id="culture-select" name="culture" onchange="this.form.submit()">
+                                <option value="de" selected="@(currentCulture == "de" ? "selected" : null)">@Localizer["Common.LanguageGerman"]</option>
+                                <option value="id" selected="@(currentCulture == "id" ? "selected" : null)">@Localizer["Common.LanguageIndonesian"]</option>
+                            </select>
+                            <input type="hidden" name="returnUrl" value="@currentPath" />
+                            <noscript><button type="submit">@Localizer["Settings.Save"]</button></noscript>
+                        </form>
+                    </div>
+                </details>
+            }
         </nav>
     </header>
 
@@ -51,9 +71,20 @@
         @RenderBody()
     </main>
 
-    <footer class="app-footer">
-        <p>@Localizer["Common.AppName"] &middot; v@(Nadiano.Core.Common.AppVersion.Current)</p>
-    </footer>
+    @if (!isPracticeWorkspace)
+    {
+        <nav class="mobile-nav" aria-label="@T("Hauptnavigation", "Navigasi utama")">
+            <a asp-page="/Index" aria-current="@Current(path == "/")"><span aria-hidden="true">⌂</span>@T("Heute", "Hari ini")</a>
+            <a asp-page="/Learn/Index" aria-current="@Current(path.StartsWithSegments("/Learn"))"><span aria-hidden="true">▤</span>@T("Lernen", "Belajar")</a>
+            <a asp-page="/Library/Index" aria-current="@Current(path.StartsWithSegments("/Library"))"><span aria-hidden="true">♫</span>@T("Songs", "Lagu")</a>
+            <a asp-page="/Practice/Beta" aria-current="@Current(path.StartsWithSegments("/Practice/Beta"))"><span aria-hidden="true">◎</span>@T("Train", "Latihan")</a>
+            <a asp-page="/Progress/Index" aria-current="@Current(path.StartsWithSegments("/Progress"))"><span aria-hidden="true">↗</span>@T("Fortschritt", "Kemajuan")</a>
+        </nav>
+
+        <footer class="app-footer">
+            <p>@Localizer["Common.AppName"] &middot; v@(Nadiano.Core.Common.AppVersion.Current)</p>
+        </footer>
+    }
 
     <script src="~/dist/pages/main.js" type="module" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
