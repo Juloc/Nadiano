@@ -21,7 +21,8 @@ Nadiano helps a complete beginner build correct foundations and continue into se
 - adaptive review, session planning, PWA installation and offline result recovery;
 - separate profiles with complete progress export and deletion of profile-private files;
 - release-gated backup, cold restore, upgrade and rollback rehearsals;
-- reproducible scanned Docker release with dependency and license reports.
+- WCAG-focused automated learner-page checks and release performance profiling at one CPU / 512 MiB RAM;
+- reproducible scanned Docker release with dependency, license and performance reports.
 
 ## Documentation
 
@@ -54,7 +55,7 @@ The architecture is intentionally a modular monolith. Microservices, distributed
 
 ## Run with Docker
 
-Use `ghcr.io/juloc/nadiano:1.0.2`, expose container port `8080`, mount persistent storage at `/data`, and use the bundled content at `/app/content`.
+Use `ghcr.io/juloc/nadiano:1.0.3`, expose container port `8080`, mount persistent storage at `/data`, and use the bundled content at `/app/content`.
 
 ## Repository rules
 
