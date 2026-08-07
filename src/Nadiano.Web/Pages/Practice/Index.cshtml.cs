@@ -4,6 +4,7 @@ using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
+using Nadiano.Core.Beta;
 using Nadiano.Core.Content;
 using Nadiano.Core.Content.Manifests;
 using Nadiano.Web.Features.Library;
@@ -32,11 +33,20 @@ public class IndexModel(
     public IReadOnlyList<string> SupportedModes { get; private set; } = [];
     public string AssessmentCategoriesJson { get; private set; } = "[]";
 
-    public async Task<IActionResult> OnGetAsync(string? lessonId, Guid? libraryItemId, CancellationToken cancellationToken)
+    public async Task<IActionResult> OnGetAsync(
+        string? lessonId,
+        Guid? libraryItemId,
+        string? repertoireId,
+        CancellationToken cancellationToken)
     {
         if (libraryItemId.HasValue)
         {
             return await LoadPrivateLibraryItemAsync(libraryItemId.Value, cancellationToken);
+        }
+
+        if (!string.IsNullOrWhiteSpace(repertoireId))
+        {
+            return LoadRepertoireItem(repertoireId);
         }
 
         if (string.IsNullOrWhiteSpace(lessonId))
@@ -94,11 +104,35 @@ public class IndexModel(
         "tempo-ladder" => T("Tempo-Leiter", "Tangga tempo"),
         "listen-and-copy" => T("Hören und nachspielen", "Dengar dan tirukan"),
         "performance" => T("Durchspielen", "Pertunjukan"),
+        "sight-reading" => T("Vom Blatt", "Baca langsung"),
         _ => mode,
     };
 
     public string T(string german, string indonesian) =>
         CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "id" ? indonesian : german;
+
+    private IActionResult LoadRepertoireItem(string repertoireId)
+    {
+        var piece = ReleaseContentCatalogue.FindRepertoire(repertoireId);
+        if (piece is null)
+        {
+            return NotFound();
+        }
+
+        var indonesian = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "id";
+        HasLesson = true;
+        LessonId = $"repertoire:{piece.Id}";
+        LessonTitle = indonesian ? piece.TitleId : piece.TitleDe;
+        ContentVersion = "release-1.0";
+        ScoreUrl = $"/api/beta/repertoire/{Uri.EscapeDataString(piece.Id)}/score";
+        ExpectedEventsUrl = $"/api/beta/repertoire/{Uri.EscapeDataString(piece.Id)}/expected-events";
+        TargetTempo = piece.TargetTempoBpm;
+        CountInMeasures = 1;
+        DefaultMode = "sight-reading";
+        SupportedModes = ["wait", "loop", "rhythm", "tempo-ladder", "listen-and-copy", "performance", "sight-reading"];
+        AssessmentCategoriesJson = JsonSerializer.Serialize(new[] { "pitch", "onset", "duration", "steadiness", "dynamics" });
+        return Page();
+    }
 
     private async Task<IActionResult> LoadPrivateLibraryItemAsync(Guid itemId, CancellationToken cancellationToken)
     {
@@ -122,13 +156,13 @@ public class IndexModel(
         TargetTempo = metadata.TargetTempoBpm;
         CountInMeasures = 1;
         DefaultMode = "wait";
-        SupportedModes = ["wait", "loop", "hands-separate", "rhythm", "tempo-ladder", "listen-and-copy", "performance"];
+        SupportedModes = ["wait", "loop", "hands-separate", "rhythm", "tempo-ladder", "listen-and-copy", "performance", "sight-reading"];
         AssessmentCategoriesJson = JsonSerializer.Serialize(new[] { "pitch", "onset", "duration", "steadiness", "dynamics" });
         return Page();
     }
 
     private static bool IsSupportedMode(string mode) =>
-        mode is "wait" or "loop" or "hands-separate" or "rhythm" or "tempo-ladder" or "listen-and-copy" or "performance";
+        mode is "wait" or "loop" or "hands-separate" or "rhythm" or "tempo-ladder" or "listen-and-copy" or "performance" or "sight-reading";
 
     private static string ContentUrl(string lessonId, string relativePath) =>
         $"/api/content/lessons/{Uri.EscapeDataString(lessonId)}/files/{relativePath}";
@@ -142,6 +176,7 @@ public class IndexModel(
         PracticeMode.TempoLadder => "tempo-ladder",
         PracticeMode.ListenAndCopy => "listen-and-copy",
         PracticeMode.Performance => "performance",
+        PracticeMode.SightReading => "sight-reading",
         _ => "wait",
     };
 
