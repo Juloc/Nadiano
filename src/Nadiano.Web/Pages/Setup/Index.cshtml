@@ -3,64 +3,100 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @{
     ViewData["Title"] = Localizer["Setup.Title"];
+    var isIndonesian = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("id", StringComparison.OrdinalIgnoreCase);
+    string T(string de, string id) => isIndonesian ? id : de;
 }
 
-<h1>@Localizer["Setup.Title"]</h1>
-<p>@Localizer["Setup.Intro"]</p>
+<header class="page-heading">
+    <div class="page-heading-copy">
+        <span class="eyebrow">@T("MIDI & Einrichtung", "MIDI & penyiapan")</span>
+        <h1>@T("E-Piano verbinden", "Hubungkan piano digital")</h1>
+        <p>@T("Gehe die Schritte einmal durch. Technische Diagnosen bleiben im Hintergrund, solange alles funktioniert.", "Ikuti langkah-langkah ini sekali. Diagnostik teknis tetap di latar belakang selama semuanya berfungsi.")</p>
+    </div>
+</header>
 
-<section aria-labelledby="setup-capabilities-heading" class="card">
-    <h2 id="setup-capabilities-heading">@Localizer["Setup.Capabilities.Heading"]</h2>
-    <ul>
-        <li>@Localizer["Setup.Capabilities.SecureContext"]: <strong id="capability-secure-context" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
-        <li>@Localizer["Setup.Capabilities.Midi"]: <strong id="capability-midi" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
-        <li>@Localizer["Setup.Capabilities.Audio"]: <strong id="capability-audio" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
-        <li>@Localizer["Setup.Capabilities.IndexedDb"]: <strong id="capability-indexeddb" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
-    </ul>
-</section>
+<ol class="session-outline surface" aria-label="@T("Einrichtungsschritte", "Langkah penyiapan")">
+    <li><span class="session-step">1</span><span>@T("Browser prüfen", "Periksa browser")</span><span class="chip">@T("automatisch", "otomatis")</span></li>
+    <li><span class="session-step">2</span><span>@T("MIDI-Zugriff erlauben", "Izinkan akses MIDI")</span><span class="chip">@T("einmalig", "sekali")</span></li>
+    <li><span class="session-step">3</span><span>@T("E-Piano auswählen", "Pilih piano digital")</span><span class="chip">USB MIDI</span></li>
+    <li><span class="session-step">4</span><span>@T("Tasten und Pedale testen", "Uji tuts dan pedal")</span><span class="chip">@T("kurz", "singkat")</span></li>
+    <li><span class="session-step">5</span><span>@T("Mit dem Lernen beginnen", "Mulai belajar")</span><span class="chip">✓</span></li>
+</ol>
+
+<div class="progress-hero" style="margin-top:1rem">
+    <section aria-labelledby="setup-capabilities-heading" class="surface">
+        <span class="eyebrow">@T("Schritt 1", "Langkah 1")</span>
+        <h2 id="setup-capabilities-heading">@Localizer["Setup.Capabilities.Heading"]</h2>
+        <ul class="progress-list">
+            <li>@Localizer["Setup.Capabilities.SecureContext"] <strong id="capability-secure-context" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+            <li>@Localizer["Setup.Capabilities.Midi"] <strong id="capability-midi" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+            <li>@Localizer["Setup.Capabilities.Audio"] <strong id="capability-audio" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+            <li>@Localizer["Setup.Capabilities.IndexedDb"] <strong id="capability-indexeddb" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+        </ul>
+    </section>
+
+    <section class="surface" aria-labelledby="setup-connect-heading">
+        <span class="eyebrow">@T("Schritt 2", "Langkah 2")</span>
+        <h2 id="setup-connect-heading">@T("MIDI-Zugriff erlauben", "Izinkan akses MIDI")</h2>
+        <p class="help-text">@T("Der Browser fragt erst nach Zugriff, wenn du den Button drückst.", "Browser hanya meminta akses setelah kamu menekan tombol.")</p>
+        <p id="setup-preferred-hint" hidden><span>@Localizer["Setup.PreferredDeviceHint"]:</span> <strong id="setup-preferred-hint-name"></strong></p>
+        <div class="today-actions">
+            <button id="setup-connect-button" type="button" class="button">@Localizer["Setup.ConnectButton"]</button>
+            <button id="setup-forget-button" type="button" class="button-secondary" hidden>@Localizer["Setup.ForgetPreference"]</button>
+        </div>
+    </section>
+</div>
 
 <p id="setup-guidance-insecure" class="callout" hidden>@Localizer["Setup.Guidance.Insecure"]</p>
 <p id="setup-guidance-unsupported" class="callout" hidden>@Localizer["Setup.Guidance.Unsupported"]</p>
 <p id="setup-guidance-denied" class="callout" hidden>@Localizer["Setup.Guidance.Denied"]</p>
 
-<p id="setup-preferred-hint" hidden><span>@Localizer["Setup.PreferredDeviceHint"]:</span> <strong id="setup-preferred-hint-name"></strong></p>
-<p>
-    <button id="setup-connect-button" type="button" class="button">@Localizer["Setup.ConnectButton"]</button>
-    <button id="setup-forget-button" type="button" class="button-secondary" hidden>@Localizer["Setup.ForgetPreference"]</button>
-</p>
-
-<section id="setup-devices-section" aria-labelledby="setup-devices-heading" hidden
+<section id="setup-devices-section" class="surface" aria-labelledby="setup-devices-heading" hidden
     data-label-select="@Localizer["Setup.Devices.SelectButton"]"
     data-label-selected="@Localizer["Setup.Devices.Selected"]"
     data-label-connected="@Localizer["Setup.Devices.StateConnected"]"
     data-label-disconnected="@Localizer["Setup.Devices.StateDisconnected"]">
+    <span class="eyebrow">@T("Schritt 3", "Langkah 3")</span>
     <h2 id="setup-devices-heading">@Localizer["Setup.Devices.Heading"]</h2>
     <p id="setup-devices-empty" hidden>@Localizer["Setup.Devices.Empty"]</p>
-    <ul id="setup-devices-list"></ul>
+    <ul id="setup-devices-list" class="progress-list"></ul>
 </section>
 
-<section id="setup-diagnostics-section" aria-labelledby="setup-diagnostics-heading" hidden
+<section id="setup-diagnostics-section" class="surface" aria-labelledby="setup-diagnostics-heading" hidden
     data-label-pedal-on="@Localizer["Setup.Diagnostics.SustainOn"]"
-    data-label-pedal-off="@Localizer["Setup.Diagnostics.SustainOff"]">
-    <h2 id="setup-diagnostics-heading">@Localizer["Setup.Diagnostics.Heading"]</h2>
+    data-label-pedal-off="@Localizer["Setup.Diagnostics.SustainOff"]"
+    style="margin-top:1rem">
+    <span class="eyebrow">@T("Schritt 4", "Langkah 4")</span>
+    <h2 id="setup-diagnostics-heading">@T("Tasten und Pedale testen", "Uji tuts dan pedal")</h2>
+    <p class="help-text">@T("Spiele einige tiefe, mittlere und hohe Töne und betätige alle vorhandenen Pedale.", "Mainkan beberapa nada rendah, tengah, dan tinggi lalu tekan semua pedal yang tersedia.")</p>
     <div id="setup-keyboard" class="keyboard" role="img" aria-label="@Localizer["Setup.Diagnostics.Heading"]"></div>
 
     <h3>@Localizer["Setup.Diagnostics.ActiveNotesHeading"]</h3>
     <p id="setup-active-notes-empty">@Localizer["Setup.Diagnostics.ActiveNotesEmpty"]</p>
-    <ul id="setup-active-notes-list"></ul>
+    <ul id="setup-active-notes-list" class="progress-list"></ul>
 
-    <h3>Pedale / Pedal</h3>
+    <h3>@T("Pedale", "Pedal")</h3>
     <dl class="pedal-grid" aria-live="polite">
         <div><dt>Sustain · CC64</dt><dd id="setup-pedal-sustain">0</dd></div>
         <div><dt>Sostenuto · CC66</dt><dd id="setup-pedal-sostenuto">0</dd></div>
         <div><dt>Soft / Una corda · CC67</dt><dd id="setup-pedal-soft">0</dd></div>
     </dl>
 
-    <h3>@Localizer["Setup.Diagnostics.RecentEventsHeading"]</h3>
-    <p id="setup-recent-events-empty">@Localizer["Setup.Diagnostics.RecentEventsEmpty"]</p>
-    <ul id="setup-recent-events-list"></ul>
+    <details class="disclosure-panel">
+        <summary>@T("Technische Diagnosen", "Diagnostik teknis")</summary>
+        <div class="disclosure-content">
+            <h3>@Localizer["Setup.Diagnostics.RecentEventsHeading"]</h3>
+            <p id="setup-recent-events-empty">@Localizer["Setup.Diagnostics.RecentEventsEmpty"]</p>
+            <ul id="setup-recent-events-list" class="progress-list"></ul>
+            <p><button id="setup-export-button" type="button" class="button-secondary">@Localizer["Setup.Diagnostics.ExportButton"]</button></p>
+            <pre id="setup-export-output" hidden></pre>
+        </div>
+    </details>
 
-    <p><button id="setup-export-button" type="button" class="button-secondary">@Localizer["Setup.Diagnostics.ExportButton"]</button></p>
-    <pre id="setup-export-output" hidden></pre>
+    <div class="today-actions">
+        <a class="button" asp-page="/Index">@T("Einrichtung fertig", "Penyiapan selesai")</a>
+        <a class="button-secondary" asp-page="/Learn/Index">@T("Zum Lernpfad", "Ke jalur belajar")</a>
+    </div>
 </section>
 
 @section Scripts {
