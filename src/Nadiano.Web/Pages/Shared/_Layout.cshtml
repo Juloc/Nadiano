@@ -5,6 +5,9 @@
     var currentCulture = System.Globalization.CultureInfo.CurrentUICulture.Name;
     var isIndonesian = currentCulture.StartsWith("id", StringComparison.OrdinalIgnoreCase);
     var isPracticeWorkspace = path.StartsWithSegments("/Practice") && !path.StartsWithSegments("/Practice/Beta");
+    var practiceReturnPage = Context.Request.Query.ContainsKey("libraryItemId") || Context.Request.Query.ContainsKey("repertoireId")
+        ? "/Library/Index"
+        : "/Learn/Index";
 
     string T(string de, string id) => isIndonesian ? id : de;
     string Current(bool active) => active ? "page" : "false";
@@ -30,7 +33,7 @@
         <nav class="app-nav" aria-label="@Localizer["Common.AppName"]">
             @if (isPracticeWorkspace)
             {
-                <a class="practice-back" asp-page="/Learn/Index" aria-label="@T("Übung verlassen", "Keluar dari latihan")">
+                <a class="practice-back" asp-page="@practiceReturnPage" aria-label="@T("Übung verlassen", "Keluar dari latihan")">
                     <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7" /></svg>
                 </a>
                 <a class="app-brand" asp-page="/Index">@Localizer["Common.AppName"]</a>
