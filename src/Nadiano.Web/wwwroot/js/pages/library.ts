@@ -9,11 +9,15 @@ function initLibraryFilters(): void {
     return;
   }
 
+  const searchInput = search;
+  const statusSelect = status;
+  const countLabel = count;
+  const emptyState = empty;
   const unit = document.documentElement.lang.startsWith("id") ? "lagu" : "Stücke";
 
   function apply(): void {
-    const query = search.value.trim().toLocaleLowerCase();
-    const selectedStatus = status.value;
+    const query = searchInput.value.trim().toLocaleLowerCase();
+    const selectedStatus = statusSelect.value;
     let visible = 0;
 
     for (const card of cards) {
@@ -30,12 +34,12 @@ function initLibraryFilters(): void {
       }
     }
 
-    count.textContent = `${visible} ${unit}`;
-    empty.hidden = visible !== 0;
+    countLabel.textContent = `${visible} ${unit}`;
+    emptyState.hidden = visible !== 0;
   }
 
-  search.addEventListener("input", apply);
-  status.addEventListener("change", apply);
+  searchInput.addEventListener("input", apply);
+  statusSelect.addEventListener("change", apply);
   apply();
 }
 
