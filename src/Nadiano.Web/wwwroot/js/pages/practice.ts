@@ -291,13 +291,14 @@ function initPracticeWorkspace(): void {
         .filter((measure): measure is number => measure !== undefined),
     )].sort((a, b) => a - b);
 
-    if (issueMeasures.length > 0) {
+    const firstIssueMeasure = issueMeasures[0];
+    if (firstIssueMeasure !== undefined) {
       const visibleMeasures = issueMeasures.slice(0, 4).join(", ");
       problemLocation.textContent = indonesian
         ? `Periksa dulu birama ${visibleMeasures}${issueMeasures.length > 4 ? " …" : ""}. Kursor menunjukkan masalah pertama.`
         : `Prüfe zuerst Takt ${visibleMeasures}${issueMeasures.length > 4 ? " …" : ""}. Der Cursor zeigt die erste Problemstelle.`;
       problemLocation.hidden = false;
-      notationAdapter.moveCursorToMeasure(issueMeasures[0]);
+      notationAdapter.moveCursorToMeasure(firstIssueMeasure);
     } else {
       problemLocation.hidden = true;
       notationAdapter.hideCursor();
