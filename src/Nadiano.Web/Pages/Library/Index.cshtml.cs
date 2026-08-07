@@ -15,6 +15,7 @@ public sealed class IndexModel(
     CurrentProfileAccessor profiles) : PageModel
 {
     public IReadOnlyList<PrivateLibraryItem> Items { get; private set; } = [];
+    public IReadOnlyList<RepertoirePieceDescriptor> Repertoire { get; } = ReleaseContentCatalogue.Create().Repertoire;
     public string? Notice { get; private set; }
     public string? Error { get; private set; }
 
@@ -126,6 +127,9 @@ public sealed class IndexModel(
 
     public IReadOnlyList<string> Warnings(PrivateLibraryItem item) =>
         JsonSerializer.Deserialize<string[]>(item.WarningJson) ?? [];
+
+    public string PieceTitle(RepertoirePieceDescriptor piece) =>
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "id" ? piece.TitleId : piece.TitleDe;
 
     public string T(string german, string indonesian) =>
         CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "id" ? indonesian : german;
