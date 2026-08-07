@@ -11,64 +11,69 @@
     <div class="page-heading-copy">
         <span class="eyebrow">@T("MIDI & Einrichtung", "MIDI & penyiapan")</span>
         <h1>@T("E-Piano verbinden", "Hubungkan piano digital")</h1>
-        <p>@T("Gehe die Schritte einmal durch. Technische Diagnosen bleiben im Hintergrund, solange alles funktioniert.", "Ikuti langkah-langkah ini sekali. Diagnostik teknis tetap di latar belakang selama semuanya berfungsi.")</p>
+        <p>@T("Fünf kurze Schritte. Nadiano zeigt immer nur das, was du gerade brauchst.", "Lima langkah singkat. Nadiano hanya menampilkan apa yang kamu perlukan saat ini.")</p>
     </div>
 </header>
 
-<ol class="session-outline surface" aria-label="@T("Einrichtungsschritte", "Langkah penyiapan")">
-    <li><span class="session-step">1</span><span>@T("Browser prüfen", "Periksa browser")</span><span class="chip">@T("automatisch", "otomatis")</span></li>
-    <li><span class="session-step">2</span><span>@T("MIDI-Zugriff erlauben", "Izinkan akses MIDI")</span><span class="chip">@T("einmalig", "sekali")</span></li>
-    <li><span class="session-step">3</span><span>@T("E-Piano auswählen", "Pilih piano digital")</span><span class="chip">USB MIDI</span></li>
-    <li><span class="session-step">4</span><span>@T("Tasten und Pedale testen", "Uji tuts dan pedal")</span><span class="chip">@T("kurz", "singkat")</span></li>
-    <li><span class="session-step">5</span><span>@T("Mit dem Lernen beginnen", "Mulai belajar")</span><span class="chip">✓</span></li>
+<ol class="session-outline surface setup-progress" aria-label="@T("Einrichtungsschritte", "Langkah penyiapan")">
+    <li id="setup-progress-1" data-state="current"><span class="session-step">1</span><span>@T("Browser prüfen", "Periksa browser")</span><span class="chip setup-progress-state" data-pending="@T("offen", "belum")" data-current="@T("jetzt", "sekarang")" data-complete="@T("fertig", "selesai")">@T("jetzt", "sekarang")</span></li>
+    <li id="setup-progress-2" data-state="pending"><span class="session-step">2</span><span>@T("MIDI-Zugriff erlauben", "Izinkan akses MIDI")</span><span class="chip setup-progress-state" data-pending="@T("offen", "belum")" data-current="@T("jetzt", "sekarang")" data-complete="@T("fertig", "selesai")">@T("offen", "belum")</span></li>
+    <li id="setup-progress-3" data-state="pending"><span class="session-step">3</span><span>@T("E-Piano auswählen", "Pilih piano digital")</span><span class="chip setup-progress-state" data-pending="@T("offen", "belum")" data-current="@T("jetzt", "sekarang")" data-complete="@T("fertig", "selesai")">@T("offen", "belum")</span></li>
+    <li id="setup-progress-4" data-state="pending"><span class="session-step">4</span><span>@T("Tasten und Pedale testen", "Uji tuts dan pedal")</span><span class="chip setup-progress-state" data-pending="@T("offen", "belum")" data-current="@T("jetzt", "sekarang")" data-complete="@T("fertig", "selesai")">@T("offen", "belum")</span></li>
+    <li id="setup-progress-5" data-state="pending"><span class="session-step">5</span><span>@T("Fertig", "Selesai")</span><span class="chip setup-progress-state" data-pending="@T("offen", "belum")" data-current="@T("jetzt", "sekarang")" data-complete="@T("fertig", "selesai")">@T("offen", "belum")</span></li>
 </ol>
 
-<div class="progress-hero" style="margin-top:1rem">
-    <section aria-labelledby="setup-capabilities-heading" class="surface">
-        <span class="eyebrow">@T("Schritt 1", "Langkah 1")</span>
-        <h2 id="setup-capabilities-heading">@Localizer["Setup.Capabilities.Heading"]</h2>
-        <ul class="progress-list">
-            <li>@Localizer["Setup.Capabilities.SecureContext"] <strong id="capability-secure-context" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
-            <li>@Localizer["Setup.Capabilities.Midi"] <strong id="capability-midi" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
-            <li>@Localizer["Setup.Capabilities.Audio"] <strong id="capability-audio" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
-            <li>@Localizer["Setup.Capabilities.IndexedDb"] <strong id="capability-indexeddb" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
-        </ul>
-    </section>
+<section id="setup-step-1" class="surface setup-wizard-step" aria-labelledby="setup-capabilities-heading">
+    <span class="eyebrow">@T("Schritt 1 von 5", "Langkah 1 dari 5")</span>
+    <h2 id="setup-capabilities-heading">@Localizer["Setup.Capabilities.Heading"]</h2>
+    <p class="help-text">@T("Nadiano prüft automatisch, ob der Browser für MIDI-Übungen bereit ist.", "Nadiano otomatis memeriksa apakah browser siap untuk latihan MIDI.")</p>
+    <ul class="setup-check-list">
+        <li><span>@Localizer["Setup.Capabilities.SecureContext"]</span><strong id="capability-secure-context" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+        <li><span>@Localizer["Setup.Capabilities.Midi"]</span><strong id="capability-midi" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+        <li><span>@Localizer["Setup.Capabilities.Audio"]</span><strong id="capability-audio" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+        <li><span>@Localizer["Setup.Capabilities.IndexedDb"]</span><strong id="capability-indexeddb" data-yes="@Localizer["Setup.Capabilities.Yes"]" data-no="@Localizer["Setup.Capabilities.No"]"></strong></li>
+    </ul>
+</section>
 
-    <section class="surface" aria-labelledby="setup-connect-heading">
-        <span class="eyebrow">@T("Schritt 2", "Langkah 2")</span>
-        <h2 id="setup-connect-heading">@T("MIDI-Zugriff erlauben", "Izinkan akses MIDI")</h2>
-        <p class="help-text">@T("Der Browser fragt erst nach Zugriff, wenn du den Button drückst.", "Browser hanya meminta akses setelah kamu menekan tombol.")</p>
-        <p id="setup-preferred-hint" hidden><span>@Localizer["Setup.PreferredDeviceHint"]:</span> <strong id="setup-preferred-hint-name"></strong></p>
-        <div class="today-actions">
-            <button id="setup-connect-button" type="button" class="button">@Localizer["Setup.ConnectButton"]</button>
-            <button id="setup-forget-button" type="button" class="button-secondary" hidden>@Localizer["Setup.ForgetPreference"]</button>
-        </div>
-    </section>
-</div>
+<p id="setup-guidance-insecure" class="callout" role="alert" hidden>@Localizer["Setup.Guidance.Insecure"]</p>
+<p id="setup-guidance-unsupported" class="callout" role="alert" hidden>@Localizer["Setup.Guidance.Unsupported"]</p>
+<p id="setup-guidance-denied" class="callout" role="alert" hidden>@Localizer["Setup.Guidance.Denied"]</p>
 
-<p id="setup-guidance-insecure" class="callout" hidden>@Localizer["Setup.Guidance.Insecure"]</p>
-<p id="setup-guidance-unsupported" class="callout" hidden>@Localizer["Setup.Guidance.Unsupported"]</p>
-<p id="setup-guidance-denied" class="callout" hidden>@Localizer["Setup.Guidance.Denied"]</p>
+<section id="setup-step-2" class="surface setup-wizard-step" aria-labelledby="setup-connect-heading" hidden>
+    <span class="eyebrow">@T("Schritt 2 von 5", "Langkah 2 dari 5")</span>
+    <h2 id="setup-connect-heading">@T("MIDI-Zugriff erlauben", "Izinkan akses MIDI")</h2>
+    <p>@T("Der Browser fragt erst nach MIDI-Zugriff, wenn du den Button drückst. Nadiano benötigt keine SysEx-Berechtigung.", "Browser baru meminta akses MIDI setelah kamu menekan tombol. Nadiano tidak memerlukan izin SysEx.")</p>
+    <p id="setup-preferred-hint" class="help-text" hidden><span>@Localizer["Setup.PreferredDeviceHint"]:</span> <strong id="setup-preferred-hint-name"></strong></p>
+    <div class="today-actions">
+        <button id="setup-connect-button" type="button" class="button">@Localizer["Setup.ConnectButton"]</button>
+        <button id="setup-forget-button" type="button" class="button-secondary" hidden>@Localizer["Setup.ForgetPreference"]</button>
+    </div>
+</section>
 
-<section id="setup-devices-section" class="surface" aria-labelledby="setup-devices-heading" hidden
+<section id="setup-devices-section" class="surface setup-wizard-step" aria-labelledby="setup-devices-heading" hidden
     data-label-select="@Localizer["Setup.Devices.SelectButton"]"
     data-label-selected="@Localizer["Setup.Devices.Selected"]"
     data-label-connected="@Localizer["Setup.Devices.StateConnected"]"
     data-label-disconnected="@Localizer["Setup.Devices.StateDisconnected"]">
-    <span class="eyebrow">@T("Schritt 3", "Langkah 3")</span>
+    <span class="eyebrow">@T("Schritt 3 von 5", "Langkah 3 dari 5")</span>
     <h2 id="setup-devices-heading">@Localizer["Setup.Devices.Heading"]</h2>
-    <p id="setup-devices-empty" hidden>@Localizer["Setup.Devices.Empty"]</p>
-    <ul id="setup-devices-list" class="progress-list"></ul>
+    <p class="help-text">@T("Wähle das E-Piano, das Nadiano für Übungen verwenden soll.", "Pilih piano digital yang akan digunakan Nadiano untuk latihan.")</p>
+    <p id="setup-devices-empty" class="callout" hidden>@Localizer["Setup.Devices.Empty"]</p>
+    <ul id="setup-devices-list" class="setup-device-list"></ul>
 </section>
 
-<section id="setup-diagnostics-section" class="surface" aria-labelledby="setup-diagnostics-heading" hidden
+<section id="setup-diagnostics-section" class="surface setup-wizard-step" aria-labelledby="setup-diagnostics-heading" hidden
     data-label-pedal-on="@Localizer["Setup.Diagnostics.SustainOn"]"
-    data-label-pedal-off="@Localizer["Setup.Diagnostics.SustainOff"]"
-    style="margin-top:1rem">
-    <span class="eyebrow">@T("Schritt 4", "Langkah 4")</span>
+    data-label-pedal-off="@Localizer["Setup.Diagnostics.SustainOff"]">
+    <span class="eyebrow">@T("Schritt 4 von 5", "Langkah 4 dari 5")</span>
     <h2 id="setup-diagnostics-heading">@T("Tasten und Pedale testen", "Uji tuts dan pedal")</h2>
-    <p class="help-text">@T("Spiele einige tiefe, mittlere und hohe Töne und betätige alle vorhandenen Pedale.", "Mainkan beberapa nada rendah, tengah, dan tinggi lalu tekan semua pedal yang tersedia.")</p>
+    <p>@T("Spiele mindestens drei verschiedene Tasten. Betätige danach die vorhandenen Pedale – erkannte Pedale werden direkt bestätigt.", "Mainkan sedikitnya tiga tuts yang berbeda. Setelah itu tekan pedal yang tersedia — pedal yang terdeteksi langsung dikonfirmasi.")</p>
+
+    <div class="setup-test-summary" aria-live="polite">
+        <div><span>@T("Tastentest", "Tes tuts")</span><strong id="setup-note-test-state" data-template-de="{0}/3 Tasten erkannt" data-template-id="{0}/3 tuts terdeteksi">0/3 @T("Tasten erkannt", "tuts terdeteksi")</strong></div>
+        <div><span>@T("Pedaltest", "Tes pedal")</span><strong id="setup-pedal-test-state" data-template-de="{0} Pedale erkannt" data-template-id="{0} pedal terdeteksi">0 @T("Pedale erkannt", "pedal terdeteksi")</strong></div>
+    </div>
+
     <div id="setup-keyboard" class="keyboard" role="img" aria-label="@Localizer["Setup.Diagnostics.Heading"]"></div>
 
     <h3>@Localizer["Setup.Diagnostics.ActiveNotesHeading"]</h3>
@@ -93,8 +98,16 @@
         </div>
     </details>
 
+    <button id="setup-test-complete-button" class="button" type="button" disabled>@T("Test abschließen", "Selesaikan tes")</button>
+    <p class="help-text">@T("Der Button wird aktiv, sobald mindestens drei verschiedene Tasten erkannt wurden. Pedale sind optional, weil nicht jedes Instrument drei Pedale besitzt.", "Tombol aktif setelah sedikitnya tiga tuts berbeda terdeteksi. Pedal bersifat opsional karena tidak semua instrumen memiliki tiga pedal.")</p>
+</section>
+
+<section id="setup-step-5" class="surface setup-wizard-step setup-complete" aria-labelledby="setup-complete-heading" hidden>
+    <span class="eyebrow">@T("Schritt 5 von 5", "Langkah 5 dari 5")</span>
+    <h2 id="setup-complete-heading">@T("Bereit zum Spielen", "Siap bermain")</h2>
+    <p>@T("MIDI ist eingerichtet. Nadiano merkt sich das ausgewählte E-Piano und versucht es beim nächsten Mal wiederzuverwenden.", "MIDI sudah disiapkan. Nadiano mengingat piano digital yang dipilih dan akan mencoba menggunakannya lagi lain kali.")</p>
     <div class="today-actions">
-        <a class="button" asp-page="/Index">@T("Einrichtung fertig", "Penyiapan selesai")</a>
+        <a class="button" asp-page="/Index">@T("Zur heutigen Übung", "Ke latihan hari ini")</a>
         <a class="button-secondary" asp-page="/Learn/Index">@T("Zum Lernpfad", "Ke jalur belajar")</a>
     </div>
 </section>
