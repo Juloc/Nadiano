@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 using Nadiano.Core.Beta;
 
 namespace Nadiano.Core.Tests.Beta;
@@ -32,7 +34,7 @@ public class BetaCurriculumTests
         Assert.Equal(first.Lessons, second.Lessons);
         Assert.Equal(first.Exercises, second.Exercises);
         Assert.Equal(firstRelease.EarTasks, secondRelease.EarTasks);
-        Assert.Equal(firstRelease.Repertoire, secondRelease.Repertoire);
+        Assert.Equal(JsonSerializer.Serialize(firstRelease.Repertoire), JsonSerializer.Serialize(secondRelease.Repertoire));
     }
 
     [Fact]
