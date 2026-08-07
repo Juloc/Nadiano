@@ -3,26 +3,43 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @{
     ViewData["Title"] = Model.Text.Title;
+    var isIndonesian = System.Globalization.CultureInfo.CurrentUICulture.Name.StartsWith("id", StringComparison.OrdinalIgnoreCase);
+    string T(string de, string id) => isIndonesian ? id : de;
 }
 
-<h1>@Model.Text.Title</h1>
+<header class="page-heading">
+    <div class="page-heading-copy">
+        <span class="eyebrow">@T("Lektion", "Pelajaran")</span>
+        <h1>@Model.Text.Title</h1>
+        <p>@Model.Text.Summary</p>
+    </div>
+    @if (Model.HasNotationPractice)
+    {
+        <a class="button" asp-page="/Practice/Index" asp-route-lessonId="@Model.LessonId">@T("Am Piano üben", "Latihan di piano")</a>
+    }
+</header>
 
-<section class="card" aria-labelledby="lesson-goal-heading">
-    <h2 id="lesson-goal-heading">@Localizer["Lesson.GoalHeading"]</h2>
-    <p id="lesson-cue" class="callout">@Model.Text.Summary</p>
-</section>
-
-@if (!string.IsNullOrWhiteSpace(Model.Text.Why))
-{
-    <section aria-labelledby="lesson-why-heading">
-        <h2 id="lesson-why-heading">@Localizer["Lesson.WhyHeading"]</h2>
-        <p>@Model.Text.Why</p>
+<div class="progress-hero">
+    <section class="surface" aria-labelledby="lesson-goal-heading">
+        <span class="eyebrow">@T("Ziel", "Tujuan")</span>
+        <h2 id="lesson-goal-heading">@Localizer["Lesson.GoalHeading"]</h2>
+        <p id="lesson-cue">@Model.Text.Summary</p>
     </section>
-}
+
+    @if (!string.IsNullOrWhiteSpace(Model.Text.Why))
+    {
+        <section class="surface" aria-labelledby="lesson-why-heading">
+            <span class="eyebrow">@T("Warum", "Mengapa")</span>
+            <h2 id="lesson-why-heading">@Localizer["Lesson.WhyHeading"]</h2>
+            <p>@Model.Text.Why</p>
+        </section>
+    }
+</div>
 
 @if (Model.MediaViews.Count > 0)
 {
-    <section aria-labelledby="lesson-demo-heading">
+    <section class="surface" aria-labelledby="lesson-demo-heading">
+        <span class="eyebrow">@T("Demonstration", "Demonstrasi")</span>
         <h2 id="lesson-demo-heading">@Localizer["Lesson.DemonstrationHeading"]</h2>
         <p class="help-text">@Localizer["Lesson.DemonstrationTextAlternative"]</p>
         <div class="technique-media-list" data-loop="@Model.MediaLoops.ToString().ToLowerInvariant()">
@@ -49,37 +66,47 @@
     </section>
 }
 
-@if (!string.IsNullOrWhiteSpace(Model.Text.CommonMistake))
+@if (Model.Text.Steps.Count > 0 || !string.IsNullOrWhiteSpace(Model.Text.CommonMistake))
 {
-    <section aria-labelledby="lesson-mistake-heading" class="callout">
-        <h2 id="lesson-mistake-heading">@Localizer["Lesson.CommonMistakeHeading"]</h2>
-        <p>@Model.Text.CommonMistake</p>
-    </section>
-}
+    <div class="progress-hero" style="margin-top:1rem">
+        @if (Model.Text.Steps.Count > 0)
+        {
+            <section class="surface" aria-labelledby="lesson-steps-heading">
+                <span class="eyebrow">@T("Ausprobieren", "Coba")</span>
+                <h2 id="lesson-steps-heading">@Localizer["Lesson.StepsHeading"]</h2>
+                <ol class="progress-list">
+                    @foreach (var step in Model.Text.Steps)
+                    {
+                        <li>@step</li>
+                    }
+                </ol>
+            </section>
+        }
 
-@if (Model.Text.Steps.Count > 0)
-{
-    <section aria-labelledby="lesson-steps-heading">
-        <h2 id="lesson-steps-heading">@Localizer["Lesson.StepsHeading"]</h2>
-        <ol>
-            @foreach (var step in Model.Text.Steps)
-            {
-                <li>@step</li>
-            }
-        </ol>
-    </section>
+        @if (!string.IsNullOrWhiteSpace(Model.Text.CommonMistake))
+        {
+            <section class="surface" aria-labelledby="lesson-mistake-heading">
+                <span class="eyebrow">@T("Achte darauf", "Perhatikan")</span>
+                <h2 id="lesson-mistake-heading">@Localizer["Lesson.CommonMistakeHeading"]</h2>
+                <p>@Model.Text.CommonMistake</p>
+            </section>
+        }
+    </div>
 }
 
 @if (Model.HasNotationPractice)
 {
-    <p class="help-text">
-        @Localizer["Lesson.PlayAtPianoHint"]
-        <a asp-page="/Practice/Index" asp-route-lessonId="@Model.LessonId">@Localizer["Nav.Practice"]</a>
-    </p>
+    <section class="surface" style="margin-top:1rem">
+        <span class="eyebrow">@T("Jetzt spielen", "Sekarang bermain")</span>
+        <h2>@T("Setze die Lektion am Piano um", "Terapkan pelajaran di piano")</h2>
+        <p class="help-text">@Localizer["Lesson.PlayAtPianoHint"]</p>
+        <a class="button" asp-page="/Practice/Index" asp-route-lessonId="@Model.LessonId">@T("Übung starten", "Mulai latihan")</a>
+    </section>
 }
 else
 {
-    <section class="card" id="lesson-dry-task" data-lesson-id="@Model.LessonId" data-content-version="@Model.ContentVersion">
+    <section class="surface" id="lesson-dry-task" data-lesson-id="@Model.LessonId" data-content-version="@Model.ContentVersion" style="margin-top:1rem">
+        <span class="eyebrow">@T("Aufgabe", "Tugas")</span>
         <p id="lesson-dry-task-status" class="callout" hidden>@Localizer["Lesson.DryTaskDone"]</p>
         <button id="lesson-dry-task-button" type="button" class="button">@Localizer["Lesson.DryTaskButton"]</button>
     </section>
@@ -87,10 +114,11 @@ else
 
 @if (Model.SelfCheckSkillIds.Count > 0)
 {
-    <section aria-labelledby="lesson-selfcheck-heading" id="lesson-selfcheck-section" class="card" hidden>
+    <section aria-labelledby="lesson-selfcheck-heading" id="lesson-selfcheck-section" class="surface" hidden style="margin-top:1rem">
+        <span class="eyebrow">@T("Selbstcheck", "Pemeriksaan diri")</span>
         <h2 id="lesson-selfcheck-heading">@Localizer["Lesson.SelfCheckHeading"]</h2>
         <p class="help-text">@Localizer["Lesson.SelfCheckDisclaimer"]</p>
-        <ul id="lesson-selfcheck-list" data-lesson-id="@Model.LessonId">
+        <ul id="lesson-selfcheck-list" data-lesson-id="@Model.LessonId" class="progress-list">
             @foreach (var skillId in Model.SelfCheckSkillIds)
             {
                 <li class="self-check-item" data-skill-id="@skillId">
