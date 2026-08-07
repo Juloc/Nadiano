@@ -1,67 +1,103 @@
 @page
 @model BetaModel
 @{
-    ViewData["Title"] = Model.T("1.0-Training", "Latihan 1.0");
+    ViewData["Title"] = Model.T("Trainieren", "Latihan");
 }
 
-<h1>@Model.T("1.0-Training", "Latihan 1.0")</h1>
-<p>@Model.T("Der Tagesplan mischt fällige Wiederholungen mit Lesen, Rhythmus und Gehör.", "Rencana harian menggabungkan ulasan yang jatuh tempo dengan membaca, ritme, dan pendengaran.")</p>
-
-<section class="card" aria-labelledby="plan-heading">
-    <h2 id="plan-heading">@Model.T("Tagesplan", "Rencana harian")</h2>
-    <button id="beta-load-plan" class="button-secondary" type="button">@Model.T("Plan laden", "Muat rencana")</button>
-    <ol id="beta-plan" aria-live="polite"></ol>
-</section>
-
-<section class="card" aria-labelledby="reading-heading">
-    <h2 id="reading-heading">@Model.T("Generierte Lesekarte", "Kartu membaca yang dibuat")</h2>
-    <button id="beta-reading-new" class="button" type="button">@Model.T("Neue Karte", "Kartu baru")</button>
-    <p id="beta-reading-seed" class="help-text"></p>
-    <ol id="beta-reading-events" class="practice-card-events"></ol>
-    <button id="beta-reading-correct" class="button-secondary" type="button" disabled>@Model.T("Richtig gelesen", "Dibaca dengan benar")</button>
-    <button id="beta-reading-retry" class="button-secondary" type="button" disabled>@Model.T("Noch üben", "Perlu latihan")</button>
-</section>
-
-<section class="card" aria-labelledby="rhythm-heading">
-    <h2 id="rhythm-heading">@Model.T("Rhythmus-Tap", "Ketuk ritme")</h2>
-    <button id="beta-rhythm-new" class="button" type="button">@Model.T("Neues Muster", "Pola baru")</button>
-    <p id="beta-rhythm-pattern" class="rhythm-pattern" aria-live="polite"></p>
-    <button id="beta-rhythm-start" class="button-secondary" type="button" disabled>@Model.T("Start mit Einzähler", "Mulai dengan hitungan")</button>
-    <button id="beta-rhythm-tap" class="button" type="button" disabled>@Model.T("Tippen / Leertaste", "Ketuk / spasi")</button>
-    <p id="beta-rhythm-result" aria-live="polite"></p>
-</section>
-
-<section class="card" aria-labelledby="ear-heading">
-    <h2 id="ear-heading">@Model.T("Gehörtraining", "Latihan pendengaran")</h2>
-    <p>@Model.T("Der 1.0-Katalog enthält 60 reproduzierbare Gehöraufgaben für Tonrichtung, Muster und Klanggedächtnis.", "Katalog 1.0 berisi 60 tugas pendengaran yang dapat direproduksi untuk arah nada, pola, dan memori bunyi.")</p>
-    <button id="beta-ear-play" class="button" type="button">@Model.T("Zwei Töne abspielen", "Putar dua nada")</button>
-    <div id="beta-ear-answers" hidden>
-        <button class="button-secondary" type="button" data-answer="higher">@Model.T("Höher", "Lebih tinggi")</button>
-        <button class="button-secondary" type="button" data-answer="lower">@Model.T("Tiefer", "Lebih rendah")</button>
-        <button class="button-secondary" type="button" data-answer="same">@Model.T("Gleich", "Sama")</button>
+<header class="page-heading">
+    <div class="page-heading-copy">
+        <span class="eyebrow">@Model.T("Trainieren", "Latihan")</span>
+        <h1>@Model.T("Eine Fähigkeit gezielt verbessern", "Tingkatkan satu keterampilan secara terarah")</h1>
+        <p>@Model.T("Kurze Übungen für Lesen, Rhythmus, Gehör und fällige Wiederholungen. Für den normalen Tagesablauf kannst du direkt den Tagesplan laden.", "Latihan singkat untuk membaca, ritme, pendengaran, dan ulasan jatuh tempo. Untuk latihan harian normal, muat rencana harian langsung.")</p>
     </div>
-    <p id="beta-ear-result" aria-live="polite"></p>
-</section>
+    <a class="button-secondary" asp-page="/Index">@Model.T("Zurück zu Heute", "Kembali ke Hari ini")</a>
+</header>
 
-<section class="card" aria-labelledby="repertoire-heading">
-    <h2 id="repertoire-heading">@Model.T("Stücke", "Repertoar")</h2>
-    <p>@Model.T("24 originale Miniaturen und 12 gemeinfreie Melodien nutzen denselben Notations-, MIDI- und Bewertungsweg wie andere Übungen.", "24 miniatur orisinal dan 12 melodi domain publik memakai jalur notasi, MIDI, dan penilaian yang sama seperti latihan lain.")</p>
-    <ul class="lesson-list">
-        @foreach (var piece in Model.Repertoire)
-        {
-            <li>
-                <a class="button-secondary" asp-page="/Practice/Index" asp-route-repertoireId="@piece.Id">@Model.PieceTitle(piece)</a>
-                <span class="help-text">@piece.Stage · @piece.Composer · @piece.TargetTempoBpm BPM</span>
-            </li>
-        }
-    </ul>
-</section>
+<div class="train-grid">
+    <section class="card train-card train-card--wide" aria-labelledby="plan-heading">
+        <span class="eyebrow">@Model.T("Empfohlen", "Direkomendasikan")</span>
+        <h2 id="plan-heading">@Model.T("Tagesplan", "Rencana harian")</h2>
+        <p class="help-text">@Model.T("Mischt fällige Wiederholungen mit Lesen, Rhythmus und Gehör.", "Menggabungkan ulasan jatuh tempo dengan membaca, ritme, dan pendengaran.")</p>
+        <button id="beta-load-plan" class="button" type="button">@Model.T("Plan laden", "Muat rencana")</button>
+        <ol id="beta-plan" class="session-outline" aria-live="polite"></ol>
+    </section>
 
-<section class="card" aria-labelledby="review-heading">
-    <h2 id="review-heading">@Model.T("Fällige Wiederholungen", "Ulasan jatuh tempo")</h2>
-    <button id="beta-load-reviews" class="button-secondary" type="button">@Model.T("Aktualisieren", "Perbarui")</button>
-    <ul id="beta-reviews"></ul>
-</section>
+    <section class="card train-card" aria-labelledby="reading-heading">
+        <span class="eyebrow">@Model.T("Notenlesen", "Membaca not")</span>
+        <h2 id="reading-heading">@Model.T("Lesekarte", "Kartu membaca")</h2>
+        <p class="help-text">@Model.T("Kurzes unbekanntes Material lesen und direkt bewerten.", "Baca materi singkat yang belum dikenal dan nilai langsung.")</p>
+        <div class="train-card-actions">
+            <button id="beta-reading-new" class="button" type="button">@Model.T("Neue Karte", "Kartu baru")</button>
+            <button id="beta-reading-correct" class="button-secondary" type="button" disabled>@Model.T("Richtig gelesen", "Dibaca dengan benar")</button>
+            <button id="beta-reading-retry" class="button-secondary" type="button" disabled>@Model.T("Noch üben", "Perlu latihan")</button>
+        </div>
+        <p id="beta-reading-seed" class="help-text"></p>
+        <ol id="beta-reading-events" class="practice-card-events"></ol>
+    </section>
+
+    <section class="card train-card" aria-labelledby="rhythm-heading">
+        <span class="eyebrow">@Model.T("Timing", "Timing")</span>
+        <h2 id="rhythm-heading">@Model.T("Rhythmus", "Ritme")</h2>
+        <p class="help-text">@Model.T("Rhythmus getrennt von Tonhöhen trainieren.", "Latih ritme terpisah dari tinggi nada.")</p>
+        <p id="beta-rhythm-pattern" class="rhythm-pattern" aria-live="polite"></p>
+        <div class="train-card-actions">
+            <button id="beta-rhythm-new" class="button" type="button">@Model.T("Neues Muster", "Pola baru")</button>
+            <button id="beta-rhythm-start" class="button-secondary" type="button" disabled>@Model.T("Start mit Einzähler", "Mulai dengan hitungan")</button>
+            <button id="beta-rhythm-tap" class="button" type="button" disabled>@Model.T("Tippen / Leertaste", "Ketuk / spasi")</button>
+        </div>
+        <p id="beta-rhythm-result" aria-live="polite"></p>
+    </section>
+
+    <section class="card train-card" aria-labelledby="ear-heading">
+        <span class="eyebrow">@Model.T("Gehör", "Pendengaran")</span>
+        <h2 id="ear-heading">@Model.T("Tonrichtung erkennen", "Kenali arah nada")</h2>
+        <p>@Model.T("Höre zwei Töne und entscheide, wie sich der zweite Ton bewegt.", "Dengarkan dua nada dan tentukan bagaimana nada kedua bergerak.")</p>
+        <div class="train-card-actions">
+            <button id="beta-ear-play" class="button" type="button">@Model.T("Zwei Töne abspielen", "Putar dua nada")</button>
+            <div id="beta-ear-answers" hidden>
+                <button class="button-secondary" type="button" data-answer="higher">@Model.T("Höher", "Lebih tinggi")</button>
+                <button class="button-secondary" type="button" data-answer="lower">@Model.T("Tiefer", "Lebih rendah")</button>
+                <button class="button-secondary" type="button" data-answer="same">@Model.T("Gleich", "Sama")</button>
+            </div>
+        </div>
+        <p id="beta-ear-result" aria-live="polite"></p>
+    </section>
+
+    <section class="card train-card" aria-labelledby="review-heading">
+        <span class="eyebrow">@Model.T("Wiederholen", "Ulasan")</span>
+        <h2 id="review-heading">@Model.T("Fällige Aufgaben", "Tugas jatuh tempo")</h2>
+        <p class="help-text">@Model.T("Schwierige Inhalte kommen gezielt wieder zurück.", "Materi yang sulit akan kembali secara terarah.")</p>
+        <button id="beta-load-reviews" class="button-secondary" type="button">@Model.T("Aktualisieren", "Perbarui")</button>
+        <ul id="beta-reviews" class="progress-list"></ul>
+    </section>
+
+    <section class="card train-card train-card--wide" aria-labelledby="repertoire-heading">
+        <div class="library-toolbar">
+            <div>
+                <span class="eyebrow">@Model.T("Repertoire", "Repertoar")</span>
+                <h2 id="repertoire-heading">@Model.T("Stücke aus Nadiano", "Lagu dari Nadiano")</h2>
+            </div>
+            <a class="button-secondary" asp-page="/Library/Index">@Model.T("Eigene Songs", "Lagu sendiri")</a>
+        </div>
+        <p class="help-text">@Model.T("Originale Miniaturen und gemeinfreie Melodien nutzen denselben Notations-, MIDI- und Bewertungsweg wie andere Übungen.", "Miniatur orisinal dan melodi domain publik memakai jalur notasi, MIDI, dan penilaian yang sama seperti latihan lain.")</p>
+        <div class="song-grid">
+            @foreach (var piece in Model.Repertoire)
+            {
+                <article class="song-card">
+                    <div class="song-card-meta">
+                        <span class="chip">@piece.Stage</span>
+                        <span class="chip">@piece.TargetTempoBpm BPM</span>
+                    </div>
+                    <h3>@Model.PieceTitle(piece)</h3>
+                    <p class="help-text">@piece.Composer</p>
+                    <div class="song-card-actions">
+                        <a class="button" asp-page="/Practice/Index" asp-route-repertoireId="@piece.Id">@Model.T("Üben", "Latihan")</a>
+                    </div>
+                </article>
+            }
+        </div>
+    </section>
+</div>
 
 @section Scripts {
     <script src="~/dist/pages/beta-practice.js" type="module" asp-append-version="true"></script>
