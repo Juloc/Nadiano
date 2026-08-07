@@ -1,6 +1,6 @@
 # Nadiano 1.0 release checklist
 
-Stable software release: **1.0.3**.
+Stable software release: **1.0.4**.
 
 ## Automated gates
 
@@ -17,9 +17,9 @@ Stable software release: **1.0.3**.
 - [x] Upgrade rehearsal starts Beta data with the stable image and preserves the learner profile.
 - [x] Cold restore copies the pre-upgrade backup into an empty volume and verifies the preserved profile.
 - [x] Rollback restores the pre-upgrade backup with the Beta image and verifies the preserved profile.
-- [x] Immutable `1.0.3` and commit-SHA image tags are pushed before the GitHub release is created.
+- [x] Immutable `1.0.4` and commit-SHA image tags are pushed before the GitHub release is created.
 
-Release evidence is attached to the `v1.0.3` GitHub release, including `performance-profile.json`, `upgrade-rehearsal.json`, `restore-rehearsal.json`, `rollback-rehearsal.json`, dependency inventories and the third-party license report.
+Release evidence is attached to the `v1.0.4` GitHub release, including `performance-profile.json`, `upgrade-rehearsal.json`, `restore-rehearsal.json`, `rollback-rehearsal.json`, dependency inventories and the third-party license report.
 
 ## Manual gates that CI cannot truthfully replace
 
