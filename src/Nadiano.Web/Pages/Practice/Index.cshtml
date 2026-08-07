@@ -5,20 +5,28 @@
     ViewData["Title"] = Localizer["Practice.Title"];
 }
 
-<h1>@Localizer["Practice.Title"]</h1>
-
 @if (!Model.HasLesson)
 {
-    <section class="card">
-        <p>@Localizer["Practice.NoLesson"]</p>
-        <a class="button" asp-page="/Learn/Index">@Localizer["Practice.SelectLesson"]</a>
-        <a class="button-secondary" asp-page="/Library/Index">@Model.T("Eigene Noten öffnen", "Buka partitur pribadi")</a>
+    <header class="page-heading">
+        <div class="page-heading-copy">
+            <span class="eyebrow">@Localizer["Practice.Title"]</span>
+            <h1>@Model.T("Wähle zuerst eine Lektion oder ein Stück", "Pilih pelajaran atau lagu terlebih dahulu")</h1>
+            <p>@Localizer["Practice.NoLesson"]</p>
+        </div>
+    </header>
+    <section class="surface">
+        <div class="today-actions">
+            <a class="button" asp-page="/Learn/Index">@Localizer["Practice.SelectLesson"]</a>
+            <a class="button-secondary" asp-page="/Library/Index">@Model.T("Eigene Songs öffnen", "Buka lagu pribadi")</a>
+            <a class="button-secondary" asp-page="/Practice/Beta" asp-fragment="repertoire-heading">@Model.T("Nadiano-Repertoire", "Repertoar Nadiano")</a>
+        </div>
     </section>
 }
 else
 {
     <div
         id="practice-workspace"
+        class="practice-workspace"
         data-lesson-id="@Model.LessonId"
         data-content-version="@Model.ContentVersion"
         data-score-url="@Model.ScoreUrl"
@@ -27,90 +35,119 @@ else
         data-count-in-measures="@Model.CountInMeasures"
         data-assessment-categories="@Model.AssessmentCategoriesJson">
 
-        <section aria-labelledby="workspace-goal-heading" class="card">
-            <h2 id="workspace-goal-heading">@Model.LessonTitle</h2>
-            <p>@Localizer["Practice.Workspace.Goal"]</p>
-            @if (Model.IsPrivateLibraryItem)
-            {
-                <p class="help-text">@Model.T("Private Datei: Sie wird nicht im öffentlichen PWA-Cache gespeichert.", "Berkas pribadi: tidak disimpan dalam cache PWA publik.")</p>
-            }
-            <p class="help-text">@Localizer["Practice.Workspace.TargetTempoLabel"]: <strong id="workspace-target-tempo"></strong> BPM</p>
-        </section>
+        <header class="practice-context">
+            <div class="practice-context-copy">
+                <h1>@Model.LessonTitle</h1>
+                <p>
+                    @Localizer["Practice.Workspace.Goal"] ·
+                    @Localizer["Practice.Workspace.TargetTempoLabel"] <strong id="workspace-target-tempo"></strong> BPM
+                </p>
+            </div>
+            <div class="practice-device">
+                <p id="workspace-device-status" class="callout" hidden
+                   data-connected="@Localizer["Practice.Workspace.DeviceConnected"]"
+                   data-not-connected="@Localizer["Practice.Workspace.DeviceNotConnected"]"></p>
+                <button id="workspace-connect-button" type="button" class="button-secondary" disabled>@Localizer["Practice.Workspace.ConnectButton"]</button>
+            </div>
+        </header>
 
-        <p id="workspace-device-status" class="callout" hidden
-           data-connected="@Localizer["Practice.Workspace.DeviceConnected"]"
-           data-not-connected="@Localizer["Practice.Workspace.DeviceNotConnected"]"></p>
-        <p><button id="workspace-connect-button" type="button" class="button-secondary" disabled>@Localizer["Practice.Workspace.ConnectButton"]</button></p>
+        @if (Model.IsPrivateLibraryItem)
+        {
+            <p class="help-text">@Model.T("Private Datei: Sie wird nicht im öffentlichen PWA-Cache gespeichert.", "Berkas pribadi: tidak disimpan dalam cache PWA publik.")</p>
+        }
 
         <p id="workspace-load-error" class="callout" hidden>@Localizer["Practice.Workspace.LoadError"]</p>
-        <div id="workspace-notation" class="notation-container"></div>
-        <section id="workspace-fingering-section" class="card" aria-labelledby="workspace-fingering-heading" hidden>
-            <h3 id="workspace-fingering-heading">@Model.T("Fingersatzhinweise", "Petunjuk penjarian")</h3>
-            <p class="help-text">@Model.T("Die Ereignis-ID kann in der privaten Bibliothek für eine begrenzte Fingersatz-Korrektur verwendet werden.", "ID peristiwa dapat digunakan di perpustakaan pribadi untuk koreksi penjarian terbatas.")</p>
+
+        <section class="practice-score-shell" aria-label="@Model.T("Noten und Übungssteuerung", "Partitur dan kontrol latihan")">
+            <div id="workspace-notation" class="notation-container"></div>
+
+            <div class="practice-toolbar" aria-label="@Model.T("Übungssteuerung", "Kontrol latihan")">
+                <div class="practice-toolbar-group">
+                    <button id="workspace-start-button" type="button" class="button">@Localizer["Practice.Workspace.StartButton"]</button>
+                    <button id="workspace-stop-button" type="button" class="button-secondary" disabled>@Localizer["Practice.Workspace.StopButton"]</button>
+                </div>
+
+                <div class="practice-toolbar-group practice-toolbar-group--grow">
+                    <div class="practice-control">
+                        <label for="workspace-mode">@Localizer["Practice.Workspace.ModeLabel"]</label>
+                        <select id="workspace-mode">
+                            @foreach (var mode in Model.SupportedModes)
+                            {
+                                <option value="@mode" selected="@(mode == Model.DefaultMode ? "selected" : null)">@Model.ModeDisplayName(mode)</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div id="workspace-hand-range" class="practice-control" hidden>
+                        <label for="workspace-hand">@Model.T("Hand", "Tangan")</label>
+                        <select id="workspace-hand">
+                            <option value="right">@Model.T("Rechts", "Kanan")</option>
+                            <option value="left">@Model.T("Links", "Kiri")</option>
+                        </select>
+                    </div>
+
+                    <div class="practice-control practice-control--zoom">
+                        <label for="workspace-zoom">@Localizer["Practice.Notation.ZoomLabel"]</label>
+                        <input id="workspace-zoom" type="range" min="0.5" max="2" step="0.1" value="1" />
+                    </div>
+                </div>
+
+                <details class="practice-more">
+                    <summary>@Model.T("Mehr", "Lainnya")</summary>
+                    <div class="practice-more-panel">
+                        <div id="workspace-loop-range" hidden>
+                            <strong>@Model.T("Übungsbereich", "Bagian latihan")</strong>
+                            <div class="practice-loop-grid">
+                                <div>
+                                    <label for="workspace-from-measure">@Localizer["Practice.Notation.FromMeasureLabel"]</label>
+                                    <input id="workspace-from-measure" type="number" min="1" value="1" />
+                                </div>
+                                <div>
+                                    <label for="workspace-to-measure">@Localizer["Practice.Notation.ToMeasureLabel"]</label>
+                                    <input id="workspace-to-measure" type="number" min="1" value="1" />
+                                </div>
+                            </div>
+                        </div>
+                        <p id="workspace-mode-hint" class="help-text" aria-live="polite"></p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section id="workspace-fingering-section" class="surface" aria-labelledby="workspace-fingering-heading" hidden>
+            <h2 id="workspace-fingering-heading">@Model.T("Fingersatzhinweise", "Petunjuk penjarian")</h2>
+            <p class="help-text">@Model.T("Fingersätze sind Lernhinweise. MIDI kann nicht erkennen, welchen Finger du tatsächlich benutzt.", "Penjarian adalah petunjuk belajar. MIDI tidak dapat mengenali jari yang benar-benar kamu gunakan.")</p>
             <ul id="workspace-fingering-list"></ul>
         </section>
-        <div class="field-list">
-            <div>
-                <label for="workspace-zoom">@Localizer["Practice.Notation.ZoomLabel"]</label>
-                <input id="workspace-zoom" type="range" min="0.5" max="2" step="0.1" value="1" />
-            </div>
+
+        <div class="practice-feedback-row">
+            <section aria-labelledby="workspace-live-heading" id="workspace-live-section" class="surface" hidden>
+                <span class="eyebrow">@Model.T("Live", "Langsung")</span>
+                <h2 id="workspace-live-heading">@Localizer["Practice.Workspace.LiveHeading"]</h2>
+                <ul id="workspace-live-list" aria-live="polite"
+                    data-status-pending="@Localizer["Practice.Workspace.StatusPending"]"
+                    data-status-correct="@Localizer["Practice.Workspace.StatusCorrect"]"
+                    data-status-missed="@Localizer["Practice.Workspace.StatusMissed"]"></ul>
+            </section>
+
+            <section aria-labelledby="workspace-result-heading" id="workspace-result-section" class="surface" hidden
+                data-pitch-template="@Localizer["Practice.Result.PitchCorrect"]"
+                data-additions-template="@Localizer["Practice.Result.PitchAdditions"]"
+                data-onset-template="@Localizer["Practice.Result.OnsetOnTime"]"
+                data-duration-template="@Localizer["Practice.Result.DurationAverage"]"
+                data-steadiness-template="@Localizer["Practice.Result.SteadinessValue"]"
+                data-dynamics-template="@Localizer["Practice.Result.DynamicsRange"]"
+                data-next-action-hands-separate="@Localizer["Practice.NextAction.HandsSeparate"]"
+                data-next-action-repeat-slower="@Localizer["Practice.NextAction.RepeatSlower"]"
+                data-next-action-repeat-section="@Localizer["Practice.NextAction.RepeatSection"]"
+                data-next-action-well-done="@Localizer["Practice.NextAction.WellDone"]">
+                <span class="eyebrow">@Model.T("Auswertung", "Hasil")</span>
+                <h2 id="workspace-result-heading">@Localizer["Practice.Workspace.ResultHeading"]</h2>
+                <ul id="workspace-result-list"></ul>
+                <p id="workspace-next-action" aria-live="polite"></p>
+                <button id="workspace-retry-button" type="button" class="button">@Localizer["Practice.Workspace.RetryButton"]</button>
+            </section>
         </div>
-
-        <div class="field-list">
-            <div>
-                <label for="workspace-mode">@Localizer["Practice.Workspace.ModeLabel"]</label>
-                <select id="workspace-mode">
-                    @foreach (var mode in Model.SupportedModes)
-                    {
-                        <option value="@mode" selected="@(mode == Model.DefaultMode ? "selected" : null)">@Model.ModeDisplayName(mode)</option>
-                    }
-                </select>
-            </div>
-            <div id="workspace-hand-range" hidden>
-                <label for="workspace-hand">@Model.T("Hand", "Tangan")</label>
-                <select id="workspace-hand">
-                    <option value="right">@Model.T("Rechts", "Kanan")</option>
-                    <option value="left">@Model.T("Links", "Kiri")</option>
-                </select>
-            </div>
-            <div id="workspace-loop-range" hidden>
-                <label for="workspace-from-measure">@Localizer["Practice.Notation.FromMeasureLabel"]</label>
-                <input id="workspace-from-measure" type="number" min="1" value="1" />
-                <label for="workspace-to-measure">@Localizer["Practice.Notation.ToMeasureLabel"]</label>
-                <input id="workspace-to-measure" type="number" min="1" value="1" />
-            </div>
-        </div>
-
-        <p id="workspace-mode-hint" class="help-text" aria-live="polite"></p>
-        <p>
-            <button id="workspace-start-button" type="button" class="button">@Localizer["Practice.Workspace.StartButton"]</button>
-            <button id="workspace-stop-button" type="button" class="button-secondary" disabled>@Localizer["Practice.Workspace.StopButton"]</button>
-        </p>
-
-        <section aria-labelledby="workspace-live-heading" id="workspace-live-section" hidden>
-            <h3 id="workspace-live-heading">@Localizer["Practice.Workspace.LiveHeading"]</h3>
-            <ul id="workspace-live-list" aria-live="polite"
-                data-status-pending="@Localizer["Practice.Workspace.StatusPending"]"
-                data-status-correct="@Localizer["Practice.Workspace.StatusCorrect"]"
-                data-status-missed="@Localizer["Practice.Workspace.StatusMissed"]"></ul>
-        </section>
-
-        <section aria-labelledby="workspace-result-heading" id="workspace-result-section" class="card" hidden
-            data-pitch-template="@Localizer["Practice.Result.PitchCorrect"]"
-            data-additions-template="@Localizer["Practice.Result.PitchAdditions"]"
-            data-onset-template="@Localizer["Practice.Result.OnsetOnTime"]"
-            data-duration-template="@Localizer["Practice.Result.DurationAverage"]"
-            data-steadiness-template="@Localizer["Practice.Result.SteadinessValue"]"
-            data-dynamics-template="@Localizer["Practice.Result.DynamicsRange"]"
-            data-next-action-hands-separate="@Localizer["Practice.NextAction.HandsSeparate"]"
-            data-next-action-repeat-slower="@Localizer["Practice.NextAction.RepeatSlower"]"
-            data-next-action-repeat-section="@Localizer["Practice.NextAction.RepeatSection"]"
-            data-next-action-well-done="@Localizer["Practice.NextAction.WellDone"]">
-            <h3 id="workspace-result-heading">@Localizer["Practice.Workspace.ResultHeading"]</h3>
-            <ul id="workspace-result-list"></ul>
-            <p id="workspace-next-action" aria-live="polite"></p>
-            <button id="workspace-retry-button" type="button" class="button">@Localizer["Practice.Workspace.RetryButton"]</button>
-        </section>
     </div>
 }
 
