@@ -21,6 +21,7 @@ export interface PracticeSessionConfig {
 
 export interface PracticeSessionResult {
   facts: ScoringFacts;
+  matchResult: MatchResult;
   nextAction: NextActionCode;
   nextActionKey: string;
 }
@@ -141,7 +142,7 @@ export class PracticeSession {
     const matchResult = this.config.mode === "wait" ? this.computeFinalWaitMatchResult() : this.computeTimedMatchResult();
     const facts = computeScoringFacts(this.config.enabledCategories, matchResult, this.resolvedExpected, this.playedEvents, this.config.onTimeToleranceMs);
     const nextAction = recommendNextAction(facts);
-    this.onComplete?.({ facts, nextAction, nextActionKey: nextActionLocalizationKey(nextAction) });
+    this.onComplete?.({ facts, matchResult, nextAction, nextActionKey: nextActionLocalizationKey(nextAction) });
   }
 
   private computeFinalWaitMatchResult(): MatchResult {
