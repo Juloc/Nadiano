@@ -12,11 +12,29 @@
         <div>
             <span class="eyebrow">@T("Heute", "Hari ini")</span>
             <h1 id="today-heading">@T("Deine nächste Klaviereinheit", "Sesi piano berikutnya")</h1>
-            <p>@T("Nadiano verbindet Wiederholung, Lesen, Rhythmus, Gehör und echte Stücke zu einer klaren Übungseinheit.", "Nadiano menggabungkan ulasan, membaca, ritme, pendengaran, dan lagu nyata menjadi satu sesi latihan yang jelas.")</p>
+            @if (Model.Summary.ReviewsDue.Count > 0)
+            {
+                <p>@T($"{Model.Summary.ReviewsDue.Count} Wiederholungen sind fällig. Nadiano mischt sie automatisch mit Lesen, Rhythmus, Gehör und Repertoire.", $"{Model.Summary.ReviewsDue.Count} ulasan sudah jatuh tempo. Nadiano otomatis mencampurnya dengan membaca, ritme, pendengaran, dan repertoar.")</p>
+            }
+            else if (Model.Summary.RecommendedLesson is not null)
+            {
+                <p>@T("Keine Wiederholung drängt. Heute kannst du mit der nächsten empfohlenen Lektion und einem kurzen Training weitergehen.", "Tidak ada ulasan mendesak. Hari ini kamu bisa melanjutkan dengan pelajaran rekomendasi berikutnya dan latihan singkat.")</p>
+            }
+            else
+            {
+                <p>@T("Nadiano verbindet Wiederholung, Lesen, Rhythmus, Gehör und echte Stücke zu einer klaren Übungseinheit.", "Nadiano menggabungkan ulasan, membaca, ritme, pendengaran, dan lagu nyata menjadi satu sesi latihan yang jelas.")</p>
+            }
         </div>
         <div class="today-actions">
             <a class="button" asp-page="/Practice/Beta">@T("Heutiges Training starten", "Mulai latihan hari ini")</a>
-            <a class="button-secondary" asp-page="/Learn/Index">@T("Lernpfad öffnen", "Buka jalur belajar")</a>
+            @if (Model.Summary.RecommendedLesson is not null)
+            {
+                <a class="button-secondary" asp-page="/Learn/Lesson" asp-route-lessonId="@Model.Summary.RecommendedLesson.LessonId">@T("Empfohlene Lektion", "Pelajaran rekomendasi")</a>
+            }
+            else
+            {
+                <a class="button-secondary" asp-page="/Learn/Index">@T("Lernpfad öffnen", "Buka jalur belajar")</a>
+            }
         </div>
     </section>
 
@@ -32,6 +50,29 @@
                 <li><span class="session-step">5</span><span>@T("Ergebnis prüfen", "Tinjau hasil")</span><span class="chip">1 min</span></li>
             </ol>
         </section>
+
+        <section class="surface">
+            <div class="quick-status">
+                <div>
+                    <strong>@T("Lernstand", "Kemajuan belajar")</strong>
+                    <span class="help-text">@Model.Summary.CompletedLessonCount / @Model.Summary.TotalLessonCount @T("Lektionen abgeschlossen", "pelajaran selesai")</span>
+                </div>
+                <a class="button-secondary" asp-page="/Progress/Index">@T("Ansehen", "Lihat")</a>
+            </div>
+            <progress class="progress-meter" value="@Model.Summary.CompletedLessonCount" max="@Math.Max(1, Model.Summary.TotalLessonCount)" aria-label="@T("Kursfortschritt", "Kemajuan kursus")"></progress>
+        </section>
+
+        @if (Model.Summary.ReviewsDue.Count > 0)
+        {
+            var review = Model.Summary.ReviewsDue[0];
+            <section class="surface quick-status">
+                <div>
+                    <strong>@T("Nächste Wiederholung", "Ulasan berikutnya")</strong>
+                    <span class="help-text">@review.LessonTitle</span>
+                </div>
+                <a class="button-secondary" asp-page="/Learn/Lesson" asp-route-lessonId="@review.LessonId">@T("Öffnen", "Buka")</a>
+            </section>
+        }
 
         <section class="surface quick-status">
             <div>
@@ -59,8 +100,8 @@
     </a>
     <a class="surface" asp-page="/Library/Index" style="text-decoration:none;color:inherit">
         <span class="eyebrow">@T("Songs", "Lagu")</span>
-        <h3>@T("Eigene Noten üben", "Latih partitur sendiri")</h3>
-        <p class="help-text">@T("MusicXML/MXL importieren und mit derselben Übungsengine spielen.", "Impor MusicXML/MXL dan gunakan mesin latihan yang sama.")</p>
+        <h3>@T("Stücke auswählen", "Pilih lagu")</h3>
+        <p class="help-text">@T("Nadiano-Repertoire und eigene MusicXML/MXL-Dateien in einer Bibliothek.", "Repertoar Nadiano dan berkas MusicXML/MXL pribadi dalam satu perpustakaan.")</p>
     </a>
     <a class="surface" asp-page="/Progress/Index" style="text-decoration:none;color:inherit">
         <span class="eyebrow">@T("Fortschritt", "Kemajuan")</span>
