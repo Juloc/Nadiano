@@ -30,7 +30,9 @@
         <nav class="app-nav" aria-label="@Localizer["Common.AppName"]">
             @if (isPracticeWorkspace)
             {
-                <a class="practice-back" asp-page="/Learn/Index" aria-label="@T("Übung verlassen", "Keluar dari latihan")">←</a>
+                <a class="practice-back" asp-page="/Learn/Index" aria-label="@T("Übung verlassen", "Keluar dari latihan")">
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7" /></svg>
+                </a>
                 <a class="app-brand" asp-page="/Index">@Localizer["Common.AppName"]</a>
                 <span class="practice-shell-label">@T("Übungsmodus", "Mode latihan")</span>
                 <a class="nav-utility-link" asp-page="/Setup/Index">@T("MIDI", "MIDI")</a>
@@ -74,11 +76,26 @@
     @if (!isPracticeWorkspace)
     {
         <nav class="mobile-nav" aria-label="@T("Hauptnavigation", "Navigasi utama")">
-            <a asp-page="/Index" aria-current="@Current(path == "/")"><span aria-hidden="true">⌂</span>@T("Heute", "Hari ini")</a>
-            <a asp-page="/Learn/Index" aria-current="@Current(path.StartsWithSegments("/Learn"))"><span aria-hidden="true">▤</span>@T("Lernen", "Belajar")</a>
-            <a asp-page="/Library/Index" aria-current="@Current(path.StartsWithSegments("/Library"))"><span aria-hidden="true">♫</span>@T("Songs", "Lagu")</a>
-            <a asp-page="/Practice/Beta" aria-current="@Current(path.StartsWithSegments("/Practice/Beta"))"><span aria-hidden="true">◎</span>@T("Train", "Latihan")</a>
-            <a asp-page="/Progress/Index" aria-current="@Current(path.StartsWithSegments("/Progress"))"><span aria-hidden="true">↗</span>@T("Fortschritt", "Kemajuan")</a>
+            <a asp-page="/Index" aria-current="@Current(path == "/")">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V20h-5v-6H9v6H4Z" /></svg>
+                @T("Heute", "Hari ini")
+            </a>
+            <a asp-page="/Learn/Index" aria-current="@Current(path.StartsWithSegments("/Learn"))">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4.5h6.5c1.2 0 2 .8 2 2V20c0-1.2-.8-2-2-2H5Zm14 0h-5.5v13.5H19Z" /></svg>
+                @T("Lernen", "Belajar")
+            </a>
+            <a asp-page="/Library/Index" aria-current="@Current(path.StartsWithSegments("/Library"))">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 18V6l9-2v12M9 18a3 3 0 1 1-3-3 3 3 0 0 1 3 3Zm9-2a3 3 0 1 1-3-3 3 3 0 0 1 3 3Z" /></svg>
+                @T("Songs", "Lagu")
+            </a>
+            <a asp-page="/Practice/Beta" aria-current="@Current(path.StartsWithSegments("/Practice/Beta"))">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3" /><path d="M12 2v3m0 14v3M2 12h3m14 0h3" /></svg>
+                @T("Train", "Latihan")
+            </a>
+            <a asp-page="/Progress/Index" aria-current="@Current(path.StartsWithSegments("/Progress"))">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 19V11m7 8V7m7 12V4" /></svg>
+                @T("Fortschritt", "Kemajuan")
+            </a>
         </nav>
 
         <footer class="app-footer">
