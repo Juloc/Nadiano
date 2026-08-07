@@ -145,6 +145,7 @@
                     }
                     <a class="button-secondary" href="/api/library/@item.Id/score">@Model.T("MusicXML anzeigen", "Tampilkan MusicXML")</a>
                     <a class="button-secondary" href="/api/library/@item.Id/export">@Model.T("Original exportieren", "Ekspor asli")</a>
+                    <a class="button-secondary" href="/api/library/@item.Id/package">@Model.T("Nadiano-Paket exportieren", "Ekspor paket Nadiano")</a>
                 </p>
                 <form method="post" asp-page-handler="Delete">
                     <input type="hidden" name="itemId" value="@item.Id" />
