@@ -2,11 +2,17 @@
 @model IndexModel
 @inject IStringLocalizer<SharedResource> Localizer
 @{
-    ViewData["Title"] = Localizer["Library.Title"];
+    ViewData["Title"] = Model.T("Songs", "Lagu");
 }
 
-<h1>@Localizer["Library.Title"]</h1>
-<p>@Model.T("Eigene MusicXML- und MXL-Dateien werden nur im aktuellen Profil gespeichert.", "Berkas MusicXML dan MXL pribadi hanya disimpan dalam profil saat ini.")</p>
+<header class="page-heading">
+    <div class="page-heading-copy">
+        <span class="eyebrow">@Model.T("Songs", "Lagu")</span>
+        <h1>@Model.T("Stücke auswählen und üben", "Pilih dan latih lagu")</h1>
+        <p>@Model.T("Eigene MusicXML- und MXL-Dateien bleiben im aktuellen Profil und verwenden dieselbe Übungsengine wie Nadiano-Stücke.", "Berkas MusicXML dan MXL pribadi tetap di profil saat ini dan menggunakan mesin latihan yang sama seperti lagu Nadiano.")</p>
+    </div>
+    <a class="button-secondary" asp-page="/Practice/Beta" asp-fragment="repertoire-heading">@Model.T("Nadiano-Repertoire", "Repertoar Nadiano")</a>
+</header>
 
 @if (Model.Notice is not null)
 {
@@ -17,140 +23,171 @@
     <p class="callout" role="alert">@Model.Error</p>
 }
 
-<section class="card" aria-labelledby="import-heading">
-    <h2 id="import-heading">@Model.T("Noten importieren", "Impor partitur")</h2>
-    <form method="post" enctype="multipart/form-data" asp-page-handler="Import">
-        <div class="field-list">
-            <div>
-                <label for="upload">@Model.T("MusicXML- oder MXL-Datei", "Berkas MusicXML atau MXL")</label>
-                <input id="upload" name="upload" type="file" accept=".musicxml,.xml,.mxl,application/vnd.recordare.musicxml+xml,application/vnd.recordare.musicxml" required />
+<details class="disclosure-panel">
+    <summary>@Model.T("Noten importieren", "Impor partitur")</summary>
+    <div class="disclosure-content">
+        <form method="post" enctype="multipart/form-data" asp-page-handler="Import">
+            <div class="field-list">
+                <div>
+                    <label for="upload">@Model.T("MusicXML- oder MXL-Datei", "Berkas MusicXML atau MXL")</label>
+                    <input id="upload" name="upload" type="file" accept=".musicxml,.xml,.mxl,application/vnd.recordare.musicxml+xml,application/vnd.recordare.musicxml" required />
+                </div>
+                <div>
+                    <label for="title">@Model.T("Titel (optional)", "Judul (opsional)")</label>
+                    <input id="title" name="title" maxlength="300" />
+                </div>
             </div>
-            <div>
-                <label for="title">@Model.T("Titel (optional)", "Judul (opsional)")</label>
-                <input id="title" name="title" maxlength="300" />
-            </div>
-        </div>
-        <p class="help-text">@Model.T("Maximal 8 MB. Archive und XML werden vor dem Speichern auf unsichere Inhalte geprüft.", "Maksimal 8 MB. Arsip dan XML diperiksa terhadap konten tidak aman sebelum disimpan.")</p>
-        <button class="button" type="submit">@Model.T("Importieren", "Impor")</button>
-    </form>
-</section>
+            <p class="help-text">@Model.T("Maximal 8 MB. Archive und XML werden vor dem Speichern auf unsichere Inhalte geprüft.", "Maksimal 8 MB. Arsip dan XML diperiksa terhadap konten tidak aman sebelum disimpan.")</p>
+            <button class="button" type="submit">@Model.T("Importieren", "Impor")</button>
+        </form>
+    </div>
+</details>
 
 <section aria-labelledby="private-library-heading">
-    <h2 id="private-library-heading">@Model.T("Private Bibliothek", "Perpustakaan pribadi")</h2>
+    <div class="library-toolbar">
+        <div>
+            <span class="eyebrow">@Model.T("Deine Bibliothek", "Perpustakaanmu")</span>
+            <h2 id="private-library-heading">@Model.T("Eigene Stücke", "Lagu sendiri")</h2>
+        </div>
+        <span class="chip">@Model.Items.Count @Model.T("Stücke", "lagu")</span>
+    </div>
+
     @if (Model.Items.Count == 0)
     {
-        <p>@Model.T("Noch keine eigenen Noten importiert.", "Belum ada partitur pribadi yang diimpor.")</p>
+        <section class="surface">
+            <h3>@Model.T("Noch keine eigenen Noten", "Belum ada partitur sendiri")</h3>
+            <p class="help-text">@Model.T("Importiere MusicXML/MXL oder öffne das mitgelieferte Repertoire im Trainingsbereich.", "Impor MusicXML/MXL atau buka repertoar bawaan di area latihan.")</p>
+            <a class="button-secondary" asp-page="/Practice/Beta" asp-fragment="repertoire-heading">@Model.T("Repertoire ansehen", "Lihat repertoar")</a>
+        </section>
     }
     else
     {
-        <div class="card-grid">
+        <div class="song-grid">
         @foreach (var item in Model.Items)
         {
             var metadata = Model.Metadata(item);
             var warnings = Model.Warnings(item);
             var voices = metadata.Parts.SelectMany(part => part.Voices).Distinct(StringComparer.Ordinal).OrderBy(value => value, StringComparer.Ordinal).ToArray();
-            <article class="card">
+            <article class="song-card">
+                <div class="song-card-meta">
+                    <span class="chip">@metadata.MeasureCount @Model.T("Takte", "birama")</span>
+                    <span class="chip">@metadata.TargetTempoBpm BPM</span>
+                    <span class="badge @(item.ValidationState == "ready" ? "badge--completed" : "badge--locked")">@item.ValidationState</span>
+                </div>
                 <h3>@item.DisplayTitle</h3>
-                <p><strong>@Model.T("Status", "Status"):</strong> @item.ValidationState</p>
-                <p>@metadata.PartCount @Model.T("Parts", "bagian") · @metadata.MeasureCount @Model.T("Takte", "birama") · @metadata.FingeringCount @Model.T("Fingersätze aus der Datei", "penjarian dari berkas")</p>
-
-                @if (metadata.Parts.Count > 0)
-                {
-                    <details>
-                        <summary>@Model.T("Erkannte Parts und Stimmen", "Bagian dan suara yang terdeteksi")</summary>
-                        <ul>
-                        @foreach (var part in metadata.Parts)
-                        {
-                            <li><strong>@part.Id</strong> — @part.Name · @Model.T("Stimmen", "suara"): @(part.Voices.Count == 0 ? "—" : string.Join(", ", part.Voices))</li>
-                        }
-                        </ul>
-                    </details>
-                }
+                <p class="help-text">@metadata.PartCount @Model.T("Parts", "bagian") · @metadata.FingeringCount @Model.T("Fingersätze", "penjarian")</p>
 
                 @if (warnings.Count > 0)
                 {
-                    <details>
-                        <summary>@Model.T("Importwarnungen", "Peringatan impor") (@warnings.Count)</summary>
-                        <ul>
-                        @foreach (var warning in warnings)
-                        {
-                            <li>@warning</li>
-                        }
-                        </ul>
-                    </details>
+                    <p class="help-text">@warnings.Count @Model.T("Importwarnungen", "peringatan impor")</p>
                 }
 
-                <form method="post" asp-page-handler="Update" class="field-list">
-                    <input type="hidden" name="itemId" value="@item.Id" />
-                    <datalist id="parts-@item.Id">
-                    @foreach (var part in metadata.Parts)
-                    {
-                        <option value="@part.Id">@part.Name</option>
-                    }
-                    </datalist>
-                    <datalist id="voices-@item.Id">
-                    @foreach (var voice in voices)
-                    {
-                        <option value="@voice"></option>
-                    }
-                    </datalist>
-
-                    <div>
-                        <label for="title-@item.Id">@Model.T("Titel", "Judul")</label>
-                        <input id="title-@item.Id" name="title" value="@item.DisplayTitle" maxlength="300" />
-                    </div>
-                    <div>
-                        <label for="from-@item.Id">@Model.T("Von Takt", "Dari birama")</label>
-                        <input id="from-@item.Id" name="fromMeasure" type="number" min="1" max="@metadata.MeasureCount" value="@metadata.FromMeasure" />
-                    </div>
-                    <div>
-                        <label for="to-@item.Id">@Model.T("Bis Takt", "Sampai birama")</label>
-                        <input id="to-@item.Id" name="toMeasure" type="number" min="1" max="@metadata.MeasureCount" value="@metadata.ToMeasure" />
-                    </div>
-                    <div>
-                        <label for="tempo-@item.Id">@Model.T("Zieltempo", "Tempo target")</label>
-                        <input id="tempo-@item.Id" name="targetTempoBpm" type="number" min="30" max="240" value="@metadata.TargetTempoBpm" />
-                    </div>
-                    <fieldset>
-                        <legend>@Model.T("Hände zuordnen", "Tetapkan tangan")</legend>
-                        <div>
-                            <label for="left-part-@item.Id">@Model.T("Linke Hand: Part-ID", "Tangan kiri: ID bagian")</label>
-                            <input id="left-part-@item.Id" name="leftHandPartId" list="parts-@item.Id" value="@metadata.LeftHandPartId" />
-                        </div>
-                        <div>
-                            <label for="left-voice-@item.Id">@Model.T("Linke Hand: Stimme (optional)", "Tangan kiri: suara (opsional)")</label>
-                            <input id="left-voice-@item.Id" name="leftHandVoice" list="voices-@item.Id" value="@metadata.LeftHandVoice" />
-                        </div>
-                        <div>
-                            <label for="right-part-@item.Id">@Model.T("Rechte Hand: Part-ID", "Tangan kanan: ID bagian")</label>
-                            <input id="right-part-@item.Id" name="rightHandPartId" list="parts-@item.Id" value="@metadata.RightHandPartId" />
-                        </div>
-                        <div>
-                            <label for="right-voice-@item.Id">@Model.T("Rechte Hand: Stimme (optional)", "Tangan kanan: suara (opsional)")</label>
-                            <input id="right-voice-@item.Id" name="rightHandVoice" list="voices-@item.Id" value="@metadata.RightHandVoice" />
-                        </div>
-                    </fieldset>
-                    <div>
-                        <label for="fingering-@item.Id">@Model.T("Fingersatz-Korrekturen", "Koreksi penjarian")</label>
-                        <textarea id="fingering-@item.Id" name="fingeringOverrides" rows="4" placeholder="m1-v1-n1=1&#10;m1-v1-n2=2">@Model.FingeringOverrides(metadata)</textarea>
-                        <p class="help-text">@Model.T("Eine Zeile je Ereignis. Bei Akkorden mehrere Finger mit Komma. Die IDs werden im Übungsbereich angezeigt.", "Satu baris untuk setiap peristiwa. Untuk akor, pisahkan beberapa jari dengan koma. ID ditampilkan di area latihan.")</p>
-                    </div>
-                    <button class="button-secondary" type="submit">@Model.T("Zuordnung speichern", "Simpan pengaturan")</button>
-                </form>
-
-                <p>
+                <div class="song-card-actions">
                     @if (item.ValidationState == "ready")
                     {
-                        <a class="button" asp-page="/Practice/Index" asp-route-libraryItemId="@item.Id">@Model.T("Vorschau und Üben", "Pratinjau dan latihan")</a>
+                        <a class="button" asp-page="/Practice/Index" asp-route-libraryItemId="@item.Id">@Model.T("Üben", "Latihan")</a>
                     }
-                    <a class="button-secondary" href="/api/library/@item.Id/score">@Model.T("MusicXML anzeigen", "Tampilkan MusicXML")</a>
-                    <a class="button-secondary" href="/api/library/@item.Id/export">@Model.T("Original exportieren", "Ekspor asli")</a>
-                    <a class="button-secondary" href="/api/library/@item.Id/package">@Model.T("Nadiano-Paket exportieren", "Ekspor paket Nadiano")</a>
-                </p>
-                <form method="post" asp-page-handler="Delete">
-                    <input type="hidden" name="itemId" value="@item.Id" />
-                    <button class="button-danger" type="submit">@Model.T("Löschen", "Hapus")</button>
-                </form>
+                    <a class="button-secondary" href="/api/library/@item.Id/export">@Model.T("Export", "Ekspor")</a>
+                </div>
+
+                <details class="song-settings">
+                    <summary>@Model.T("Übungseinstellungen", "Pengaturan latihan")</summary>
+
+                    @if (metadata.Parts.Count > 0)
+                    {
+                        <details>
+                            <summary>@Model.T("Erkannte Parts und Stimmen", "Bagian dan suara yang terdeteksi")</summary>
+                            <ul>
+                            @foreach (var part in metadata.Parts)
+                            {
+                                <li><strong>@part.Id</strong> — @part.Name · @Model.T("Stimmen", "suara"): @(part.Voices.Count == 0 ? "—" : string.Join(", ", part.Voices))</li>
+                            }
+                            </ul>
+                        </details>
+                    }
+
+                    @if (warnings.Count > 0)
+                    {
+                        <details>
+                            <summary>@Model.T("Importwarnungen", "Peringatan impor") (@warnings.Count)</summary>
+                            <ul>
+                            @foreach (var warning in warnings)
+                            {
+                                <li>@warning</li>
+                            }
+                            </ul>
+                        </details>
+                    }
+
+                    <form method="post" asp-page-handler="Update" class="field-list">
+                        <input type="hidden" name="itemId" value="@item.Id" />
+                        <datalist id="parts-@item.Id">
+                        @foreach (var part in metadata.Parts)
+                        {
+                            <option value="@part.Id">@part.Name</option>
+                        }
+                        </datalist>
+                        <datalist id="voices-@item.Id">
+                        @foreach (var voice in voices)
+                        {
+                            <option value="@voice"></option>
+                        }
+                        </datalist>
+
+                        <div>
+                            <label for="title-@item.Id">@Model.T("Titel", "Judul")</label>
+                            <input id="title-@item.Id" name="title" value="@item.DisplayTitle" maxlength="300" />
+                        </div>
+                        <div class="practice-loop-grid">
+                            <div>
+                                <label for="from-@item.Id">@Model.T("Von Takt", "Dari birama")</label>
+                                <input id="from-@item.Id" name="fromMeasure" type="number" min="1" max="@metadata.MeasureCount" value="@metadata.FromMeasure" />
+                            </div>
+                            <div>
+                                <label for="to-@item.Id">@Model.T("Bis Takt", "Sampai birama")</label>
+                                <input id="to-@item.Id" name="toMeasure" type="number" min="1" max="@metadata.MeasureCount" value="@metadata.ToMeasure" />
+                            </div>
+                        </div>
+                        <div>
+                            <label for="tempo-@item.Id">@Model.T("Zieltempo", "Tempo target")</label>
+                            <input id="tempo-@item.Id" name="targetTempoBpm" type="number" min="30" max="240" value="@metadata.TargetTempoBpm" />
+                        </div>
+                        <fieldset>
+                            <legend>@Model.T("Hände zuordnen", "Tetapkan tangan")</legend>
+                            <div>
+                                <label for="left-part-@item.Id">@Model.T("Linke Hand: Part-ID", "Tangan kiri: ID bagian")</label>
+                                <input id="left-part-@item.Id" name="leftHandPartId" list="parts-@item.Id" value="@metadata.LeftHandPartId" />
+                            </div>
+                            <div>
+                                <label for="left-voice-@item.Id">@Model.T("Linke Hand: Stimme (optional)", "Tangan kiri: suara (opsional)")</label>
+                                <input id="left-voice-@item.Id" name="leftHandVoice" list="voices-@item.Id" value="@metadata.LeftHandVoice" />
+                            </div>
+                            <div>
+                                <label for="right-part-@item.Id">@Model.T("Rechte Hand: Part-ID", "Tangan kanan: ID bagian")</label>
+                                <input id="right-part-@item.Id" name="rightHandPartId" list="parts-@item.Id" value="@metadata.RightHandPartId" />
+                            </div>
+                            <div>
+                                <label for="right-voice-@item.Id">@Model.T("Rechte Hand: Stimme (optional)", "Tangan kanan: suara (opsional)")</label>
+                                <input id="right-voice-@item.Id" name="rightHandVoice" list="voices-@item.Id" value="@metadata.RightHandVoice" />
+                            </div>
+                        </fieldset>
+                        <div>
+                            <label for="fingering-@item.Id">@Model.T("Fingersatz-Korrekturen", "Koreksi penjarian")</label>
+                            <textarea id="fingering-@item.Id" name="fingeringOverrides" rows="4" placeholder="m1-v1-n1=1&#10;m1-v1-n2=2">@Model.FingeringOverrides(metadata)</textarea>
+                            <p class="help-text">@Model.T("Eine Zeile je Ereignis. Bei Akkorden mehrere Finger mit Komma. Die IDs werden im Übungsbereich angezeigt.", "Satu baris untuk setiap peristiwa. Untuk akor, pisahkan beberapa jari dengan koma. ID ditampilkan di area latihan.")</p>
+                        </div>
+                        <button class="button-secondary" type="submit">@Model.T("Speichern", "Simpan")</button>
+                    </form>
+
+                    <div class="song-card-actions">
+                        <a class="button-secondary" href="/api/library/@item.Id/score">@Model.T("MusicXML", "MusicXML")</a>
+                        <a class="button-secondary" href="/api/library/@item.Id/package">@Model.T("Nadiano-Paket", "Paket Nadiano")</a>
+                    </div>
+                    <form method="post" asp-page-handler="Delete">
+                        <input type="hidden" name="itemId" value="@item.Id" />
+                        <button class="button-danger" type="submit">@Model.T("Löschen", "Hapus")</button>
+                    </form>
+                </details>
             </article>
         }
         </div>
