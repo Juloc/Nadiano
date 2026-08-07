@@ -1,6 +1,8 @@
 using System.Net;
 using System.Text.Json;
 
+using Nadiano.Core.Common;
+
 namespace Nadiano.Web.IntegrationTests.Features.Diagnostics;
 
 public class ReleaseDiagnosticsEndpointsTests : IClassFixture<ProgressWebApplicationFactory>
@@ -25,7 +27,7 @@ public class ReleaseDiagnosticsEndpointsTests : IClassFixture<ProgressWebApplica
         using var document = JsonDocument.Parse(json);
         var root = document.RootElement;
 
-        Assert.Equal("1.0.3", root.GetProperty("applicationVersion").GetString());
+        Assert.Equal(AppVersion.Current, root.GetProperty("applicationVersion").GetString());
         Assert.NotEqual("none", root.GetProperty("database").GetProperty("latestMigration").GetString());
         Assert.Equal(1, root.GetProperty("content").GetProperty("courseCount").GetInt32());
 
