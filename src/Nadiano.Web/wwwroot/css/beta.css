@@ -37,6 +37,31 @@ select {
   font-weight: 700;
 }
 
+#workspace-next-action:not(:empty) {
+  margin: 0.8rem 0;
+  padding: 0.85rem 1rem;
+  border-radius: var(--nadiano-radius-sm, 8px);
+  background: var(--nadiano-color-accent-soft, #eeecff);
+  color: #38317e;
+  font-weight: 750;
+}
+
+#workspace-problem-location {
+  border-color: #efcf8c;
+  background: var(--nadiano-color-warning-soft, #fff6df);
+  color: #684700;
+}
+
+#practice-workspace:fullscreen {
+  overflow: auto;
+  padding: 0.75rem;
+  background: var(--nadiano-color-bg, #f6f7f9);
+}
+
+#practice-workspace:fullscreen .practice-score-shell {
+  min-height: calc(100vh - 5rem);
+}
+
 @media (max-width: 560px) {
   .practice-card-events {
     columns: 1;
