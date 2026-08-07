@@ -99,8 +99,7 @@
     <section class="surface" style="margin-top:1rem">
         <span class="eyebrow">@T("Jetzt spielen", "Sekarang bermain")</span>
         <h2>@T("Setze die Lektion am Piano um", "Terapkan pelajaran di piano")</h2>
-        <p class="help-text">@Localizer["Lesson.PlayAtPianoHint"]</p>
-        <a class="button" asp-page="/Practice/Index" asp-route-lessonId="@Model.LessonId">@T("Übung starten", "Mulai latihan")</a>
+        <p class="help-text">@Localizer["Lesson.PlayAtPianoHint"] @T("Der Übungsstart bleibt oben als klare Hauptaktion erreichbar.", "Tombol latihan tetap tersedia di atas sebagai tindakan utama yang jelas.")</p>
     </section>
 }
 else
