@@ -3,15 +3,15 @@
 @inject IStringLocalizer<SharedResource> Localizer
 @{
     ViewData["Title"] = Model.T("Songs", "Lagu");
+    var totalSongs = Model.Repertoire.Count + Model.Items.Count;
 }
 
 <header class="page-heading">
     <div class="page-heading-copy">
         <span class="eyebrow">@Model.T("Songs", "Lagu")</span>
         <h1>@Model.T("Stücke auswählen und üben", "Pilih dan latih lagu")</h1>
-        <p>@Model.T("Eigene MusicXML- und MXL-Dateien bleiben im aktuellen Profil und verwenden dieselbe Übungsengine wie Nadiano-Stücke.", "Berkas MusicXML dan MXL pribadi tetap di profil saat ini dan menggunakan mesin latihan yang sama seperti lagu Nadiano.")</p>
+        <p>@Model.T("Mitgelieferte Nadiano-Stücke und eigene MusicXML/MXL-Dateien liegen in einer gemeinsamen Bibliothek und verwenden dieselbe Übungsengine.", "Lagu bawaan Nadiano dan berkas MusicXML/MXL pribadi berada dalam satu perpustakaan dan menggunakan mesin latihan yang sama.")</p>
     </div>
-    <a class="button-secondary" asp-page="/Practice/Beta" asp-fragment="repertoire-heading">@Model.T("Nadiano-Repertoire", "Repertoar Nadiano")</a>
 </header>
 
 @if (Model.Notice is not null)
@@ -24,7 +24,7 @@
 }
 
 <details class="disclosure-panel">
-    <summary>@Model.T("Noten importieren", "Impor partitur")</summary>
+    <summary>@Model.T("Eigene Noten importieren", "Impor partitur sendiri")</summary>
     <div class="disclosure-content">
         <form method="post" enctype="multipart/form-data" asp-page-handler="Import">
             <div class="field-list">
@@ -43,48 +43,71 @@
     </div>
 </details>
 
-<section aria-labelledby="private-library-heading">
+<section aria-labelledby="songs-library-heading">
     <div class="library-toolbar">
         <div>
-            <span class="eyebrow">@Model.T("Deine Bibliothek", "Perpustakaanmu")</span>
-            <h2 id="private-library-heading">@Model.T("Eigene Stücke", "Lagu sendiri")</h2>
+            <span class="eyebrow">@Model.T("Bibliothek", "Perpustakaan")</span>
+            <h2 id="songs-library-heading">@Model.T("Alle Stücke", "Semua lagu")</h2>
         </div>
-        <span id="song-filter-count" class="chip" aria-live="polite">@Model.Items.Count @Model.T("Stücke", "lagu")</span>
+        <span id="song-filter-count" class="chip" aria-live="polite">@totalSongs @Model.T("Stücke", "lagu")</span>
     </div>
 
-    @if (Model.Items.Count == 0)
-    {
-        <section class="surface">
-            <h3>@Model.T("Noch keine eigenen Noten", "Belum ada partitur sendiri")</h3>
-            <p class="help-text">@Model.T("Importiere MusicXML/MXL oder öffne das mitgelieferte Repertoire im Trainingsbereich.", "Impor MusicXML/MXL atau buka repertoar bawaan di area latihan.")</p>
-            <a class="button-secondary" asp-page="/Practice/Beta" asp-fragment="repertoire-heading">@Model.T("Repertoire ansehen", "Lihat repertoar")</a>
-        </section>
-    }
-    else
-    {
-        <div class="library-filter" role="search" aria-label="@Model.T("Songs filtern", "Filter lagu")">
-            <div>
-                <label for="song-search">@Model.T("Suchen", "Cari")</label>
-                <input id="song-search" type="search" placeholder="@Model.T("Titel suchen", "Cari judul")" autocomplete="off" />
-            </div>
-            <div>
-                <label for="song-status">@Model.T("Status", "Status")</label>
-                <select id="song-status">
-                    <option value="all">@Model.T("Alle", "Semua")</option>
-                    <option value="ready">@Model.T("Bereit zum Üben", "Siap dilatih")</option>
-                    <option value="other">@Model.T("Prüfen", "Periksa")</option>
-                </select>
-            </div>
+    <div class="library-filter" role="search" aria-label="@Model.T("Songs filtern", "Filter lagu")">
+        <div>
+            <label for="song-search">@Model.T("Suchen", "Cari")</label>
+            <input id="song-search" type="search" placeholder="@Model.T("Titel oder Komponist", "Judul atau komposer")" autocomplete="off" />
         </div>
+        <div>
+            <label for="song-source">@Model.T("Quelle", "Sumber")</label>
+            <select id="song-source">
+                <option value="all">@Model.T("Alle", "Semua")</option>
+                <option value="nadiano">Nadiano</option>
+                <option value="private">@Model.T("Eigene", "Pribadi")</option>
+            </select>
+        </div>
+        <div>
+            <label for="song-status">@Model.T("Status", "Status")</label>
+            <select id="song-status">
+                <option value="all">@Model.T("Alle", "Semua")</option>
+                <option value="ready">@Model.T("Bereit zum Üben", "Siap dilatih")</option>
+                <option value="other">@Model.T("Prüfen", "Periksa")</option>
+            </select>
+        </div>
+    </div>
 
-        <div class="song-grid" id="song-grid">
+    <div class="song-grid" id="song-grid">
+        @foreach (var piece in Model.Repertoire)
+        {
+            var sourceLabel = piece.SourceKind == Nadiano.Core.Beta.ReleaseContentCatalogue.PublicDomainSourceKind
+                ? Model.T("Gemeinfrei", "Domain publik")
+                : Model.T("Nadiano Original", "Orisinal Nadiano");
+            var searchText = $"{Model.PieceTitle(piece)} {piece.Composer} {piece.Stage}".ToLowerInvariant();
+            <article class="song-card" data-song-card data-title="@searchText" data-status="ready" data-source="nadiano">
+                <div class="song-card-meta">
+                    <span class="chip">@piece.Stage</span>
+                    <span class="chip">@piece.TargetTempoBpm BPM</span>
+                    <span class="chip">@sourceLabel</span>
+                </div>
+                <h3>@Model.PieceTitle(piece)</h3>
+                <p class="help-text">@piece.Composer</p>
+                @if (!string.IsNullOrWhiteSpace(piece.Attribution))
+                {
+                    <p class="help-text">@piece.Attribution</p>
+                }
+                <div class="song-card-actions">
+                    <a class="button" asp-page="/Practice/Index" asp-route-repertoireId="@piece.Id">@Model.T("Üben", "Latihan")</a>
+                </div>
+            </article>
+        }
+
         @foreach (var item in Model.Items)
         {
             var metadata = Model.Metadata(item);
             var warnings = Model.Warnings(item);
             var voices = metadata.Parts.SelectMany(part => part.Voices).Distinct(StringComparer.Ordinal).OrderBy(value => value, StringComparer.Ordinal).ToArray();
-            <article class="song-card" data-song-card data-title="@item.DisplayTitle.ToLowerInvariant()" data-status="@item.ValidationState.ToLowerInvariant()">
+            <article class="song-card" data-song-card data-title="@item.DisplayTitle.ToLowerInvariant()" data-status="@item.ValidationState.ToLowerInvariant()" data-source="private">
                 <div class="song-card-meta">
+                    <span class="chip">@Model.T("Eigen", "Pribadi")</span>
                     <span class="chip">@metadata.MeasureCount @Model.T("Takte", "birama")</span>
                     <span class="chip">@metadata.TargetTempoBpm BPM</span>
                     <span class="badge @(item.ValidationState == "ready" ? "badge--completed" : "badge--locked")">@item.ValidationState</span>
@@ -205,14 +228,11 @@
                 </details>
             </article>
         }
-        </div>
-        <p id="song-filter-empty" class="surface" hidden>@Model.T("Keine Stücke passen zu diesem Filter.", "Tidak ada lagu yang cocok dengan filter ini.")</p>
-    }
+    </div>
+
+    <p id="song-filter-empty" class="surface" hidden>@Model.T("Keine Stücke passen zu diesem Filter.", "Tidak ada lagu yang cocok dengan filter ini.")</p>
 </section>
 
 @section Scripts {
-    @if (Model.Items.Count > 0)
-    {
-        <script src="~/dist/pages/library.js" type="module" asp-append-version="true"></script>
-    }
+    <script src="~/dist/pages/library.js" type="module" asp-append-version="true"></script>
 }
