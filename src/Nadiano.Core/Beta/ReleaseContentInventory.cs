@@ -44,7 +44,7 @@ public static class ReleaseContentCatalogue
         var earTasks = Enumerable.Range(1, 60)
             .Select(index =>
             {
-                var kind = index % 3 switch
+                var kind = (index % 3) switch
                 {
                     1 => "direction",
                     2 => "pattern",
