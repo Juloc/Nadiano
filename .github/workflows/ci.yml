@@ -8,6 +8,7 @@ on:
 env:
   DOTNET_VERSION: "10.0.x"
   NODE_VERSION: "22"
+  DOCKER_BUILD_RECORD_UPLOAD: "false"
 
 jobs:
   format:
