@@ -1,352 +1,192 @@
-# Alpha, beta and 1.0 roadmap
-
-## 1. Release philosophy
-
-Each milestone must be a complete usable vertical slice. A milestone is not complete because screens exist; the learning loop, data persistence, validation, tests, deployment and documentation must all work together.
-
-Release labels:
+# Nadiano roadmap
 
-- **Prototype:** disposable technical experiment, never deployed as the product.
-- **Alpha:** internal household use, limited content, migration and compatibility may still change.
-- **Beta:** daily-use candidate with stable core workflows and a feature-complete beginner path.
-- **Release candidate:** only defect correction, content correction and release hardening remain.
-- **1.0:** supported stable self-hosted release.
-
-## 2. Milestone overview
+`MASTER_PLAN.md` is the canonical source for complete product scope, pedagogy, UI/UX, architecture and work-package detail.
 
-| Milestone | Primary proof | Planned audience |
-|---|---|---|
-| A0 | project builds, tests and deploys | developers |
-| A1 | browser receives and displays MIDI | developers |
-| A2 | one score can be practised and scored | internal learners |
-| Alpha | complete foundation learning loop | household |
-| B1 | complete beginner course structure | household testers |
-| B2 | import, adaptive review and PWA | invited testers |
-| Beta | feature-complete 1.0 candidate | invited testers |
-| RC1 | upgrade, backup, accessibility and release hardening | release testers |
-| 1.0 | stable documented self-hosted product | users |
-
-# 3. Foundation milestones
-
-## A0 — repository and delivery foundation
-
-### Scope
-
-- .NET 10 solution and projects;
-- Razor Pages application shell;
-- TypeScript build with strict mode;
-- SQLite connection and first migration;
-- Dockerfile and minimal Compose file;
-- health endpoints;
-- German and Indonesian interface resources;
-- test projects and CI pipeline;
-- version information in the UI and diagnostics endpoint.
-
-### Acceptance gate
-
-- clean checkout builds with one documented command;
-- tests run without a MIDI device;
-- container starts as non-root and reports ready;
-- both languages can be selected;
-- empty database initializes through committed migrations;
-- no high-severity dependency or container scan findings.
-
-## A1 — MIDI and audio foundation
-
-### Scope
-
-- browser capability page;
-- secure-context check;
-- MIDI permission request initiated by user action;
-- input device selection and reconnect handling;
-- normalized note-on, note-off and sustain events;
-- live keyboard/event display;
-- Web Audio metronome with count-in;
-- fake MIDI adapter for tests;
-- diagnostics export without raw private data.
-
-### Acceptance gate
-
-- supported Chrome/Edge browser connects to a common USB MIDI piano;
-- connection loss produces a recoverable message;
-- note-on velocity zero is handled correctly;
-- sustain events are visible and normalized;
-- metronome remains perceptually stable during a two-minute test;
-- automated browser tests exercise the same consumer interface through a fake adapter.
-
-## A2 — notation and deterministic scoring
-
-### Scope
-
-- load one bundled MusicXML score;
-- render with OpenSheetMusicDisplay;
-- generate/load normalized expected events;
-- current-note cursor and event highlighting;
-- wait, loop and performance modes;
-- deterministic pitch and onset matching;
-- separate pitch and timing feedback;
-- practice session persistence;
-- recorded MIDI fixture tests.
-
-### Acceptance gate
-
-- the same fixture always produces the same result;
-- chords, repeated notes and extra notes have explicit tested behavior;
-- learner can select and repeat measures;
-- result identifies measure/beat and next action;
-- page reload after a completed attempt does not duplicate the result;
-- rendering failure does not corrupt progress.
-
-# 4. Alpha release
-
-## Alpha goal
-
-A learner can create a profile, connect a MIDI piano, complete the first physical/keyboard foundation lessons, practise a short original score and receive useful feedback in German or Indonesian.
-
-## Alpha scope
-
-### Profiles and setup
-
-- create, select, rename and delete local learner profiles;
-- language and note-name preference;
-- MIDI setup wizard;
-- stored preferred input with safe fallback;
-- first-run flow and browser support explanation.
-
-### Learning experience
-
-- F0 foundation course;
-- selected F1 lessons;
-- at least 20 exercises;
-- at least 4 listening tasks;
-- at least 3 original mini-pieces;
-- technique demonstrations with text alternatives;
-- one technique cue per pass;
-- self-assessment for posture, tension and fingering-related cues.
-
-### Practice engine
-
-- wait, loop, hands-separate and performance modes;
-- pitch, onset and basic duration categories;
-- count-in and tempo control;
-- category-specific result view;
-- retry recommended section;
-- progress and recent attempts.
-
-### Operations
-
-- Docker image and minimal Compose example;
-- persistent volume;
-- database migrations;
-- export of profile progress as JSON;
-- basic backup instructions;
-- internal release checklist.
-
-## Alpha exclusions
-
-- MusicXML upload;
-- offline practice guarantees;
-- generated exercises;
-- audio/video recording;
-- public accounts;
-- advanced pedal evaluation;
-- MIDI-to-notation conversion.
-
-## Alpha exit criteria
-
-- two separate learners can use the same deployment without progress mixing;
-- complete first-start-to-first-result path works in German and Indonesian;
-- all bundled packages pass validation;
-- all F0 lessons have reviewed explanations and original media;
-- no known data-loss defect;
-- no known scoring defect that marks a wrong pitch as correct;
-- container can be upgraded once in a rehearsal without losing data;
-- five complete manual sessions have been performed on at least two supported browsers and one real digital piano.
-
-# 5. Beta development
-
-## B1 — complete beginner path
-
-### Scope
-
-- complete F0, F1, B1 and B2 course progression;
-- generated reading and rhythm cards using seeded reviewed templates;
-- ear-training player and answer flows;
-- stage checks;
-- course map and prerequisite visualization;
-- session planner balancing competencies;
-- skill evidence and review queue;
-- accessibility baseline across all learner pages.
-
-### Acceptance gate
-
-- at least 45 guided lessons and 100 exercises pass content validation;
-- generated tasks are reproducible from their seed;
-- course cannot be completed by repertoire scores alone;
-- delayed review items appear predictably;
-- a learner can understand why an item was recommended.
-
-## B2 — import, PWA and adaptive practice
-
-### Scope
-
-- MusicXML and MXL upload;
-- archive/XML security limits;
-- notation preview and warnings;
-- hand/voice mapping;
-- section and target-tempo editor;
-- fingering display and limited reviewed editing workflow;
-- private library;
-- PWA installation;
-- cached app shell and previously prepared lesson assets;
-- resilient active-session result queue;
-- adaptive section, hands-separate and tempo recommendations.
-
-### Acceptance gate
-
-- malformed or hostile packages fail safely with actionable errors;
-- imported and bundled lessons use the same runtime practice path;
-- offline interruption does not duplicate a completed result;
-- private imported files are not placed in a shared cache;
-- import warnings distinguish unsupported from invalid content;
-- adaptive recommendations are derived from explicit tested rules.
-
-## Beta release scope
-
-Everything planned for 1.0 is functionally present except final hardening, final content quantity and release support documentation.
-
-## Beta exit criteria
-
-- full first-start, daily-session, import and restore workflows pass browser tests;
-- no open critical/high security findings;
-- no known data-loss or cross-profile privacy defect;
-- database and content-schema migrations are tested from the alpha version;
-- German and Indonesian key parity is complete;
-- manual test matrix covers two Chromium-based desktop browsers and supported device classes;
-- beta testers can use the app for at least two weeks without manual database repair;
-- all 1.0-blocking issues are classified and assigned.
-
-# 6. Release candidate
-
-## RC1 scope
-
-- complete 1.0 content quantities;
-- introductory E1 lessons selected for the beginner endpoint;
-- final original/public-domain repertoire review;
-- backup and restore UI or documented assisted workflow;
-- profile data deletion and export;
-- accessibility audit and fixes;
-- performance profiling on modest hardware;
-- dependency update and license report;
-- container hardening;
-- release notes and upgrade guide;
-- telemetry/privacy review;
-- browser compatibility documentation;
-- disaster-recovery rehearsal.
-
-## RC1 exit criteria
-
-- all 1.0 acceptance criteria pass;
-- no release-blocking defects;
-- all bundled content has musical, pedagogical, localization and licensing sign-off;
-- upgrade from latest alpha/beta test fixtures preserves progress;
-- backup restore onto a clean deployment succeeds;
-- WCAG-focused automated checks and manual keyboard checks pass for core workflows;
-- image is reproducible and tagged with version plus commit SHA;
-- rollback instructions are tested.
-
-# 7. Version 1.0
-
-## Functional scope
-
-### Learning
-
-- at least 60 guided lessons through foundation, beginner and introductory elementary material;
-- at least 120 technique/rhythm exercises;
-- at least 80 reading configurations;
-- at least 60 ear-training tasks;
-- at least 24 original mini-pieces;
-- 12 verified public-domain melodies in Nadiano editions;
-- stage checks and final beginner assessment;
-- deliberate-practice recommendations and review scheduling.
-
-### Practice
-
-- wait, rhythm, loop, hands separate, tempo ladder, listen/copy, performance and sight-reading modes where content supports them;
-- pitch, timing, steadiness, duration, articulation, basic dynamics and pedal observations with honest limitations;
-- section-focused next actions;
-- profile-specific history and skill evidence.
-
-### Content and library
-
-- versioned package schemas;
-- bundled content validation;
-- MusicXML/MXL private import;
-- private package export;
-- safe content storage and attribution records.
-
-### Product and operations
-
-- German and Indonesian;
-- PWA installation and controlled caching;
-- one-container Docker deployment;
-- persistent data volume;
-- health checks, structured logs and diagnostics export;
-- profile export/delete;
-- tested backup, restore and upgrade;
-- accessibility baseline;
-- published architecture and contributor documentation.
-
-## 1.0 release blockers
-
-Any of the following blocks release:
-
-- wrong notes accepted as correct in a normal tested case;
-- progress loss or cross-profile mixing;
-- import path traversal, XML entity or archive expansion vulnerability;
-- application unusable after MIDI disconnect;
-- bundled lesson missing required translation or attribution;
-- deployment requires undocumented manual database changes;
-- restore procedure not tested;
-- unsupported browser shown as supported;
-- physical technique automatically marked correct from MIDI-only evidence;
-- core workflow inaccessible by normal pointer/keyboard controls.
-
-# 8. Post-1.0 direction
-
-## 1.x
-
-- expanded E1 and intermediate course content;
+This file contains only the **current version sequence and milestone gates** so it does not compete with the master plan.
+
+Current stable release: **1.0.4**.
+
+---
+
+# Completed foundation
+
+The following milestones are complete as software baselines and remain visible in git/release history:
+
+- A0 — repository/delivery foundation;
+- A1 — MIDI/audio foundation;
+- A2 — notation/deterministic scoring;
+- Alpha — first complete household learning loop;
+- B1 — complete beginner course structure;
+- B2 — import, review scheduling and PWA path;
+- Beta — feature-complete 1.0 candidate;
+- RC/1.0 hardening — backup/restore, accessibility, performance, security and release gates;
+- 1.0.0–1.0.3 — stable content/operations/accessibility/performance releases;
+- **1.0.4 — learner-focused UI/UX structural redesign.**
+
+Historical Alpha/Beta scope remains documented in the versioned release checklists and limitation documents; it is not future work.
+
+---
+
+# 1.0.4 — current stable baseline
+
+Released baseline includes:
+
+- F0/F1/B1/B2 plus selected introductory E1 content;
+- required 1.0 content quantities and validated repertoire;
+- stable MIDI/scoring/practice engine;
+- three-pedal diagnostics for CC64/66/67;
+- private MusicXML/MXL import/export path;
+- review scheduling and skill evidence;
+- Today, Learn, Songs, Train, Progress navigation;
+- unified bundled/private Songs surface;
+- score-dominant focused Practice workspace;
+- problem-location + next-action results;
+- progressive MIDI onboarding;
+- PWA/offline result recovery baseline;
+- non-root Docker deployment;
+- automated frontend/.NET/content/browser/accessibility/security gates;
+- 1 CPU / 512 MiB performance gate;
+- upgrade, cold-restore and rollback rehearsals.
+
+## Manual acceptance track still open
+
+- German real-permission Chrome first-run → result;
+- Indonesian real-permission Edge first-run → result;
+- production HTTPS PWA install + MIDI reconnect;
+- manual keyboard-only review;
+- human musical/pedagogical/localization/licensing sign-off;
+- sustained household/invited-user daily-use evidence without manual DB repair.
+
+These remain manual evidence and must not be claimed by CI.
+
+---
+
+# 1.0.x patch policy
+
+Patch releases after 1.0.4 are limited to:
+
+- defect correction;
+- security/compatibility fixes;
+- accessibility corrections;
+- contained UX refinements;
+- documentation/release evidence corrections.
+
+New learning-model capabilities belong in 1.1+.
+
+---
+
+# 1.1 — Daily learning and adaptive practice
+
+## Goal
+
+Turn the stable 1.0.4 surfaces into a stronger personalized daily practice system while keeping the recommendation engine deterministic and explainable.
+
+## Scope
+
+- full Today session composer for 10/20/30-minute plans;
+- resumable daily session;
+- review/new-skill/repertoire/sight-or-ear balancing;
+- per-task recommendation reason;
+- adaptive one/two-measure micro-practice;
+- tempo/hands/rhythm/listen interventions;
+- mastery + reintegration + delayed review;
+- progressive removal of learning aids;
+- richer separate skill evidence;
+- adaptive sight-reading difficulty;
+- stronger recommendation explanations;
+- Songs favorites and richer filters/recommendations;
+- focused tablet ergonomics/user testing.
+
+## Exit criteria
+
+- one action starts a useful evidence-based daily plan;
+- plans fit selected 10/20/30-minute budgets without duplicating recommendation logic;
+- recurring localized errors produce targeted section practice;
+- mastery interventions are deterministic and explainable;
+- learning aids fade only with sufficient evidence and remain accessibility-safe;
+- fresh sight-reading difficulty adjusts through tested explicit rules;
+- German/Indonesian parity remains complete;
+- all standard stable release gates pass;
+- migration/backup/restore/rollback compatibility is verified.
+
+---
+
+# 1.2 — Chords, accompaniment and imported-piece intelligence
+
+## Goal
+
+Make Nadiano strong for practical accompaniment and learner-owned repertoire, not only fully notated solo playing.
+
+## Scope
+
+- dedicated chord/accompaniment path;
+- major/minor triads;
+- chord symbols;
+- inversions;
+- left-hand/broken-chord patterns;
+- reusable accompaniment patterns;
+- lead-sheet reading;
+- simple pop accompaniment;
+- common progression recognition/application;
+- introductory improvisation;
+- deterministic targeted-practice suggestions from MusicXML/MXL imports;
+- richer repertoire metadata;
+- original/licensed backing tracks where useful.
+
+## Exit criteria
+
+- chord path reuses shared rhythm/theory/ear skills rather than duplicating the curriculum;
+- at least one complete lead-sheet/accompaniment vertical slice is validated before catalogue expansion;
+- imported and bundled content still use the same runtime path;
+- generated imported-piece practice is deterministic and explainable;
+- content/licensing gates remain satisfied;
+- all stable release gates pass.
+
+---
+
+# 1.3 — Intermediate expansion and richer self-review
+
+## Direction
+
+Potential 1.3 work, to be split into approved vertical slices:
+
+- expanded E1/intermediate curriculum;
 - improved pedal and dynamics analysis;
-- teacher notes on private profiles;
-- better printable and large-score layouts;
-- more languages and notation naming systems;
-- optional local audio recording.
+- richer original technique/hand demonstrations;
+- printable/large-score layouts;
+- additional notation naming options/languages;
+- optional local audio recording and listen-back;
+- teacher notes on private profiles if permissions remain simple.
 
-## 2.0 candidates
+No item is automatically included merely because it is listed here; each needs scope, acceptance criteria, tests, privacy/licensing review and an implementation issue/work package.
+
+---
+
+# 2.0 candidates
+
+These are research candidates, not promises:
 
 - assisted MIDI-to-MusicXML workflow;
-- teacher/learner account model;
+- teacher/learner online account model;
 - synchronized multi-device profiles;
 - optional camera-assisted self-review;
 - richer notation editing;
-- licensed content distribution.
+- licensed/community content distribution.
 
-These candidates require new architecture, privacy and licensing decisions and are not implied promises.
+They require new architecture/privacy/licensing decisions before implementation.
 
-# 9. Milestone management
+---
 
-Each milestone should be represented by GitHub issues grouped by the work packages in `JUNIOR_IMPLEMENTATION_PLAN.md`.
+# Permanent non-goals unless the master plan changes
 
-An issue must include:
+- MIDI-only posture/tension/finger correctness;
+- falling-note lane as the default learning model;
+- global leaderboards/loot boxes/aggressive streak punishment;
+- generic AI chat as scoring/progression authority;
+- mandatory cloud service for core learning;
+- live video conferencing as a core feature;
+- multiplayer synchronization as a priority;
+- full professional notation editor in 1.x;
+- microservices/CQRS/MediatR/event bus/SPA framework without demonstrated need.
 
-- user outcome;
-- exact scope and exclusions;
-- dependencies;
-- implementation steps;
-- acceptance criteria;
-- required tests;
-- documentation and localization changes;
-- manual verification steps.
-
-Do not create broad issues such as “implement practice mode” without a complete vertical slice and objective completion conditions.
+For exact behavior, UI rules, active backlog, work packages and definitions of done, use `MASTER_PLAN.md`.
