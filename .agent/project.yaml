@@ -1,0 +1,19 @@
+project: Nadiano
+repository: Juloc/Nadiano
+coordination:
+  repository: Juloc/agent-control
+  issue: 1
+  hubUrl: null
+relatedRepositories:
+  - Juloc/docker
+validation:
+  - dotnet build Nadiano.slnx -c Release
+  - dotnet test Nadiano.slnx -c Release
+protectedPaths:
+  - release/**
+  - content/**
+  - docs/MASTER_PLAN.md
+notes:
+  - Root AGENTS.md remains the authoritative Nadiano-specific learning, safety, content, MIDI, UI and testing guide.
+  - docs/MASTER_PLAN.md remains durable product-plan authority; GitHub Issues hold active task/backlog state.
+  - Never represent manual real-piano/human acceptance gates as automated passes.
